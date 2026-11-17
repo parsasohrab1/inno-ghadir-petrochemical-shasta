@@ -9,7 +9,7 @@
 **توسعه‌دهنده:** شرکت پتروپالاتوس
 **شماره نامه:** 14050817001
 **سطح بلوغ فناوری:** TRL 5 ✅
-**نسخه:** 2.0.0 (بهینه‌شده پس از بنچ‌مارک با استانداردهای بین‌المللی)
+**نسخه:** 2.1.0 (افزودن ماژول‌های کیفیت محصول و بهینه‌سازی خط تولید)
 
 ---
 
@@ -54,7 +54,7 @@ BHAM یک سامانه هوشمند مبتنی بر هوش مصنوعی برای
 - ✅ **ماژول پنجم تشخیص خطای فرآیند** روی بنچ‌مارک واقعی TEP با ۱۰٬۵۸۰ نمونه آموزش و ۲۱٬۱۲۰ نمونه آزمون.
 - ✅ **REST API کامل** با FastAPI (۱۵ endpoint) برای یکپارچه‌سازی با سیستم‌های دیگر.
 - ✅ **داشبورد واکنش‌گرا** تک‌فایلی (HTML/CSS/JS بدون وابستگی خارجی) با پشتیبانی RTL و فارسی.
-- ✅ **تست خودکار** با pytest (۷۸ تست)، پوشش ۹۴٪.
+- ✅ **تست خودکار** با pytest (۱۱۴ تست)، پوشش ۹۳٪.
 - ✅ **تولید داده مصنوعی** با الگوهای واقع‌گرایانه (چترینگ، علت مشترک، طوفان آلارم، توالی خطرناک).
 - ✅ **مستندات کامل** SRS، BRS، TRL، معماری فنی، بنچ‌مارک.
 - ✅ **قابلیت بازتولید** با seed ثابت و نسخه‌گذاری وابستگی.
@@ -82,6 +82,27 @@ BHAM یک سامانه هوشمند مبتنی بر هوش مصنوعی برای
 - 💡 **توصیه مداخله** بر اساس horizon پیش‌بینی.
 
 برای جزئیات بنچ‌مارک با محصولات تجاری (PAS, Honeywell, ABB, AspenTech, GE, Yokogawa, Siemens, Rockwell) به [docs/BENCHMARK.md](docs/BENCHMARK.md) مراجعه کنید.
+
+### قابلیت‌های جدید نسخه ۲.۱ (بهینه‌سازی کیفیت محصول و خط تولید)
+
+پس از تحلیل چالش‌های خط تولید و کیفیت محصول پتروشیمی غدیر (نرخ خرابی ۲.۵٪، نبود SPC، نبود OEE، نبود bottleneck analysis)، دو ماژول جدید اضافه شد:
+
+**ماژول ۶: پایش و بهینه‌سازی کیفیت محصول (Quality Optimization) — منطبق با ISO 22514-2 / ISO 7870-2 / AIAG SPC:**
+- 📊 **کنترل آماری فرآیند (SPC)** با ۸ قانون Western Electric (Rule1-8).
+- 🎯 **شاخص قابلیت فرآیند**: Cp، Cpk، Pp، Ppk + گرید (Excellent/Acceptable/Marginal/Inadequate/Critical).
+- 📈 **CUSUM و EWMA** برای تشخیص drift تدریجی و ناهنجاری زودهنگام.
+- 🔍 **تحلیل علت ریشه‌ای** (Ishikawa fishbone 6M: Man/Machine/Material/Method/Measurement/Environment).
+- ⚠ **اثر خطاها بر کیفیت**: رتبه‌بندی ۲۲ خطای فرآیندی بر اساس انحراف خلوص و اتلاف بازده.
+- ⚙ **بهینه‌سازی setpoint**: پیشنهاد تنظیم متغیرهای دستکاری بر اساس همبستگی با کیفیت.
+
+**ماژول ۷: بهینه‌سازی عملکرد خط تولید (Production Line Optimization) — منطبق با ISO 22400-2 / TPM (Nakajima) / Theory of Constraints:**
+- 🏭 **OEE** (Overall Equipment Effectiveness) = Availability × Performance × Quality + گرید (World-class/Good/Fair/Poor/Critical).
+- 🚧 **شناسایی گلوگاه** (Bottleneck) با Theory of Constraints + تعیین نوع محدودیت (Capacity/Speed/Quality/Availability).
+- 📉 **تحلیل بازده** (Yield) با تفکیک اتلاف‌ها (downtime/quality/energy) + ارزش دلاری.
+- 📊 **KPI تولید**: MTBF، MTTR، PPH، utilization، cycle time (مطابق SEMI E10).
+- 💡 **بهینه‌سازی با ROI**: تحلیل هزینه-فایده با تخمین ROI و payback period برای اولویت‌بندی سرمایه‌گذاری.
+
+برای جزئیات چالش‌های شناسایی‌شده و بهینه‌سازی‌ها به [docs/PRODUCTION_QUALITY.md](docs/PRODUCTION_QUALITY.md) مراجعه کنید.
 
 ## معماری سیستم
 
@@ -247,6 +268,14 @@ uvicorn api.server:app --host 0.0.0.0 --port 8000 --reload
 | POST | `/api/v1/sequences/predict` | پیش‌بینی احتمال توقف (horizon 1h/24h/72h) |
 | POST | `/api/v1/risk/estimate` | برآورد ریسک پویا |
 | POST | `/api/v1/tep/detect` | تشخیص خطای TEP |
+| POST | `/api/v1/quality/spc` | تحلیل SPC یک متغیر (Western Electric + Cp/Cpk) |
+| POST | `/api/v1/quality/report` | گزارش جامع کیفیت محصول (SPC + fault impact + RCA) |
+| POST | `/api/v1/quality/fault-impact` | اثر خطاهای فرآیندی بر کیفیت |
+| POST | `/api/v1/quality/setpoint-optimize` | بهینه‌سازی setpoint بر اساس همبستگی |
+| POST | `/api/v1/production/oee` | محاسبه OEE (Availability × Performance × Quality) |
+| POST | `/api/v1/production/bottlenecks` | شناسایی گلوگاه خط تولید (Theory of Constraints) |
+| POST | `/api/v1/production/yield` | تحلیل بازده با تفکیک اتلاف‌ها |
+| POST | `/api/v1/production/report` | گزارش جامع تولید (OEE + bottleneck + yield + ROI) |
 
 مستندات تعاملی Swagger UI در `/docs` و ReDoc در `/redoc` در دسترس است.
 
@@ -277,7 +306,7 @@ curl -X POST http://localhost:8000/api/v1/sequences/predict \
 PYTHONPATH=src pytest tests/ -v
 ```
 
-نتیجه فعلی: **۴۹ تست، همه موفق، پوشش ۹۶٪**.
+نتیجه فعلی: **۱۱۴ تست، همه موفق، پوشش ۹۳٪**.
 
 گزارش پوشش HTML در `reports/coverage_html/index.html` و XML در `reports/coverage.xml`.
 

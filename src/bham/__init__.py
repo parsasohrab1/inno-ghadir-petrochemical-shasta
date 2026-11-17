@@ -1,6 +1,6 @@
 """نسخه‌گذاری و ورودی‌های عمومی BHAM."""
 from __future__ import annotations
-__version__ = "2.0.0"
+__version__ = "2.1.0"
 __product__ = "BHAM — Barrier Health & Alarm Manager"
 
 from .config import (  # noqa: F401
@@ -20,3 +20,12 @@ from .modules.barrier_health import (  # noqa: F401
 from .modules.sequence_prediction import SequencePredictor, SequencePrediction  # noqa: F401
 from .modules.dynamic_risk import DynamicRiskEstimator, RiskEstimate  # noqa: F401
 from .modules.tep_fault_detection import TEPFaultDetector, FaultDetectionResult  # noqa: F401
+from .modules.quality_optimizer import (  # noqa: F401
+    QualityOptimizer, SPCResult, QualityVariable,
+    FaultQualityImpact, SetpointOptimization, RootCauseAnalysis,
+    WE_RULES,
+)
+from .modules.production_optimizer import (  # noqa: F401
+    ProductionOptimizer, OEEResult, Bottleneck, YieldAnalysis,
+    ProductionKPI, ProductionOptimization, OEE_TARGETS,
+)

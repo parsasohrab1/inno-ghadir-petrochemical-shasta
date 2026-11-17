@@ -193,6 +193,8 @@ svg.spark { width: 100%; height: 60px; }
   <button data-tab="overview" class="active">نمای کلی</button>
   <button data-tab="alarms">تحلیل آلارم</button>
   <button data-tab="barriers">لایه‌های حفاظتی</button>
+  <button data-tab="quality">کیفیت محصول</button>
+  <button data-tab="production">خط تولید</button>
   <button data-tab="sequences">پیش‌بینی توالی</button>
   <button data-tab="risk">ریسک پویا</button>
   <button data-tab="tep">تشخیص خطای TEP</button>
@@ -394,6 +396,213 @@ svg.spark { width: 100%; height: 60px; }
     <div class="card" style="margin-top:16px">
       <h3><span class="icon"></span>نتیجه و توصیه مداخله</h3>
       <div id="seqResult" style="font-size:0.9rem"></div>
+    </div>
+  </section>
+
+  <!-- کیفیت محصول (جدید v2.1) -->
+  <section class="panel" id="quality">
+    <div class="card">
+      <h3><span class="icon">🎯</span>پایش و بهینه‌سازی کیفیت محصول (SPC + Cp/Cpk)</h3>
+      <div style="font-size:0.85rem; color:var(--text-dim); margin-bottom:12px">
+        کنترل آماری فرآیند مطابق ISO 22514-2 / ISO 7870-2 / AIAG SPC. شامل قوانین Western Electric، CUSUM، EWMA.
+      </div>
+      <button class="btn" id="btnQuality">تحلیل کیفیت محصول</button>
+    </div>
+
+    <!-- پنل خلاصه قابلیت فرآیند -->
+    <div class="kpi-grid" style="margin-top:16px" id="qualityKpis">
+      <div class="kpi green"><div class="label">میانگین Cp/Cpk</div><div class="value" id="qCpk">—</div><div class="delta">قابلیت فرآیند</div></div>
+      <div class="kpi yellow"><div class="label">گرید قابلیت</div><div class="value" id="qGrade">—</div><div class="delta">AIAG SPC</div></div>
+      <div class="kpi orange"><div class="label">خارج از spec</div><div class="value" id="qOos">—</div><div class="delta">تعداد نمونه</div></div>
+      <div class="kpi red"><div class="label">خطاهای بحرانی کیفیت</div><div class="value" id="qCriticalFaults">—</div><div class="delta">اثر بر خلوص</div></div>
+    </div>
+
+    <!-- نمودار توزیع کیفیت -->
+    <div class="grid-2" style="margin-top:16px">
+      <div class="card">
+        <h3><span class="icon">📊</span>متغیرهای کیفی کلیدی (Key Quality Variables)</h3>
+        <div style="overflow-x:auto">
+          <table id="qualityVarTable" style="width:100%; border-collapse:collapse; font-size:0.85rem">
+            <thead>
+              <tr style="background:var(--bg2)">
+                <th style="padding:8px; text-align:right">متغیر</th>
+                <th style="padding:8px">هدف</th>
+                <th style="padding:8px">مقدار فعلی</th>
+                <th style="padding:8px">انحراف (σ)</th>
+                <th style="padding:8px">USL</th>
+                <th style="padding:8px">LSL</th>
+                <th style="padding:8px">وضعیت</th>
+              </tr>
+            </thead>
+            <tbody id="qualityVarBody">
+              <tr><td colspan="7" style="padding:12px; color:var(--text-dim); text-align:center">برای مشاهده، تحلیل کیفیت را اجرا کنید.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="card">
+        <h3><span class="icon">📈</span>قابلیت فرآیند (Cp/Cpk) هر متغیر</h3>
+        <div id="capabilityBars" style="padding:12px 0">
+          <div style="color:var(--text-dim); font-size:0.85rem">برای مشاهده، تحلیل کیفیت را اجرا کنید.</div>
+        </div>
+        <div style="font-size:0.78rem; color:var(--text-dim); margin-top:8px">
+          هدف: Cpk ≥ 1.33 (پتروشیمی) · Cpk ≥ 1.67 (مطلوب) · Cpk ≥ 2.0 (Six Sigma)
+        </div>
+      </div>
+    </div>
+
+    <!-- اثر خطاها بر کیفیت -->
+    <div class="card" style="margin-top:16px; border-left:4px solid var(--orange)">
+      <h3><span class="icon">⚠</span>اثر خطاهای فرآیندی بر کیفیت محصول</h3>
+      <div style="overflow-x:auto">
+        <table id="faultImpactTable" style="width:100%; border-collapse:collapse; font-size:0.85rem">
+          <thead>
+            <tr style="background:var(--bg2)">
+              <th style="padding:8px; text-align:right">خطا</th>
+              <th style="padding:8px">انحراف خلوص (σ)</th>
+              <th style="padding:8px">انحراف (٪)</th>
+              <th style="padding:8px">ضریب نوسان</th>
+              <th style="padding:8px">اتلاف بازده (٪)</th>
+              <th style="padding:8px">گرید اثر</th>
+            </tr>
+          </thead>
+          <tbody id="faultImpactBody">
+            <tr><td colspan="6" style="padding:12px; color:var(--text-dim); text-align:center">برای مشاهده، تحلیل کیفیت را اجرا کنید.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- تحلیل علت ریشه‌ای -->
+    <div class="grid-2" style="margin-top:16px">
+      <div class="card">
+        <h3><span class="icon">🔍</span>تحلیل علت ریشه‌ای (Ishikawa 6M)</h3>
+        <div id="rcaPanel" style="padding:8px 0; font-size:0.9rem">
+          برای مشاهده، تحلیل کیفیت را اجرا کنید.
+        </div>
+      </div>
+      <div class="card">
+        <h3><span class="icon">⚙</span>پیشنهاد بهینه‌سازی Setpoint</h3>
+        <div style="overflow-x:auto">
+          <table id="setpointTable" style="width:100%; border-collapse:collapse; font-size:0.85rem">
+            <thead>
+              <tr style="background:var(--bg2)">
+                <th style="padding:8px; text-align:right">متغیر</th>
+                <th style="padding:8px">Setpoint فعلی</th>
+                <th style="padding:8px">پیشنهاد</th>
+                <th style="padding:8px">بهبود خلوص</th>
+                <th style="padding:8px">اعتماد</th>
+              </tr>
+            </thead>
+            <tbody id="setpointBody">
+              <tr><td colspan="5" style="padding:12px; color:var(--text-dim); text-align:center">برای مشاهده، تحلیل کیفیت را اجرا کنید.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- خط تولید (جدید v2.1) -->
+  <section class="panel" id="production">
+    <div class="card">
+      <h3><span class="icon">🏭</span>بهینه‌سازی عملکرد خط تولید (OEE / Yield / Bottleneck)</h3>
+      <div style="font-size:0.85rem; color:var(--text-dim); margin-bottom:12px">
+        مطابق ISO 22400-2 و TPM (Nakajima). OEE = Availability × Performance × Quality.
+      </div>
+      <button class="btn" id="btnProduction">تحلیل عملکرد تولید</button>
+    </div>
+
+    <!-- پنل OEE -->
+    <div class="kpi-grid" style="margin-top:16px" id="oeeKpis">
+      <div class="kpi green"><div class="label">OEE کل</div><div class="value" id="oeeValue">—</div><div class="delta" id="oeeGrade">—</div></div>
+      <div class="kpi"><div class="label">Availability</div><div class="value" id="oeeAvail">—</div><div class="delta">هدف ۹۰٪</div></div>
+      <div class="kpi yellow"><div class="label">Performance</div><div class="value" id="oeePerf">—</div><div class="delta">هدف ۹۵٪</div></div>
+      <div class="kpi orange"><div class="label">Quality Rate</div><div class="value" id="oeeQuality">—</div><div class="delta">هدف ۹۹٪</div></div>
+    </div>
+
+    <!-- نمودار OEE -->
+    <div class="card" style="margin-top:16px; border-left:4px solid var(--primary)">
+      <h3><span class="icon">📊</span>ترکیب OEE و شکاف تا هدف (World-Class ۸۵٪)</h3>
+      <div id="oeeBreakdown" style="padding:12px 0">
+        <div style="display:flex; gap:8px; align-items:flex-end; height:160px; padding:12px 0">
+          <div style="flex:1; text-align:center">
+            <div style="font-size:0.75rem; color:var(--text-dim)">Availability</div>
+            <div id="oeeAvailBar" style="background:var(--green); width:100%; min-height:4px; border-radius:4px 4px 0 0; transition:height 0.5s"></div>
+            <div style="font-size:0.85rem; font-weight:700; margin-top:4px" id="oeeAvailTxt">—</div>
+          </div>
+          <div style="flex:1; text-align:center">
+            <div style="font-size:0.75rem; color:var(--text-dim)">Performance</div>
+            <div id="oeePerfBar" style="background:var(--yellow); width:100%; min-height:4px; border-radius:4px 4px 0 0; transition:height 0.5s"></div>
+            <div style="font-size:0.85rem; font-weight:700; margin-top:4px" id="oeePerfTxt">—</div>
+          </div>
+          <div style="flex:1; text-align:center">
+            <div style="font-size:0.75rem; color:var(--text-dim)">Quality</div>
+            <div id="oeeQualityBar" style="background:var(--orange); width:100%; min-height:4px; border-radius:4px 4px 0 0; transition:height 0.5s"></div>
+            <div style="font-size:0.85rem; font-weight:700; margin-top:4px" id="oeeQualityTxt">—</div>
+          </div>
+          <div style="flex:1; text-align:center">
+            <div style="font-size:0.75rem; color:var(--text-dim)">OEE</div>
+            <div id="oeeTotalBar" style="background:var(--primary); width:100%; min-height:4px; border-radius:4px 4px 0 0; transition:height 0.5s"></div>
+            <div style="font-size:0.85rem; font-weight:700; margin-top:4px" id="oeeTotalTxt">—</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottleneck و Yield -->
+    <div class="grid-2" style="margin-top:16px">
+      <div class="card">
+        <h3><span class="icon">🚧</span>گلوگاه خط تولید (Theory of Constraints)</h3>
+        <div style="overflow-x:auto">
+          <table id="bottleneckTable" style="width:100%; border-collapse:collapse; font-size:0.85rem">
+            <thead>
+              <tr style="background:var(--bg2)">
+                <th style="padding:8px; text-align:right">واحد</th>
+                <th style="padding:8px">تجهیز</th>
+                <th style="padding:8px">استفاده (٪)</th>
+                <th style="padding:8px">Throughput</th>
+                <th style="padding:8px">نوع محدودیت</th>
+                <th style="padding:8px">گلوگاه؟</th>
+              </tr>
+            </thead>
+            <tbody id="bottleneckBody">
+              <tr><td colspan="6" style="padding:12px; color:var(--text-dim); text-align:center">برای مشاهده، تحلیل تولید را اجرا کنید.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="card">
+        <h3><span class="icon">📉</span>تحلیل بازده (Yield) و اتلاف‌ها</h3>
+        <div id="yieldPanel" style="padding:8px 0; font-size:0.9rem">
+          برای مشاهده، تحلیل تولید را اجرا کنید.
+        </div>
+      </div>
+    </div>
+
+    <!-- پیشنهاد بهینه‌سازی با ROI -->
+    <div class="card" style="margin-top:16px; border-left:4px solid var(--green)">
+      <h3><span class="icon">💡</span>پیشنهاد بهینه‌سازی با تحلیل هزینه-فایده (ROI)</h3>
+      <div style="overflow-x:auto">
+        <table id="optimizationTable" style="width:100%; border-collapse:collapse; font-size:0.85rem">
+          <thead>
+            <tr style="background:var(--bg2)">
+              <th style="padding:8px; text-align:right">اهرم بهبود</th>
+              <th style="padding:8px">وضعیت فعلی</th>
+              <th style="padding:8px">هدف</th>
+              <th style="padding:8px">بهبود OEE</th>
+              <th style="padding:8px">هزینه (USD)</th>
+              <th style="padding:8px">سود سالانه</th>
+              <th style="padding:8px">ROI</th>
+              <th style="padding:8px">بازگشت (ماه)</th>
+              <th style="padding:8px">اولویت</th>
+            </tr>
+          </thead>
+          <tbody id="optimizationBody">
+            <tr><td colspan="9" style="padding:12px; color:var(--text-dim); text-align:center">برای مشاهده، تحلیل تولید را اجرا کنید.</td></tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </section>
 
@@ -976,6 +1185,288 @@ function renderSeqResult(p) {
       <div style="font-size:0.85rem; color:var(--text-dim); margin-bottom:4px">💡 توصیه مداخله:</div>
       <div style="font-size:0.95rem">${p.recommended_intervention || 'عملیات عادی؛ پایش استاندارد ادامه یابد.'}</div>
     </div>`;
+}
+
+// ---------------------------------------------------------------
+// کیفیت محصول (جدید v2.1)
+// ---------------------------------------------------------------
+document.getElementById('btnQuality').addEventListener('click', async () => {
+  const btn = document.getElementById('btnQuality');
+  btn.disabled = true; btn.textContent = 'در حال تحلیل...';
+  // تولید داده نمونه با الگوی واقع‌گرایانه (TEP-like)
+  const n = 200;
+  const data = {
+    'xmeas_40': Array.from({length: n}, () => +(53.6 + (Math.random()-0.5)*1.0).toFixed(3)),
+    'xmeas_41': Array.from({length: n}, () => +(43.8 + (Math.random()-0.5)*1.2).toFixed(3)),
+    'xmeas_09': Array.from({length: n}, () => +(80 + (Math.random()-0.5)*4).toFixed(2)),
+  };
+  // افزودن چند نقطه خارج از کنترل
+  data['xmeas_40'][150] = 55.2; data['xmeas_40'][151] = 55.3;
+  const specs = {
+    'xmeas_40': {target: 53.6, usl: 55.0, lsl: 52.0, description: 'خلوص A در محصول', unit: '%', impact: 'High'},
+    'xmeas_41': {target: 43.8, usl: 45.0, lsl: 42.0, description: 'B/C در محصول', unit: '%', impact: 'Medium'},
+    'xmeas_09': {target: 80, usl: 85, lsl: 75, description: 'دمای جداکننده', unit: '°C', impact: 'Medium'},
+  };
+  try {
+    const data_r = await api('/api/v1/quality/report', {
+      method: 'POST', body: JSON.stringify({data, specs, fault_col: null})
+    });
+    renderQualityResults(data_r.data);
+  } catch {
+    // حالت دمو با داده مصنوعی
+    renderQualityResults({
+      summary: {n_quality_variables: 3, avg_cpk: 0.92, capability_grade: 'Inadequate',
+                out_of_spec_total: 4, out_of_spec_pct_avg: 1.5,
+                n_critical_faults: 0, n_high_faults: 2},
+      quality_variables: [
+        {name: 'xmeas_40', description: 'خلوص A', target: 53.6, current_value: 53.8, deviation_sigma: 0.4, usl: 55.0, lsl: 52.0, status: 'In-control', impact_on_product: 'High'},
+        {name: 'xmeas_41', description: 'B/C', target: 43.8, current_value: 44.1, deviation_sigma: 0.3, usl: 45.0, lsl: 42.0, status: 'In-control', impact_on_product: 'Medium'},
+        {name: 'xmeas_09', description: 'دما جداکننده', target: 80, current_value: 81.5, deviation_sigma: 0.8, usl: 85, lsl: 75, status: 'In-control', impact_on_product: 'Medium'},
+      ],
+      spc_results: [
+        {variable: 'xmeas_40', cp: 1.5, cpk: 1.1, capability_grade: 'Inadequate', n_violations: 3, out_of_spec_pct: 1.5, rule_violations: {Rule1: 2, Rule2: 1}},
+        {variable: 'xmeas_41', cp: 1.6, cpk: 1.3, capability_grade: 'Marginal', n_violations: 1, out_of_spec_pct: 0.5, rule_violations: {Rule1: 1}},
+        {variable: 'xmeas_09', cp: 1.8, cpk: 1.4, capability_grade: 'Marginal', n_violations: 0, out_of_spec_pct: 0.0, rule_violations: {}},
+      ],
+      fault_quality_impacts: [
+        {fault_id: 6, fault_description: 'A feed loss', purity_deviation_sigma: 1.2, purity_deviation_pct: 0.5, variability_multiplier: 0.9, impact_grade: 'Medium', estimated_yield_loss_pct: 0.5},
+        {fault_id: 1, fault_description: 'A/C feed ratio', purity_deviation_sigma: 0.4, purity_deviation_pct: 0.1, variability_multiplier: 0.99, impact_grade: 'Low', estimated_yield_loss_pct: 0.1},
+      ],
+      root_cause_analysis: {symptom: 'انحراف کیفیت', category: 'Machine', confidence: 0.7,
+        likely_causes: ['drift سنسور خلوص', 'فرسودگی کاتالیست', 'تغییر کیفیت خوراک'],
+        recommended_investigation: 'بازرسی سنسور و کالیبراسیون'},
+      setpoint_optimizations: [
+        {variable: 'xmv_01', current_setpoint: 50.0, optimized_setpoint: 50.4, expected_purity_gain_pct: 1.2, confidence: 0.8},
+      ],
+    });
+  } finally {
+    btn.disabled = false; btn.textContent = 'تحلیل کیفیت محصول';
+  }
+});
+
+function renderQualityResults(d) {
+  const s = d.summary || {};
+  document.getElementById('qCpk').textContent = s.avg_cpk ?? '—';
+  document.getElementById('qGrade').textContent = s.capability_grade ?? '—';
+  document.getElementById('qOos').textContent = s.out_of_spec_total ?? '—';
+  document.getElementById('qCriticalFaults').textContent = s.n_critical_faults ?? '—';
+
+  // جدول متغیرهای کیفی
+  const qvBody = document.getElementById('qualityVarBody');
+  qvBody.innerHTML = (d.quality_variables || []).map(qv => {
+    const statusColor = qv.status === 'Out-of-spec' ? 'Critical' : qv.status === 'Out-of-control' ? 'High' : 'Low';
+    return `<tr style="border-bottom:1px solid var(--border)">
+      <td style="padding:8px; text-align:right"><code>${qv.name}</code><div style="font-size:0.75rem; color:var(--text-dim)">${qv.description}</div></td>
+      <td style="padding:8px; text-align:center">${qv.target}</td>
+      <td style="padding:8px; text-align:center; font-weight:700">${qv.current_value}</td>
+      <td style="padding:8px; text-align:center; color:${qv.deviation_sigma>2?'var(--red)':qv.deviation_sigma>1?'var(--orange)':'var(--green)'}">${qv.deviation_sigma}σ</td>
+      <td style="padding:8px; text-align:center">${qv.usl}</td>
+      <td style="padding:8px; text-align:center">${qv.lsl}</td>
+      <td style="padding:8px; text-align:center"><span class="badge ${statusColor}">${qv.status}</span></td>
+    </tr>`;
+  }).join('');
+
+  // نمودار قابلیت (Cp/Cpk)
+  const capBars = document.getElementById('capabilityBars');
+  const gradeColors = {Excellent: 'var(--green)', Acceptable: 'var(--green)', Marginal: 'var(--yellow)', Inadequate: 'var(--orange)', Critical: 'var(--red)'};
+  capBars.innerHTML = (d.spc_results || []).map(s => {
+    const cpkPct = Math.min(s.cpk / 2.0 * 100, 100);
+    const cpPct = Math.min(s.cp / 2.0 * 100, 100);
+    return `<div style="margin:8px 0">
+      <div style="display:flex; justify-content:space-between; font-size:0.85rem; margin-bottom:4px">
+        <code>${s.variable}</code>
+        <span style="color:${gradeColors[s.capability_grade] || 'var(--text)'}">${s.capability_grade} (Cpk=${s.cpk})</span>
+      </div>
+      <div style="display:flex; gap:4px; height:14px">
+        <div style="background:var(--primary); width:${cpPct}%; border-radius:4px; min-width:4px" title="Cp"></div>
+        <div style="background:${gradeColors[s.capability_grade]}; width:${cpkPct}%; border-radius:4px; min-width:4px" title="Cpk"></div>
+      </div>
+    </div>`;
+  }).join('');
+
+  // اثر خطاها
+  const fBody = document.getElementById('faultImpactBody');
+  fBody.innerHTML = (d.fault_quality_impacts || []).map(f => {
+    const gColor = f.impact_grade === 'Critical' ? 'Critical' : f.impact_grade === 'High' ? 'High' : f.impact_grade === 'Medium' ? 'Medium' : 'Low';
+    return `<tr style="border-bottom:1px solid var(--border)">
+      <td style="padding:8px; text-align:right">Fault ${f.fault_id}<div style="font-size:0.75rem; color:var(--text-dim)">${f.fault_description}</div></td>
+      <td style="padding:8px; text-align:center; color:${f.purity_deviation_sigma>2?'var(--red)':'var(--text)'}">${f.purity_deviation_sigma}σ</td>
+      <td style="padding:8px; text-align:center">${f.purity_deviation_pct > 0 ? '+' : ''}${f.purity_deviation_pct}%</td>
+      <td style="padding:8px; text-align:center">${f.variability_multiplier}×</td>
+      <td style="padding:8px; text-align:center; color:var(--red)">${f.estimated_yield_loss_pct}%</td>
+      <td style="padding:8px; text-align:center"><span class="badge ${gColor}">${f.impact_grade}</span></td>
+    </tr>`;
+  }).join('') || '<tr><td colspan="6" style="padding:12px; color:var(--text-dim); text-align:center">داده خطایی موجود نیست.</td></tr>';
+
+  // تحلیل علت ریشه‌ای
+  const rca = d.root_cause_analysis || {};
+  document.getElementById('rcaPanel').innerHTML = `
+    <div style="margin:8px 0"><b>علت:</b> ${rca.symptom || '—'}</div>
+    <div style="margin:8px 0"><b>دسته:</b> <span class="badge Medium">${rca.category || '—'}</span></div>
+    <div style="margin:8px 0"><b>اعتماد:</b> ${((rca.confidence || 0)*100).toFixed(0)}%</div>
+    <div style="margin:12px 0"><b>علت‌های محتمل:</b>
+      <ul style="margin:6px 0; padding-right:20px">
+        ${(rca.likely_causes || []).map(c => `<li style="margin:4px 0">${c}</li>`).join('')}
+      </ul>
+    </div>
+    <div style="background:var(--bg2); padding:8px; border-radius:6px; font-size:0.85rem">💡 ${rca.recommended_investigation || ''}</div>
+  `;
+
+  // پیشنهاد setpoint
+  const spBody = document.getElementById('setpointBody');
+  spBody.innerHTML = (d.setpoint_optimizations || []).map(o => `
+    <tr style="border-bottom:1px solid var(--border)">
+      <td style="padding:8px; text-align:right"><code>${o.variable}</code></td>
+      <td style="padding:8px; text-align:center">${o.current_setpoint}</td>
+      <td style="padding:8px; text-align:center; font-weight:700; color:var(--green)">${o.optimized_setpoint}</td>
+      <td style="padding:8px; text-align:center; color:var(--green)">+${o.expected_purity_gain_pct}%</td>
+      <td style="padding:8px; text-align:center">${((o.confidence||0)*100).toFixed(0)}%</td>
+    </tr>
+  `).join('') || '<tr><td colspan="5" style="padding:12px; color:var(--text-dim); text-align:center">پیشنهادی موجود نیست.</td></tr>';
+}
+
+// ---------------------------------------------------------------
+// خط تولید (جدید v2.1)
+// ---------------------------------------------------------------
+document.getElementById('btnProduction').addEventListener('click', async () => {
+  const btn = document.getElementById('btnProduction');
+  btn.disabled = true; btn.textContent = 'در حال تحلیل...';
+  const oee_input = {unit: 'Olefins-Unit', planned_time_h: 720, downtime_h: 120,
+                     total_count: 7500, good_count: 7100, ideal_cycle_time_min: 5.0};
+  const units_data = [
+    {unit: 'Olefins-Unit', equipment: 'Cracker', utilization_pct: 95.0, throughput_tph: 12.5, capacity_tph: 13.0, quality_pct: 98.5, performance_pct: 92},
+    {unit: 'Aromatics-Unit', equipment: 'Reformer', utilization_pct: 85.0, throughput_tph: 10.0, capacity_tph: 11.5, quality_pct: 97.0, performance_pct: 88},
+    {unit: 'Polymer-Unit', equipment: 'Reactor', utilization_pct: 68.0, throughput_tph: 7.8, capacity_tph: 12.0, quality_pct: 96.5, performance_pct: 82},
+    {unit: 'Utility-Unit', equipment: 'Boiler', utilization_pct: 75.0, throughput_tph: 9.5, capacity_tph: 12.0, quality_pct: 99.0, performance_pct: 90},
+  ];
+  const yields_data = [
+    {unit: 'Olefins-Unit', feed_kg_h: 12500, product_kg_h: 11300, downtime_loss_kg_h: 200, quality_loss_kg_h: 180, energy_loss_kg_h: 120},
+    {unit: 'Aromatics-Unit', feed_kg_h: 10000, product_kg_h: 9200, downtime_loss_kg_h: 150, quality_loss_kg_h: 140, energy_loss_kg_h: 90},
+  ];
+  try {
+    const data = await api('/api/v1/production/report', {
+      method: 'POST', body: JSON.stringify({oee_input, units_data, yields_data})
+    });
+    renderProductionResults(data.data);
+  } catch {
+    // حالت دمو
+    renderProductionResults({
+      summary: {oee_pct: 73.5, oee_grade: 'Fair', oee_target_pct: 85, oee_gap_pct: 11.5,
+                n_bottlenecks: 1, avg_yield_pct: 91.2, total_estimated_loss_usd_h: 1820,
+                n_optimization_opportunities: 3, best_roi: 87.5},
+      oee: {availability: 0.833, performance: 0.92, quality_rate: 0.953, oee: 0.735, oee_pct: 73.5, grade: 'Fair',
+            gap_to_target_pct: 11.5},
+      bottlenecks: [
+        {unit: 'Olefins-Unit', equipment: 'Cracker', utilization_pct: 95.0, throughput_tph: 12.5, is_bottleneck: true, constraint_type: 'Capacity', impact_on_total_pct: 9.5},
+        {unit: 'Aromatics-Unit', equipment: 'Reformer', utilization_pct: 85.0, throughput_tph: 10.0, is_bottleneck: false, constraint_type: 'Availability', impact_on_total_pct: 1.7},
+        {unit: 'Polymer-Unit', equipment: 'Reactor', utilization_pct: 68.0, throughput_tph: 7.8, is_bottleneck: false, constraint_type: 'Speed', impact_on_total_pct: 1.4},
+        {unit: 'Utility-Unit', equipment: 'Boiler', utilization_pct: 75.0, throughput_tph: 9.5, is_bottleneck: false, constraint_type: 'Availability', impact_on_total_pct: 1.5},
+      ],
+      yields: [
+        {unit: 'Olefins-Unit', feed_kg_h: 12500, product_kg_h: 11300, yield_pct: 90.4, yield_target_pct: 95, yield_gap_pct: 4.6,
+          loss_categories: {downtime: 200, quality: 180, energy: 120, unaccounted: 700}, estimated_loss_value_usd_h: 960},
+        {unit: 'Aromatics-Unit', feed_kg_h: 10000, product_kg_h: 9200, yield_pct: 92.0, yield_target_pct: 95, yield_gap_pct: 3.0,
+          loss_categories: {downtime: 150, quality: 140, energy: 90, unaccounted: 420}, estimated_loss_value_usd_h: 640},
+      ],
+      optimizations: [
+        {lever: 'Availability (PM پیشگیرانه)', unit: 'Olefins-Unit', current_value: 83.3, target_value: 90.0,
+          expected_oee_gain_pct: 6.7, estimated_cost_usd: 50000, estimated_benefit_usd_year: 4380000,
+          roi: 87.6, payback_months: 0.14, priority: 'High'},
+        {lever: 'Performance (tune PID)', unit: 'Olefins-Unit', current_value: 92.0, target_value: 95.0,
+          expected_oee_gain_pct: 3.0, estimated_cost_usd: 30000, estimated_benefit_usd_year: 1962000,
+          roi: 65.4, payback_months: 0.18, priority: 'High'},
+        {lever: 'Quality (SPC + APC)', unit: 'Olefins-Unit', current_value: 95.3, target_value: 99.0,
+          expected_oee_gain_pct: 3.7, estimated_cost_usd: 80000, estimated_benefit_usd_year: 2414000,
+          roi: 30.2, payback_months: 0.40, priority: 'Medium'},
+      ],
+    });
+  } finally {
+    btn.disabled = false; btn.textContent = 'تحلیل عملکرد تولید';
+  }
+});
+
+function renderProductionResults(d) {
+  const oee = d.oee || {};
+  const s = d.summary || {};
+
+  // پنل OEE
+  document.getElementById('oeeValue').textContent = (oee.oee_pct ?? '—') + '%';
+  document.getElementById('oeeGrade').textContent = oee.grade ?? '—';
+  document.getElementById('oeeAvail').textContent = ((oee.availability||0)*100).toFixed(1) + '%';
+  document.getElementById('oeePerf').textContent = ((oee.performance||0)*100).toFixed(1) + '%';
+  document.getElementById('oeeQuality').textContent = ((oee.quality_rate||0)*100).toFixed(1) + '%';
+
+  // نمودار OEE
+  const availH = Math.min((oee.availability||0) * 100, 100);
+  const perfH = Math.min((oee.performance||0) * 100, 100);
+  const qualH = Math.min((oee.quality_rate||0) * 100, 100);
+  const oeeH = Math.min((oee.oee||0) * 100, 100);
+  document.getElementById('oeeAvailBar').style.height = availH + '%';
+  document.getElementById('oeePerfBar').style.height = perfH + '%';
+  document.getElementById('oeeQualityBar').style.height = qualH + '%';
+  document.getElementById('oeeTotalBar').style.height = oeeH + '%';
+  document.getElementById('oeeAvailTxt').textContent = availH.toFixed(0) + '%';
+  document.getElementById('oeePerfTxt').textContent = perfH.toFixed(0) + '%';
+  document.getElementById('oeeQualityTxt').textContent = qualH.toFixed(0) + '%';
+  document.getElementById('oeeTotalTxt').textContent = oeeH.toFixed(0) + '%';
+
+  // جدول bottleneck
+  const bBody = document.getElementById('bottleneckBody');
+  bBody.innerHTML = (d.bottlenecks || []).map(b => `
+    <tr style="border-bottom:1px solid var(--border)">
+      <td style="padding:8px; text-align:right">${b.unit}</td>
+      <td style="padding:8px; text-align:center"><code>${b.equipment}</code></td>
+      <td style="padding:8px; text-align:center; font-weight:700; color:${b.utilization_pct>90?'var(--red)':'var(--text)'}">${b.utilization_pct}%</td>
+      <td style="padding:8px; text-align:center">${b.throughput_tph} tph</td>
+      <td style="padding:8px; text-align:center"><span class="badge Low">${b.constraint_type}</span></td>
+      <td style="padding:8px; text-align:center">${b.is_bottleneck ? '<span class="badge Critical">بله</span>' : '<span class="badge Low">خیر</span>'}</td>
+    </tr>
+  `).join('');
+
+  // پنل yield
+  const yields = d.yields || [];
+  const yPanel = document.getElementById('yieldPanel');
+  if (yields.length === 0) {
+    yPanel.innerHTML = '<div style="color:var(--text-dim)">داده‌ای موجود نیست.</div>';
+  } else {
+    yPanel.innerHTML = yields.map(y => `
+      <div style="border:1px solid var(--border); border-radius:8px; padding:12px; margin:8px 0">
+        <div style="display:flex; justify-content:space-between; margin-bottom:8px">
+          <b>${y.unit}</b>
+          <span class="badge ${y.yield_pct>=95?'Low':y.yield_pct>=90?'Medium':'Critical'}">${y.yield_pct}% (هدف: ${y.yield_target_pct}%)</span>
+        </div>
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(140px, 1fr)); gap:8px; font-size:0.85rem">
+          <div><div style="color:var(--text-dim)">خوراک</div><div>${y.feed_kg_h} kg/h</div></div>
+          <div><div style="color:var(--text-dim)">محصول</div><div>${y.product_kg_h} kg/h</div></div>
+          <div><div style="color:var(--text-dim)">شکاف بازده</div><div style="color:var(--red)">${y.yield_gap_pct}%</div></div>
+          <div><div style="color:var(--text-dim)">اتلاف ($/h)</div><div style="color:var(--red)">$${y.estimated_loss_value_usd_h}</div></div>
+        </div>
+        <div style="margin-top:8px; font-size:0.8rem">
+          <div style="color:var(--text-dim); margin-bottom:4px">توزیع اتلاف:</div>
+          <div style="display:flex; gap:8px; flex-wrap:wrap">
+            ${Object.entries(y.loss_categories || {}).map(([k,v]) => `<span class="badge Low">${k}: ${v}</span>`).join(' ')}
+          </div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  // جدول بهینه‌سازی با ROI
+  const oBody = document.getElementById('optimizationBody');
+  oBody.innerHTML = (d.optimizations || []).map(o => {
+    const pColor = o.priority === 'High' ? 'Critical' : o.priority === 'Medium' ? 'Medium' : 'Low';
+    return `<tr style="border-bottom:1px solid var(--border)">
+      <td style="padding:8px; text-align:right; font-size:0.82rem">${o.lever}</td>
+      <td style="padding:8px; text-align:center">${o.current_value}</td>
+      <td style="padding:8px; text-align:center; color:var(--green)">${o.target_value}</td>
+      <td style="padding:8px; text-align:center; color:var(--green)">+${o.expected_oee_gain_pct}%</td>
+      <td style="padding:8px; text-align:center">$${(o.estimated_cost_usd/1000).toFixed(0)}k</td>
+      <td style="padding:8px; text-align:center; color:var(--green); font-weight:700">$${(o.estimated_benefit_usd_year/1000).toFixed(0)}k</td>
+      <td style="padding:8px; text-align:center; font-weight:700; color:${o.roi>50?'var(--green)':o.roi>10?'var(--yellow)':'var(--orange)'}">${o.roi}×</td>
+      <td style="padding:8px; text-align:center">${o.payback_months < 1 ? (o.payback_months*30).toFixed(0)+' روز' : o.payback_months.toFixed(1)+' ماه'}</td>
+      <td style="padding:8px; text-align:center"><span class="badge ${pColor}">${o.priority}</span></td>
+    </tr>`;
+  }).join('') || '<tr><td colspan="9" style="padding:12px; color:var(--text-dim); text-align:center">فرصت بهینه‌سازی موجود نیست.</td></tr>';
 }
 
 // ---------------------------------------------------------------

@@ -19,14 +19,15 @@ from bham import (
 
 
 def test_package_version():
-    assert bham.__version__ == "2.0.0"
+    assert bham.__version__ == "2.1.0"
     assert "BHAM" in bham.__product__
 
 
 def test_module_configs_present():
     assert set(MODULE_CONFIGS.keys()) == {
         "alarm_analytics", "barrier_health",
-        "sequence_prediction", "dynamic_risk"
+        "sequence_prediction", "dynamic_risk",
+        "quality_optimizer", "production_optimizer",
     }
     for cfg in MODULE_CONFIGS.values():
         assert cfg.algorithm

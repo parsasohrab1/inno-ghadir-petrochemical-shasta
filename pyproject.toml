@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "bham-ghadir"
-version = "2.0.0"
-description = "BHAM — Barrier Health & Alarm Manager: هوشمندسازی مدیریت آلارم و پایش سلامت لایه‌های حفاظتی ایمنی فرآیند پتروشیمی غدیر (منطبق با EEMUA 191 / ISA-18.2 / IEC 62682 / IEC 61511)"
+version = "2.1.0"
+description = "BHAM — Barrier Health & Alarm Manager: هوشمندسازی مدیریت آلارم و پایش سلامت لایه‌های حفاظتی ایمنی فرآیند پتروشیمی غدیر (منطبق با EEMUA 191 / ISA-18.2 / IEC 62682 / IEC 61511 + بهینه‌سازی کیفیت و خط تولید)"
 readme = "README.md"
 requires-python = ">=3.10"
 license = {text = "Proprietary — PetroPalatos / Ghadir Petrochemical"}

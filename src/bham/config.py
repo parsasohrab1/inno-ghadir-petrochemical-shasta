@@ -59,4 +59,16 @@ MODULE_CONFIGS = {
         version="2.0.0",
         params={"n_estimators": 300, "max_depth": 6, "learning_rate": 0.05},
     ),
+    "quality_optimizer": ModuleConfig(
+        name="Product Quality Monitoring & Optimization",
+        algorithm="SPC (Western Electric) + Cp/Cpk (ISO 22514-2) + CUSUM + EWMA + Ishikawa RCA",
+        version="2.1.0",
+        params={"control_limit_sigma": 3.0, "ewma_lambda": 0.2, "cusum_threshold": 5.0},
+    ),
+    "production_optimizer": ModuleConfig(
+        name="Production Line Optimization (OEE/Yield/Bottleneck)",
+        algorithm="OEE (Nakajima) + Theory of Constraints + Yield analysis + Cost-Benefit ROI",
+        version="2.1.0",
+        params={"ideal_cycle_time_min": 5.0, "target_yield_pct": 95.0, "product_value_usd_per_ton": 800.0},
+    ),
 }

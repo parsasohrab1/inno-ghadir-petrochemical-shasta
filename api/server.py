@@ -26,6 +26,7 @@ sys.path.insert(0, str(REPO / "src"))
 from bham import (
     AlarmAnalytics, BarrierHealthMonitor, SequencePredictor,
     DynamicRiskEstimator, TEPFaultDetector,
+    QualityOptimizer, ProductionOptimizer, OEE_TARGETS,
     DATA_SYN, DATA_REAL, MODELS_DIR, REPORTS_DIR, __version__,
     EEMUA_TARGETS,
 )
@@ -33,7 +34,7 @@ import joblib
 
 app = FastAPI(
     title="BHAM API — سامانه هوشمند مدیریت آلارم و پایش سلامت لایه‌های حفاظتی",
-    description="REST API برای چهار ماژول AI + تشخیص خطای TEP",
+    description="REST API برای هفت ماژول AI + تشخیص خطای TEP + بهینه‌سازی کیفیت و خط تولید",
     version=__version__,
     docs_url="/docs",
     redoc_url="/redoc",
@@ -148,6 +149,110 @@ class LOPARequest(BaseModel):
     barriers: list[BarrierRow] = Field(..., min_length=1)
     hazard: str = "loss_of_containment"
     unmitigated_freq_per_year: float = 0.1
+
+
+# ------------------------------------------------------------
+# مدل‌های Pydantic برای ماژول‌های جدید کیفیت و تولید (v2.1)
+# ------------------------------------------------------------
+
+class QualityRow(BaseModel):
+    """یک ردیف داده کیفیت/فرآیند."""
+    timestamp: str | None = None
+    unit: str | None = None
+    value: float
+    variable: str | None = None  # نام متغیر (اگر چند متغیره)
+    target: float | None = None
+    usl: float | None = None
+    lsl: float | None = None
+    setpoint: float | None = None
+    fault_id: int | None = None
+
+
+class QualitySpec(BaseModel):
+    """spec یک متغیر کیفی."""
+    target: float
+    usl: float
+    lsl: float
+    description: str = ""
+    unit: str = ""
+    impact: str = "Medium"
+
+
+class QualityReportRequest(BaseModel):
+    """درخواست گزارش کامل کیفیت محصول."""
+    data: dict[str, list[float]] = Field(..., description="نام متغیر -> لیست مقادیر")
+    specs: dict[str, QualitySpec] = Field(..., description="spec هر متغیر")
+    fault_col: str | None = Field(None, description="نام ستون خطا (اختیاری)")
+
+
+class QualityFaultImpactRequest(BaseModel):
+    """درخواست تحلیل اثر خطا بر کیفیت."""
+    values: list[float] = Field(..., min_length=2)
+    fault_ids: list[int] = Field(..., min_length=2)
+    fault_descriptions: dict[int, str] | None = None
+    quality_variable_name: str = "xmeas_40"
+
+
+class OEEInput(BaseModel):
+    """ورودی محاسبه OEE."""
+    unit: str
+    planned_time_h: float = Field(..., gt=0)
+    downtime_h: float = Field(..., ge=0)
+    total_count: int = Field(..., gt=0)
+    good_count: int = Field(..., ge=0)
+    ideal_cycle_time_min: float = 5.0
+
+
+class UnitProductionData(BaseModel):
+    """داده تولید یک واحد برای bottleneck analysis."""
+    unit: str
+    equipment: str
+    utilization_pct: float
+    throughput_tph: float
+    capacity_tph: float
+    quality_pct: float = 99.0
+    performance_pct: float = 95.0
+
+
+class BottleneckRequest(BaseModel):
+    """درخواست شناسایی bottleneck."""
+    units: list[UnitProductionData] = Field(..., min_length=1)
+
+
+class YieldInput(BaseModel):
+    """ورودی تحلیل بازده."""
+    unit: str
+    feed_kg_h: float = Field(..., gt=0)
+    product_kg_h: float = Field(..., gt=0)
+    downtime_loss_kg_h: float = 0.0
+    quality_loss_kg_h: float = 0.0
+    energy_loss_kg_h: float = 0.0
+
+
+class ProductionReportRequest(BaseModel):
+    """درخواست گزارش جامع تولید."""
+    oee_input: OEEInput
+    units_data: list[UnitProductionData] = Field(default_factory=list)
+    yields_data: list[YieldInput] = Field(default_factory=list)
+
+
+class SPCRequest(BaseModel):
+    """درخواست تحلیل SPC یک متغیر."""
+    values: list[float] = Field(..., min_length=2)
+    usl: float
+    lsl: float
+    target: float | None = None
+    variable: str = "variable"
+
+
+class SetpointOptimizeRequest(BaseModel):
+    """درخواست بهینه‌سازی setpoint."""
+    values: list[float] = Field(..., min_length=10)
+    target: float
+    usl: float
+    lsl: float
+    quality_col: str = "quality"
+    manipulated_vars: list[str] | None = None
 
 
 # ------------------------------------------------------------
@@ -522,6 +627,139 @@ def detect_tep_faults(req: TEPDetectRequest):
         },
         "errors": [],
     }
+
+
+# ============================================================
+# ماژول جدید ۶: پایش و بهینه‌سازی کیفیت محصول (Quality Optimization)
+# ============================================================
+
+@app.post("/api/v1/quality/spc")
+def quality_spc(req: SPCRequest):
+    """تحلیل SPC کامل یک متغیر (Western Electric + Cp/Cpk + CUSUM + EWMA)."""
+    qo = QualityOptimizer()
+    s = pd.Series(req.values, name=req.variable)
+    spc = qo.spc_analysis(s, usl=req.usl, lsl=req.lsl, target=req.target)
+    return {"status": "ok", "data": spc.__dict__, "errors": []}
+
+
+@app.post("/api/v1/quality/report")
+def quality_report(req: QualityReportRequest):
+    """گزارش جامع کیفیت محصول با همه شاخص‌ها (SPC، fault impact، RCA، setpoint)."""
+    qo = QualityOptimizer()
+    # تبدیل به DataFrame
+    df = pd.DataFrame(req.data)
+    # افزودن ستون خطا اگر وجود دارد
+    fault_col = req.fault_col if (req.fault_col and req.fault_col in df.columns) else None
+    # تبدیل QualitySpec به dict
+    specs_clean = {k: v.model_dump() for k, v in req.specs.items()}
+    report = qo.quality_report(df, specs_clean, fault_col)
+    return {"status": "ok", "data": report, "errors": []}
+
+
+@app.post("/api/v1/quality/fault-impact")
+def quality_fault_impact(req: QualityFaultImpactRequest):
+    """تحلیل اثر خطاهای فرآیندی بر کیفیت محصول."""
+    qo = QualityOptimizer()
+    df = pd.DataFrame({
+        "value": req.values,
+        "fault_id": req.fault_ids,
+    })
+    impacts = qo.fault_quality_impact(
+        df, "fault_id", "value",
+        req.fault_descriptions,
+    )
+    return {
+        "status": "ok",
+        "data": {
+            "impacts": [i.__dict__ for i in impacts],
+            "quality_variable": req.quality_variable_name,
+            "n_faults_analyzed": len(impacts),
+        },
+        "errors": [],
+    }
+
+
+@app.post("/api/v1/quality/setpoint-optimize")
+def quality_setpoint_optimize(req: SetpointOptimizeRequest):
+    """پیشنهاد بهینه‌سازی setpoint بر اساس همبستگی متغیرهای دستکاری با کیفیت."""
+    qo = QualityOptimizer()
+    df = pd.DataFrame({req.quality_col: req.values})
+    # اگر متغیرهای دستکاری ارائه نشده، None بفرست تا خودکار انتخاب شود
+    opts = qo.optimize_setpoint(df, req.quality_col, req.target, req.usl, req.lsl, req.manipulated_vars)
+    return {
+        "status": "ok",
+        "data": {
+            "optimizations": [o.__dict__ for o in opts],
+            "n_suggestions": len(opts),
+        },
+        "errors": [],
+    }
+
+
+# ============================================================
+# ماژول جدید ۷: بهینه‌سازی خط تولید (Production Optimization)
+# ============================================================
+
+@app.post("/api/v1/production/oee")
+def production_oee(req: OEEInput):
+    """محاسبه OEE (Overall Equipment Effectiveness)."""
+    po = ProductionOptimizer()
+    oee = po.compute_oee(
+        unit=req.unit, planned_time_h=req.planned_time_h,
+        downtime_h=req.downtime_h, total_count=req.total_count,
+        good_count=req.good_count, ideal_cycle_time_min=req.ideal_cycle_time_min,
+    )
+    return {
+        "status": "ok",
+        "data": oee.__dict__,
+        "targets": OEE_TARGETS,
+        "errors": [],
+    }
+
+
+@app.post("/api/v1/production/bottlenecks")
+def production_bottlenecks(req: BottleneckRequest):
+    """شناسایی گلوگاه خط تولید (Theory of Constraints)."""
+    po = ProductionOptimizer()
+    units_data = [u.model_dump() if hasattr(u, 'model_dump') else u.__dict__ for u in req.units]
+    bottlenecks = po.identify_bottlenecks(units_data)
+    return {
+        "status": "ok",
+        "data": {
+            "bottlenecks": [b.__dict__ for b in bottlenecks],
+            "n_bottlenecks": sum(1 for b in bottlenecks if b.is_bottleneck),
+        },
+        "errors": [],
+    }
+
+
+@app.post("/api/v1/production/yield")
+def production_yield(req: YieldInput):
+    """تحلیل بازده محصول با تفکیک اتلاف‌ها."""
+    po = ProductionOptimizer()
+    y = po.analyze_yield(
+        unit=req.unit, feed_kg_h=req.feed_kg_h, product_kg_h=req.product_kg_h,
+        downtime_loss_kg_h=req.downtime_loss_kg_h,
+        quality_loss_kg_h=req.quality_loss_kg_h,
+        energy_loss_kg_h=req.energy_loss_kg_h,
+    )
+    return {"status": "ok", "data": y.__dict__, "errors": []}
+
+
+@app.post("/api/v1/production/report")
+def production_report(req: ProductionReportRequest):
+    """گزارش جامع تولید با OEE، bottleneck، yield، KPI و optimizations."""
+    po = ProductionOptimizer()
+    oee_input = req.oee_input.model_dump() if hasattr(req.oee_input, 'model_dump') else req.oee_input
+    units_data = [u.model_dump() if hasattr(u, 'model_dump') else u.__dict__ for u in req.units_data]
+    yields_data = [y.model_dump() if hasattr(y, 'model_dump') else y.__dict__ for y in req.yields_data]
+    report = po.production_report(
+        df=None,
+        units_data=units_data,
+        yields_data=yields_data,
+        oee_input=oee_input,
+    )
+    return {"status": "ok", "data": report, "errors": []}
 
 
 # ------------------------------------------------------------
