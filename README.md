@@ -9,7 +9,7 @@
 **توسعه‌دهنده:** شرکت پتروپالاتوس
 **شماره نامه:** 14050817001
 **سطح بلوغ فناوری:** TRL 5 ✅
-**نسخه:** 1.0.0
+**نسخه:** 2.0.0 (بهینه‌شده پس از بنچ‌مارک با استانداردهای بین‌المللی)
 
 ---
 
@@ -48,15 +48,40 @@ BHAM یک سامانه هوشمند مبتنی بر هوش مصنوعی برای
 
 ## ویژگی‌ها
 
+### قابلیت‌های اصلی (نسخه ۲.۰.۰ — بهینه‌شده با بنچ‌مارک بین‌المللی)
+
 - ✅ **۴ ماژول AI مستقل** با الگوریتم‌های تخصصی (DBSCAN، Isolation Forest، Random Forest، XGBoost، Weibull AFT، PCA، Markov Chain).
 - ✅ **ماژول پنجم تشخیص خطای فرآیند** روی بنچ‌مارک واقعی TEP با ۱۰٬۵۸۰ نمونه آموزش و ۲۱٬۱۲۰ نمونه آزمون.
-- ✅ **REST API کامل** با FastAPI برای یکپارچه‌سازی با سیستم‌های دیگر.
+- ✅ **REST API کامل** با FastAPI (۱۵ endpoint) برای یکپارچه‌سازی با سیستم‌های دیگر.
 - ✅ **داشبورد واکنش‌گرا** تک‌فایلی (HTML/CSS/JS بدون وابستگی خارجی) با پشتیبانی RTL و فارسی.
-- ✅ **تست خودکار** با pytest، پوشش ۹۶٪.
+- ✅ **تست خودکار** با pytest (۷۸ تست)، پوشش ۹۴٪.
 - ✅ **تولید داده مصنوعی** با الگوهای واقع‌گرایانه (چترینگ، علت مشترک، طوفان آلارم، توالی خطرناک).
-- ✅ **مستندات کامل** SRS، BRS، TRL، معماری فنی.
+- ✅ **مستندات کامل** SRS، BRS، TRL، معماری فنی، بنچ‌مارک.
 - ✅ **قابلیت بازتولید** با seed ثابت و نسخه‌گذاری وابستگی.
 - ✅ **سطح بلوغ فناوری TRL 5** (اعتبارسنجی در محیط مرتبط).
+
+### قابلیت‌های جدید نسخه ۲ (منطبق با استانداردهای بین‌المللی)
+
+**ماژول آلارم — منطبق با EEMUA 191 / ISA-18.2 / IEC 62682:**
+- 📊 ۲۰ شاخص کامل EEMUA: نرخ پایدار/اوج (per 10 min)، چترینگ (هر دو معیار 1min/9min)، standing، stale، flood با شروع/پایان، توزیع اولویت، bad-actors، ack_compliance، بار اپراتور.
+- 🎯 **Alarm Rationalization** خودکار (مرحله C چرخه ISA-18.2) با ۴ اقدام: Keep / Reprioritize / Retune / Remove.
+- 🔇 **Alarm Shelving** (الزام IEC 62682) با ثبت دلیل، انقضا، و safety impact.
+- 🔄 **State-Based Suppression** برای حالت‌های Start-up / Shutdown / Maintenance.
+- 📈 **امتیاز انطباق خودکار** (0-100) با گرید A-D و گزارش شکاف‌ها.
+
+**ماژول لایه‌های حفاظتی — منطبق با IEC 61511:**
+- 🛡️ **تخمین SIL** (1-4) محقق‌شده بر اساس PFD (IEC 61511 Table 3).
+- 🎯 **SIL هدف** بر اساس نوع لایه (BPCS=1, SIS=2, ESD=3).
+- ⚖️ **LOPA** (Layer of Protection Analysis) با محاسبه RRF و مقایسه با RRF لازم برای ریسک قابل‌تحمل.
+- ⏱️ **مدیریت زمان بایپس** با حداکثر مجاز بر اساس SIL (`MAX_BYPASS_H_PER_YEAR`).
+- 📅 **فواصل تست بر اساس SIL** (SIL 3 = نیم‌سالانه، SIL 4 = فصلی).
+
+**ماژول پیش‌بینی توالی:**
+- ⏰ **Horizon چندمرحله‌ای**: احتمال توقف در ۱ ساعت، ۲۴ ساعت و ۷۲ ساعت آینده.
+- 🎯 **تخمین lead-time** تا توقف و فیلد اعتماد (confidence).
+- 💡 **توصیه مداخله** بر اساس horizon پیش‌بینی.
+
+برای جزئیات بنچ‌مارک با محصولات تجاری (PAS, Honeywell, ABB, AspenTech, GE, Yokogawa, Siemens, Rockwell) به [docs/BENCHMARK.md](docs/BENCHMARK.md) مراجعه کنید.
 
 ## معماری سیستم
 
@@ -208,9 +233,18 @@ uvicorn api.server:app --host 0.0.0.0 --port 8000 --reload
 |---|---|---|
 | GET | `/api/v1/health` | بررسی سلامت سرویس |
 | GET | `/api/v1/metrics/summary` | خلاصه KPIهای آموزش |
-| POST | `/api/v1/alarms/analyze` | تحلیل لاگ آلارم |
-| POST | `/api/v1/barriers/health` | محاسبه سلامت لایه‌های حفاظتی |
-| POST | `/api/v1/sequences/predict` | پیش‌بینی احتمال توقف |
+| POST | `/api/v1/alarms/analyze` | تحلیل لاگ آلارم + compliance report |
+| POST | `/api/v1/alarms/kpi/eemua` | شاخص‌های استاندارد EEMUA 191 / ISA-18.2 |
+| POST | `/api/v1/alarms/rationalize` | Alarm Rationalization (ISA-18.2 مرحله C) |
+| POST | `/api/v1/alarms/shelve` | Alarm Shelving (الزام IEC 62682) |
+| POST | `/api/v1/alarms/shelve/batch` | شلف کردن گروهی |
+| DELETE | `/api/v1/alarms/shelve/{tag}` | بازگرداندن آلارم از shelved |
+| GET | `/api/v1/alarms/shelved` | فهرست آلارم‌های shelved |
+| POST | `/api/v1/alarms/state-based-suppression` | خاموش خودکار بر اساس حالت فرآیند |
+| POST | `/api/v1/barriers/health` | محاسبه سلامت + SIL لایه‌های حفاظتی (IEC 61511) |
+| POST | `/api/v1/barriers/lopa` | تحلیل LOPA (کفایت لایه‌های حفاظتی) |
+| POST | `/api/v1/barriers/bypass-events` | استخراج رویدادهای بایپس با انطباق SIL |
+| POST | `/api/v1/sequences/predict` | پیش‌بینی احتمال توقف (horizon 1h/24h/72h) |
 | POST | `/api/v1/risk/estimate` | برآورد ریسک پویا |
 | POST | `/api/v1/tep/detect` | تشخیص خطای TEP |
 

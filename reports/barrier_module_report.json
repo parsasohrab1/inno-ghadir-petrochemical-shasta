@@ -6,8 +6,14 @@
       "health_score": 0.5337,
       "bypass_penalty": 0.15,
       "pfd_estimate": 0.1,
+      "sil_achieved": 0,
+      "sil_target": 1,
+      "sil_gap": "Below-target",
       "risk_level": "High",
-      "recommendation": "بایپس فعال برای لایه BPCS-Control؛ بازگرداندن به خدمت یا compensating measure الزامی است."
+      "bypass_active": true,
+      "bypass_hours_year": 33.0,
+      "bypass_compliance": false,
+      "recommendation": "بایپس BPCS-Control فراتر از حد مجاز SIL 1؛ بازگرداندن به خدمت یا compensating measure الزامی است."
     },
     {
       "unit": "Aromatics-Unit",
@@ -15,8 +21,14 @@
       "health_score": 0.5555,
       "bypass_penalty": 0.15,
       "pfd_estimate": 0.1,
+      "sil_achieved": 0,
+      "sil_target": 3,
+      "sil_gap": "Below-target",
       "risk_level": "High",
-      "recommendation": "بایپس فعال برای لایه ESD-Shutdown؛ بازگرداندن به خدمت یا compensating measure الزامی است."
+      "bypass_active": true,
+      "bypass_hours_year": 54.0,
+      "bypass_compliance": false,
+      "recommendation": "بایپس ESD-Shutdown فراتر از حد مجاز SIL 3؛ بازگرداندن به خدمت یا compensating measure الزامی است."
     },
     {
       "unit": "Aromatics-Unit",
@@ -24,8 +36,14 @@
       "health_score": 0.49,
       "bypass_penalty": 0.15,
       "pfd_estimate": 0.1,
+      "sil_achieved": 0,
+      "sil_target": 1,
+      "sil_gap": "Below-target",
       "risk_level": "High",
-      "recommendation": "بایپس فعال برای لایه Procedural؛ بازگرداندن به خدمت یا compensating measure الزامی است."
+      "bypass_active": true,
+      "bypass_hours_year": 90.0,
+      "bypass_compliance": false,
+      "recommendation": "بایپس Procedural فراتر از حد مجاز SIL 1؛ بازگرداندن به خدمت یا compensating measure الزامی است."
     },
     {
       "unit": "Aromatics-Unit",
@@ -33,8 +51,14 @@
       "health_score": 0.4061,
       "bypass_penalty": 0.15,
       "pfd_estimate": 0.1,
+      "sil_achieved": 0,
+      "sil_target": 2,
+      "sil_gap": "Below-target",
       "risk_level": "Critical",
-      "recommendation": "بایپس فعال برای لایه Relief-Valve؛ بازگرداندن به خدمت یا compensating measure الزامی است."
+      "bypass_active": true,
+      "bypass_hours_year": 34.0,
+      "bypass_compliance": false,
+      "recommendation": "بایپس Relief-Valve فراتر از حد مجاز SIL 2؛ بازگرداندن به خدمت یا compensating measure الزامی است."
     },
     {
       "unit": "Aromatics-Unit",
@@ -42,8 +66,14 @@
       "health_score": 0.4197,
       "bypass_penalty": 0.15,
       "pfd_estimate": 0.1,
+      "sil_achieved": 0,
+      "sil_target": 2,
+      "sil_gap": "Below-target",
       "risk_level": "Critical",
-      "recommendation": "بایپس فعال برای لایه SIS-Interlock؛ بازگرداندن به خدمت یا compensating measure الزامی است."
+      "bypass_active": true,
+      "bypass_hours_year": 18.0,
+      "bypass_compliance": false,
+      "recommendation": "بایپس SIS-Interlock فراتر از حد مجاز SIL 2؛ بازگرداندن به خدمت یا compensating measure الزامی است."
     },
     {
       "unit": "Olefins-Unit",
@@ -51,8 +81,14 @@
       "health_score": 0.5283,
       "bypass_penalty": 0.15,
       "pfd_estimate": 0.1,
+      "sil_achieved": 0,
+      "sil_target": 1,
+      "sil_gap": "Below-target",
       "risk_level": "High",
-      "recommendation": "بایپس فعال برای لایه BPCS-Control؛ بازگرداندن به خدمت یا compensating measure الزامی است."
+      "bypass_active": true,
+      "bypass_hours_year": 39.0,
+      "bypass_compliance": false,
+      "recommendation": "بایپس BPCS-Control فراتر از حد مجاز SIL 1؛ بازگرداندن به خدمت یا compensating measure الزامی است."
     },
     {
       "unit": "Olefins-Unit",
@@ -60,8 +96,14 @@
       "health_score": 0.4916,
       "bypass_penalty": 0.15,
       "pfd_estimate": 0.1,
+      "sil_achieved": 0,
+      "sil_target": 3,
+      "sil_gap": "Below-target",
       "risk_level": "High",
-      "recommendation": "بایپس فعال برای لایه ESD-Shutdown؛ بازگرداندن به خدمت یا compensating measure الزامی است."
+      "bypass_active": true,
+      "bypass_hours_year": 45.0,
+      "bypass_compliance": false,
+      "recommendation": "بایپس ESD-Shutdown فراتر از حد مجاز SIL 3؛ بازگرداندن به خدمت یا compensating measure الزامی است."
     },
     {
       "unit": "Olefins-Unit",
@@ -69,8 +111,14 @@
       "health_score": 0.4544,
       "bypass_penalty": 0.15,
       "pfd_estimate": 0.1,
+      "sil_achieved": 0,
+      "sil_target": 1,
+      "sil_gap": "Below-target",
       "risk_level": "High",
-      "recommendation": "بایپس فعال برای لایه Procedural؛ بازگرداندن به خدمت یا compensating measure الزامی است."
+      "bypass_active": true,
+      "bypass_hours_year": 92.0,
+      "bypass_compliance": false,
+      "recommendation": "بایپس Procedural فراتر از حد مجاز SIL 1؛ بازگرداندن به خدمت یا compensating measure الزامی است."
     },
     {
       "unit": "Olefins-Unit",
@@ -78,8 +126,14 @@
       "health_score": 0.5389,
       "bypass_penalty": 0.15,
       "pfd_estimate": 0.1,
+      "sil_achieved": 0,
+      "sil_target": 2,
+      "sil_gap": "Below-target",
       "risk_level": "High",
-      "recommendation": "بایپس فعال برای لایه Relief-Valve؛ بازگرداندن به خدمت یا compensating measure الزامی است."
+      "bypass_active": true,
+      "bypass_hours_year": 14.0,
+      "bypass_compliance": false,
+      "recommendation": "بایپس Relief-Valve فراتر از حد مجاز SIL 2؛ بازگرداندن به خدمت یا compensating measure الزامی است."
     },
     {
       "unit": "Olefins-Unit",
@@ -87,8 +141,14 @@
       "health_score": 0.4,
       "bypass_penalty": 0.15,
       "pfd_estimate": 0.1,
+      "sil_achieved": 0,
+      "sil_target": 2,
+      "sil_gap": "Below-target",
       "risk_level": "Critical",
-      "recommendation": "بایپس فعال برای لایه SIS-Interlock؛ بازگرداندن به خدمت یا compensating measure الزامی است."
+      "bypass_active": true,
+      "bypass_hours_year": 29.0,
+      "bypass_compliance": false,
+      "recommendation": "بایپس SIS-Interlock فراتر از حد مجاز SIL 2؛ بازگرداندن به خدمت یا compensating measure الزامی است."
     },
     {
       "unit": "Polymer-Unit",
@@ -96,8 +156,14 @@
       "health_score": 0.5371,
       "bypass_penalty": 0.15,
       "pfd_estimate": 0.1,
+      "sil_achieved": 0,
+      "sil_target": 1,
+      "sil_gap": "Below-target",
       "risk_level": "High",
-      "recommendation": "بایپس فعال برای لایه BPCS-Control؛ بازگرداندن به خدمت یا compensating measure الزامی است."
+      "bypass_active": true,
+      "bypass_hours_year": 25.0,
+      "bypass_compliance": false,
+      "recommendation": "بایپس BPCS-Control فراتر از حد مجاز SIL 1؛ بازگرداندن به خدمت یا compensating measure الزامی است."
     },
     {
       "unit": "Polymer-Unit",
@@ -105,8 +171,14 @@
       "health_score": 0.4633,
       "bypass_penalty": 0.15,
       "pfd_estimate": 0.1,
+      "sil_achieved": 0,
+      "sil_target": 3,
+      "sil_gap": "Below-target",
       "risk_level": "High",
-      "recommendation": "بایپس فعال برای لایه ESD-Shutdown؛ بازگرداندن به خدمت یا compensating measure الزامی است."
+      "bypass_active": true,
+      "bypass_hours_year": 25.0,
+      "bypass_compliance": false,
+      "recommendation": "بایپس ESD-Shutdown فراتر از حد مجاز SIL 3؛ بازگرداندن به خدمت یا compensating measure الزامی است."
     },
     {
       "unit": "Polymer-Unit",
@@ -114,8 +186,14 @@
       "health_score": 0.455,
       "bypass_penalty": 0.15,
       "pfd_estimate": 0.1,
+      "sil_achieved": 0,
+      "sil_target": 1,
+      "sil_gap": "Below-target",
       "risk_level": "High",
-      "recommendation": "بایپس فعال برای لایه Procedural؛ بازگرداندن به خدمت یا compensating measure الزامی است."
+      "bypass_active": true,
+      "bypass_hours_year": 55.0,
+      "bypass_compliance": false,
+      "recommendation": "بایپس Procedural فراتر از حد مجاز SIL 1؛ بازگرداندن به خدمت یا compensating measure الزامی است."
     },
     {
       "unit": "Polymer-Unit",
@@ -123,8 +201,14 @@
       "health_score": 0.4263,
       "bypass_penalty": 0.15,
       "pfd_estimate": 0.1,
+      "sil_achieved": 0,
+      "sil_target": 2,
+      "sil_gap": "Below-target",
       "risk_level": "Critical",
-      "recommendation": "بایپس فعال برای لایه Relief-Valve؛ بازگرداندن به خدمت یا compensating measure الزامی است."
+      "bypass_active": true,
+      "bypass_hours_year": 38.0,
+      "bypass_compliance": false,
+      "recommendation": "بایپس Relief-Valve فراتر از حد مجاز SIL 2؛ بازگرداندن به خدمت یا compensating measure الزامی است."
     },
     {
       "unit": "Polymer-Unit",
@@ -132,8 +216,14 @@
       "health_score": 0.482,
       "bypass_penalty": 0.15,
       "pfd_estimate": 0.1,
+      "sil_achieved": 0,
+      "sil_target": 2,
+      "sil_gap": "Below-target",
       "risk_level": "High",
-      "recommendation": "بایپس فعال برای لایه SIS-Interlock؛ بازگرداندن به خدمت یا compensating measure الزامی است."
+      "bypass_active": true,
+      "bypass_hours_year": 32.0,
+      "bypass_compliance": false,
+      "recommendation": "بایپس SIS-Interlock فراتر از حد مجاز SIL 2؛ بازگرداندن به خدمت یا compensating measure الزامی است."
     },
     {
       "unit": "Storage-Tank-Farm",
@@ -141,8 +231,14 @@
       "health_score": 0.4338,
       "bypass_penalty": 0.15,
       "pfd_estimate": 0.1,
+      "sil_achieved": 0,
+      "sil_target": 1,
+      "sil_gap": "Below-target",
       "risk_level": "Critical",
-      "recommendation": "بایپس فعال برای لایه BPCS-Control؛ بازگرداندن به خدمت یا compensating measure الزامی است."
+      "bypass_active": true,
+      "bypass_hours_year": 21.0,
+      "bypass_compliance": false,
+      "recommendation": "بایپس BPCS-Control فراتر از حد مجاز SIL 1؛ بازگرداندن به خدمت یا compensating measure الزامی است."
     },
     {
       "unit": "Storage-Tank-Farm",
@@ -150,8 +246,14 @@
       "health_score": 0.4794,
       "bypass_penalty": 0.15,
       "pfd_estimate": 0.1,
+      "sil_achieved": 0,
+      "sil_target": 3,
+      "sil_gap": "Below-target",
       "risk_level": "High",
-      "recommendation": "بایپس فعال برای لایه ESD-Shutdown؛ بازگرداندن به خدمت یا compensating measure الزامی است."
+      "bypass_active": true,
+      "bypass_hours_year": 36.0,
+      "bypass_compliance": false,
+      "recommendation": "بایپس ESD-Shutdown فراتر از حد مجاز SIL 3؛ بازگرداندن به خدمت یا compensating measure الزامی است."
     },
     {
       "unit": "Storage-Tank-Farm",
@@ -159,8 +261,14 @@
       "health_score": 0.4,
       "bypass_penalty": 0.15,
       "pfd_estimate": 0.1,
+      "sil_achieved": 0,
+      "sil_target": 1,
+      "sil_gap": "Below-target",
       "risk_level": "Critical",
-      "recommendation": "بایپس فعال برای لایه Procedural؛ بازگرداندن به خدمت یا compensating measure الزامی است."
+      "bypass_active": true,
+      "bypass_hours_year": 76.0,
+      "bypass_compliance": false,
+      "recommendation": "بایپس Procedural فراتر از حد مجاز SIL 1؛ بازگرداندن به خدمت یا compensating measure الزامی است."
     },
     {
       "unit": "Storage-Tank-Farm",
@@ -168,8 +276,14 @@
       "health_score": 0.4397,
       "bypass_penalty": 0.15,
       "pfd_estimate": 0.1,
+      "sil_achieved": 0,
+      "sil_target": 2,
+      "sil_gap": "Below-target",
       "risk_level": "Critical",
-      "recommendation": "بایپس فعال برای لایه Relief-Valve؛ بازگرداندن به خدمت یا compensating measure الزامی است."
+      "bypass_active": true,
+      "bypass_hours_year": 23.0,
+      "bypass_compliance": false,
+      "recommendation": "بایپس Relief-Valve فراتر از حد مجاز SIL 2؛ بازگرداندن به خدمت یا compensating measure الزامی است."
     },
     {
       "unit": "Storage-Tank-Farm",
@@ -177,8 +291,14 @@
       "health_score": 0.5358,
       "bypass_penalty": 0.15,
       "pfd_estimate": 0.1,
+      "sil_achieved": 0,
+      "sil_target": 2,
+      "sil_gap": "Below-target",
       "risk_level": "High",
-      "recommendation": "بایپس فعال برای لایه SIS-Interlock؛ بازگرداندن به خدمت یا compensating measure الزامی است."
+      "bypass_active": true,
+      "bypass_hours_year": 24.0,
+      "bypass_compliance": false,
+      "recommendation": "بایپس SIS-Interlock فراتر از حد مجاز SIL 2؛ بازگرداندن به خدمت یا compensating measure الزامی است."
     },
     {
       "unit": "Utility-Unit",
@@ -186,8 +306,14 @@
       "health_score": 0.532,
       "bypass_penalty": 0.15,
       "pfd_estimate": 0.1,
+      "sil_achieved": 0,
+      "sil_target": 1,
+      "sil_gap": "Below-target",
       "risk_level": "High",
-      "recommendation": "بایپس فعال برای لایه BPCS-Control؛ بازگرداندن به خدمت یا compensating measure الزامی است."
+      "bypass_active": true,
+      "bypass_hours_year": 35.0,
+      "bypass_compliance": false,
+      "recommendation": "بایپس BPCS-Control فراتر از حد مجاز SIL 1؛ بازگرداندن به خدمت یا compensating measure الزامی است."
     },
     {
       "unit": "Utility-Unit",
@@ -195,8 +321,14 @@
       "health_score": 0.4065,
       "bypass_penalty": 0.15,
       "pfd_estimate": 0.1,
+      "sil_achieved": 0,
+      "sil_target": 3,
+      "sil_gap": "Below-target",
       "risk_level": "Critical",
-      "recommendation": "بایپس فعال برای لایه ESD-Shutdown؛ بازگرداندن به خدمت یا compensating measure الزامی است."
+      "bypass_active": true,
+      "bypass_hours_year": 18.0,
+      "bypass_compliance": false,
+      "recommendation": "بایپس ESD-Shutdown فراتر از حد مجاز SIL 3؛ بازگرداندن به خدمت یا compensating measure الزامی است."
     },
     {
       "unit": "Utility-Unit",
@@ -204,8 +336,14 @@
       "health_score": 0.4763,
       "bypass_penalty": 0.15,
       "pfd_estimate": 0.1,
+      "sil_achieved": 0,
+      "sil_target": 1,
+      "sil_gap": "Below-target",
       "risk_level": "High",
-      "recommendation": "بایپس فعال برای لایه Procedural؛ بازگرداندن به خدمت یا compensating measure الزامی است."
+      "bypass_active": true,
+      "bypass_hours_year": 121.0,
+      "bypass_compliance": false,
+      "recommendation": "بایپس Procedural فراتر از حد مجاز SIL 1؛ بازگرداندن به خدمت یا compensating measure الزامی است."
     },
     {
       "unit": "Utility-Unit",
@@ -213,8 +351,14 @@
       "health_score": 0.5019,
       "bypass_penalty": 0.15,
       "pfd_estimate": 0.1,
+      "sil_achieved": 0,
+      "sil_target": 2,
+      "sil_gap": "Below-target",
       "risk_level": "High",
-      "recommendation": "بایپس فعال برای لایه Relief-Valve؛ بازگرداندن به خدمت یا compensating measure الزامی است."
+      "bypass_active": true,
+      "bypass_hours_year": 34.0,
+      "bypass_compliance": false,
+      "recommendation": "بایپس Relief-Valve فراتر از حد مجاز SIL 2؛ بازگرداندن به خدمت یا compensating measure الزامی است."
     },
     {
       "unit": "Utility-Unit",
@@ -222,8 +366,14 @@
       "health_score": 0.4161,
       "bypass_penalty": 0.15,
       "pfd_estimate": 0.1,
+      "sil_achieved": 0,
+      "sil_target": 2,
+      "sil_gap": "Below-target",
       "risk_level": "Critical",
-      "recommendation": "بایپس فعال برای لایه SIS-Interlock؛ بازگرداندن به خدمت یا compensating measure الزامی است."
+      "bypass_active": true,
+      "bypass_hours_year": 13.0,
+      "bypass_compliance": false,
+      "recommendation": "بایپس SIS-Interlock فراتر از حد مجاز SIL 2؛ بازگرداندن به خدمت یا compensating measure الزامی است."
     }
   ],
   "unit_risk": {
@@ -339,8 +489,9 @@
     {
       "unit": "Storage-Tank-Farm",
       "layer": "Procedural",
+      "sil_target": 1,
       "current_interval_days": 365,
-      "recommended_interval_days": 270,
+      "recommended_interval_days": 266,
       "days_since_test": 184,
       "health_score": 0.5818,
       "risk_score": 0.2601,
@@ -349,8 +500,9 @@
     {
       "unit": "Olefins-Unit",
       "layer": "SIS-Interlock",
+      "sil_target": 2,
       "current_interval_days": 365,
-      "recommended_interval_days": 274,
+      "recommended_interval_days": 271,
       "days_since_test": 176,
       "health_score": 0.5937,
       "risk_score": 0.2471,
@@ -359,8 +511,9 @@
     {
       "unit": "Aromatics-Unit",
       "layer": "Relief-Valve",
+      "sil_target": 2,
       "current_interval_days": 365,
-      "recommended_interval_days": 280,
+      "recommended_interval_days": 276,
       "days_since_test": 183,
       "health_score": 0.6183,
       "risk_score": 0.2328,
@@ -369,8 +522,9 @@
     {
       "unit": "Utility-Unit",
       "layer": "ESD-Shutdown",
+      "sil_target": 3,
       "current_interval_days": 365,
-      "recommended_interval_days": 280,
+      "recommended_interval_days": 138,
       "days_since_test": 185,
       "health_score": 0.6172,
       "risk_score": 0.2312,
@@ -379,8 +533,9 @@
     {
       "unit": "Utility-Unit",
       "layer": "SIS-Interlock",
+      "sil_target": 2,
       "current_interval_days": 365,
-      "recommended_interval_days": 282,
+      "recommended_interval_days": 278,
       "days_since_test": 186,
       "health_score": 0.6322,
       "risk_score": 0.2273,
@@ -389,8 +544,9 @@
     {
       "unit": "Aromatics-Unit",
       "layer": "SIS-Interlock",
+      "sil_target": 2,
       "current_interval_days": 365,
-      "recommended_interval_days": 286,
+      "recommended_interval_days": 282,
       "days_since_test": 176,
       "health_score": 0.6275,
       "risk_score": 0.2161,
@@ -399,8 +555,9 @@
     {
       "unit": "Polymer-Unit",
       "layer": "Relief-Valve",
+      "sil_target": 2,
       "current_interval_days": 365,
-      "recommended_interval_days": 286,
+      "recommended_interval_days": 282,
       "days_since_test": 178,
       "health_score": 0.6411,
       "risk_score": 0.2139,
@@ -409,8 +566,9 @@
     {
       "unit": "Storage-Tank-Farm",
       "layer": "BPCS-Control",
+      "sil_target": 1,
       "current_interval_days": 365,
-      "recommended_interval_days": 287,
+      "recommended_interval_days": 283,
       "days_since_test": 182,
       "health_score": 0.6481,
       "risk_score": 0.2125,
@@ -419,8 +577,9 @@
     {
       "unit": "Storage-Tank-Farm",
       "layer": "Relief-Valve",
+      "sil_target": 2,
       "current_interval_days": 365,
-      "recommended_interval_days": 287,
+      "recommended_interval_days": 283,
       "days_since_test": 185,
       "health_score": 0.657,
       "risk_score": 0.2113,
@@ -429,8 +588,9 @@
     {
       "unit": "Olefins-Unit",
       "layer": "Procedural",
+      "sil_target": 1,
       "current_interval_days": 365,
-      "recommended_interval_days": 293,
+      "recommended_interval_days": 289,
       "days_since_test": 182,
       "health_score": 0.6737,
       "risk_score": 0.1964,
@@ -439,8 +599,9 @@
     {
       "unit": "Polymer-Unit",
       "layer": "ESD-Shutdown",
+      "sil_target": 3,
       "current_interval_days": 365,
-      "recommended_interval_days": 293,
+      "recommended_interval_days": 144,
       "days_since_test": 177,
       "health_score": 0.6839,
       "risk_score": 0.1947,
@@ -449,8 +610,9 @@
     {
       "unit": "Polymer-Unit",
       "layer": "Procedural",
+      "sil_target": 1,
       "current_interval_days": 365,
-      "recommended_interval_days": 294,
+      "recommended_interval_days": 290,
       "days_since_test": 177,
       "health_score": 0.6684,
       "risk_score": 0.1936,
@@ -459,8 +621,9 @@
     {
       "unit": "Utility-Unit",
       "layer": "Procedural",
+      "sil_target": 1,
       "current_interval_days": 365,
-      "recommended_interval_days": 298,
+      "recommended_interval_days": 294,
       "days_since_test": 182,
       "health_score": 0.6955,
       "risk_score": 0.1833,
@@ -469,8 +632,9 @@
     {
       "unit": "Storage-Tank-Farm",
       "layer": "ESD-Shutdown",
+      "sil_target": 3,
       "current_interval_days": 365,
-      "recommended_interval_days": 299,
+      "recommended_interval_days": 147,
       "days_since_test": 170,
       "health_score": 0.6902,
       "risk_score": 0.1803,
@@ -479,8 +643,9 @@
     {
       "unit": "Polymer-Unit",
       "layer": "SIS-Interlock",
+      "sil_target": 2,
       "current_interval_days": 365,
-      "recommended_interval_days": 300,
+      "recommended_interval_days": 296,
       "days_since_test": 185,
       "health_score": 0.6989,
       "risk_score": 0.1776,
@@ -489,8 +654,9 @@
     {
       "unit": "Olefins-Unit",
       "layer": "ESD-Shutdown",
+      "sil_target": 3,
       "current_interval_days": 365,
-      "recommended_interval_days": 301,
+      "recommended_interval_days": 148,
       "days_since_test": 183,
       "health_score": 0.711,
       "risk_score": 0.1728,
@@ -499,8 +665,9 @@
     {
       "unit": "Aromatics-Unit",
       "layer": "Procedural",
+      "sil_target": 1,
       "current_interval_days": 365,
-      "recommended_interval_days": 302,
+      "recommended_interval_days": 298,
       "days_since_test": 190,
       "health_score": 0.709,
       "risk_score": 0.1717,
@@ -509,8 +676,9 @@
     {
       "unit": "Utility-Unit",
       "layer": "Relief-Valve",
+      "sil_target": 2,
       "current_interval_days": 365,
-      "recommended_interval_days": 304,
+      "recommended_interval_days": 300,
       "days_since_test": 183,
       "health_score": 0.7236,
       "risk_score": 0.1653,
@@ -519,8 +687,9 @@
     {
       "unit": "Utility-Unit",
       "layer": "BPCS-Control",
+      "sil_target": 1,
       "current_interval_days": 365,
-      "recommended_interval_days": 310,
+      "recommended_interval_days": 306,
       "days_since_test": 188,
       "health_score": 0.767,
       "risk_score": 0.1482,
@@ -529,8 +698,9 @@
     {
       "unit": "Olefins-Unit",
       "layer": "BPCS-Control",
+      "sil_target": 1,
       "current_interval_days": 365,
-      "recommended_interval_days": 311,
+      "recommended_interval_days": 306,
       "days_since_test": 179,
       "health_score": 0.7527,
       "risk_score": 0.1479,
@@ -539,8 +709,9 @@
     {
       "unit": "Aromatics-Unit",
       "layer": "BPCS-Control",
+      "sil_target": 1,
       "current_interval_days": 365,
-      "recommended_interval_days": 311,
+      "recommended_interval_days": 307,
       "days_since_test": 183,
       "health_score": 0.7563,
       "risk_score": 0.1452,
@@ -549,8 +720,9 @@
     {
       "unit": "Polymer-Unit",
       "layer": "BPCS-Control",
+      "sil_target": 1,
       "current_interval_days": 365,
-      "recommended_interval_days": 312,
+      "recommended_interval_days": 308,
       "days_since_test": 179,
       "health_score": 0.7572,
       "risk_score": 0.1433,
@@ -559,8 +731,9 @@
     {
       "unit": "Storage-Tank-Farm",
       "layer": "SIS-Interlock",
+      "sil_target": 2,
       "current_interval_days": 365,
-      "recommended_interval_days": 313,
+      "recommended_interval_days": 308,
       "days_since_test": 187,
       "health_score": 0.761,
       "risk_score": 0.1424,
@@ -569,8 +742,9 @@
     {
       "unit": "Olefins-Unit",
       "layer": "Relief-Valve",
+      "sil_target": 2,
       "current_interval_days": 365,
-      "recommended_interval_days": 314,
+      "recommended_interval_days": 310,
       "days_since_test": 186,
       "health_score": 0.7636,
       "risk_score": 0.1381,
@@ -579,8 +753,9 @@
     {
       "unit": "Aromatics-Unit",
       "layer": "ESD-Shutdown",
+      "sil_target": 3,
       "current_interval_days": 365,
-      "recommended_interval_days": 317,
+      "recommended_interval_days": 156,
       "days_since_test": 183,
       "health_score": 0.7855,
       "risk_score": 0.1309,

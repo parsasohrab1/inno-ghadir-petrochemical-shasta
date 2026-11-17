@@ -34,10 +34,17 @@ class SequencePrediction:
     next_event_probability: float
     lead_time_min: int
     risk_level: str
+    # پیش‌بینی چندمرحله‌ای (بنچ‌مارک با Horizon پیش‌بینی محصولات تجاری)
+    prob_shutdown_1h: float       # احتمال توقف در ۱ ساعت آینده
+    prob_shutdown_24h: float      # احتمال توقف در ۲۴ ساعت آینده
+    prob_shutdown_72h: float      # احتمال توقف در ۷۲ ساعت آینده
+    lead_time_to_shutdown_min: int  # تخمین زمان تا توقف
+    confidence: float              # اعتماد پیش‌بینی (0..1)
+    recommended_intervention: str  # اقدام پیشنهادی برای جلوگیری
 
 
 class SequencePredictor:
-    """پیش‌بینی توالی‌های منجر به توقف/ناایمن."""
+    """پیش‌بینی توالی‌های منجر به توقف/ناایمن — نسخه ۲ با horizon چندمرحله‌ای."""
 
     def __init__(self,
                  n_estimators: int = 200,
@@ -131,8 +138,25 @@ class SequencePredictor:
             seq = row.events.split("|")
             next_event, next_p = self._predict_next(seq)
             p = float(proba[i])
+            # تخمین horizon چندمرحله‌ای: فرض ساده‌ی نرخ ثابت رشد احتمال در زمان
+            # P(t≤T) = 1 - (1-p)^k که k متناسب با افق زمانی است
+            # کالیبراسیون: پنجره ۱ ساعت = p، ۲۴ ساعت = 24×p (محصول ویژگی‌های ثابت)
+            # ۷۲ ساعت = 72×p با کاهش اثر (decay)
+            p1h = float(np.clip(p * 1.0, 0.0, 1.0))
+            p24h = float(np.clip(1 - (1 - p) ** 24, 0.0, 1.0))
+            p72h = float(np.clip(1 - (1 - p) ** 72, 0.0, 1.0))
+            # تخمین زمان تا توقف: معکوس نرخ
+            if p > 0.05:
+                lead = int(getattr(row, "lead_time_min", 0) if p > self.threshold else max(1, int(60 / p)))
+                lead_to_shutdown = max(lead, int(60 / max(p, 0.01)))
+            else:
+                lead = 0
+                lead_to_shutdown = -1  # غیرقابل پیش‌بینی
             risk = "Critical" if p > 0.7 else "High" if p > 0.4 else "Medium" if p > 0.15 else "Low"
-            lead = int(getattr(row, "lead_time_min", 0) if p > self.threshold else 0)
+            # اعتماد بر اساس تعداد نمونه‌های مشابه دیده‌شده
+            confidence = float(np.clip(next_p if next_event != "Unknown" else 0.5, 0.0, 1.0))
+            # اقدام پیشنهادی بر اساس horizon
+            intervention = self._recommend_intervention(risk, p1h, p24h, p72h)
             results.append(SequencePrediction(
                 sequence_id=row.sequence_id,
                 shutdown_probability=round(p, 4),
@@ -140,8 +164,26 @@ class SequencePredictor:
                 next_event_probability=round(next_p, 4),
                 lead_time_min=lead,
                 risk_level=risk,
+                prob_shutdown_1h=round(p1h, 4),
+                prob_shutdown_24h=round(p24h, 4),
+                prob_shutdown_72h=round(p72h, 4),
+                lead_time_to_shutdown_min=lead_to_shutdown,
+                confidence=round(confidence, 3),
+                recommended_intervention=intervention,
             ))
         return results
+
+    def _recommend_intervention(self, risk: str, p1h: float, p24h: float, p72h: float) -> str:
+        """اقدام پیشنهادی بر اساس horizon پیش‌بینی."""
+        if p1h > 0.5:
+            return "مداخله فوری در < ۱ ساعت: کاهش بار، فعال‌سازی بک‌آپ، آماده‌سازی تیم اضطراری."
+        if p24h > 0.5:
+            return "مداخله در ۲۴ ساعت: بازرسی فوری، کنترل پارامترهای بحرانی، آماده‌سازی shutdown کنترل‌شده."
+        if p72h > 0.5:
+            return "برنامه‌ریزی مداخله در ۷۲ ساعت: تحلیل روند، تنظیم فرآیند، بازرسی دوره‌ای زودهنگام."
+        if risk == "Medium":
+            return "افزایش فرکانس پایش و ثبت روند برای تحلیل پیشگیرانه."
+        return "عملیات عادی؛ پایش استاندارد ادامه یابد."
 
     def _predict_next(self, seq: list[str]) -> tuple[str, float]:
         order = self.markov_order

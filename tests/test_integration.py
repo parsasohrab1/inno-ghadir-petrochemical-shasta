@@ -19,7 +19,7 @@ from bham import (
 
 
 def test_package_version():
-    assert bham.__version__ == "1.0.0"
+    assert bham.__version__ == "2.0.0"
     assert "BHAM" in bham.__product__
 
 

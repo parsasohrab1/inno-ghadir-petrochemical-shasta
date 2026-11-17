@@ -258,6 +258,74 @@ svg.spark { width: 100%; height: 60px; }
       <div class="kpi red"><div class="label">طوفان آلارم</div><div class="value" id="aFlood">—</div></div>
     </div>
 
+    <!-- پنل انطباق EEMUA 191 / ISA-18.2 / IEC 62682 (جدید در نسخه ۲) -->
+    <div class="card" style="margin-top:16px; border-left:4px solid var(--primary)">
+      <h3><span class="icon">✓</span>انطباق با استانداردهای بین‌المللی (EEMUA 191 / ISA-18.2 / IEC 62682)</h3>
+      <div class="compliance-header" style="display:flex; flex-wrap:wrap; gap:20px; align-items:center; margin:12px 0">
+        <div style="text-align:center">
+          <div style="font-size:0.8rem; color:var(--text-dim)">امتیاز انطباق</div>
+          <div id="complianceScore" style="font-size:clamp(2rem,5vw,3rem); font-weight:900; color:var(--primary)">—</div>
+          <div style="font-size:0.8rem">از ۱۰۰</div>
+        </div>
+        <div style="text-align:center">
+          <div style="font-size:0.8rem; color:var(--text-dim)">گرید</div>
+          <div id="complianceGrade" style="font-size:clamp(2rem,5vw,3rem); font-weight:900; color:var(--green)">—</div>
+          <div style="font-size:0.8rem">A=عالی · D=ضعیف</div>
+        </div>
+        <div style="flex:1; min-width:200px">
+          <div style="font-size:0.8rem; color:var(--text-dim); margin-bottom:6px">شکاف‌های شناسایی‌شده</div>
+          <div id="complianceGaps" style="font-size:0.85rem; color:var(--orange)">در حال بارگذاری...</div>
+        </div>
+      </div>
+      <div style="overflow-x:auto">
+        <table id="eemuaTable" style="width:100%; border-collapse:collapse; font-size:0.85rem">
+          <thead>
+            <tr style="background:var(--bg2)">
+              <th style="padding:8px; text-align:right">شاخص EEMUA/ISA</th>
+              <th style="padding:8px">مقدار فعلی</th>
+              <th style="padding:8px">هدف استاندارد</th>
+              <th style="padding:8px">وضعیت</th>
+            </tr>
+          </thead>
+          <tbody id="eemuaTableBody">
+            <tr><td colspan="4" style="padding:12px; color:var(--text-dim); text-align:center">برای مشاهده شاخص‌ها، تحلیل آلارم را اجرا کنید.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- پنل توزیع اولویت (EEMUA 80/15/4/1) -->
+    <div class="grid-2" style="margin-top:16px">
+      <div class="card">
+        <h3><span class="icon">📊</span>توزیع اولویت آلارم (هدف EEMUA: ۸۰/۱۵/۴/۱)</h3>
+        <div id="priorityDistChart" style="height:200px; display:flex; align-items:flex-end; gap:12px; padding:12px 0"></div>
+        <div style="font-size:0.78rem; color:var(--text-dim); margin-top:8px">پایین · متوسط · بالا · بحرانی</div>
+      </div>
+      <div class="card">
+        <h3><span class="icon">⏱</span>نرخ آلارم در پنجره ۱۰ دقیقه</h3>
+        <div id="alarmRatePanel" style="padding:12px 0">
+          <div style="font-size:0.85rem; color:var(--text-dim)">نرخ پایدار (هدف ≤ ۱)</div>
+          <div id="steadyRate" style="font-size:1.8rem; font-weight:800; color:var(--green)">—</div>
+          <div style="font-size:0.85rem; color:var(--text-dim); margin-top:12px">نرخ اوج پس از اختلال (هدف ≤ ۱۰)</div>
+          <div id="peakRate" style="font-size:1.8rem; font-weight:800; color:var(--orange)">—</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- پنل بد-اکتورها و Rationalization -->
+    <div class="grid-2" style="margin-top:16px">
+      <div class="card">
+        <h3><span class="icon">⚠</span>بد-اکتورها (Bad Actors)</h3>
+        <div style="font-size:0.85rem; color:var(--text-dim); margin-bottom:8px">تگ‌هایی که بیش از ۵٪ کل آلارم‌ها را تولید می‌کنند</div>
+        <div id="badActorsPanel" style="font-size:0.85rem">—</div>
+      </div>
+      <div class="card">
+        <h3><span class="icon">🔧</span>Rationalization (ISA-18.2)</h3>
+        <div style="font-size:0.85rem; color:var(--text-dim); margin-bottom:8px">اقدامات پیشنهادی بازنگری آلارم</div>
+        <div id="rationalizationPanel" style="font-size:0.85rem">برای مشاهده، تحلیل آلارم را اجرا کنید.</div>
+      </div>
+    </div>
+
     <div class="grid-2" style="margin-top:16px">
       <div class="card">
         <h3><span class="icon"></span>خوشه‌های آلارم (علت‌های محتمل)</h3>
@@ -273,22 +341,42 @@ svg.spark { width: 100%; height: 60px; }
   <!-- لایه‌های حفاظتی -->
   <section class="panel" id="barriers">
     <div class="card">
-      <h3><span class="icon"></span>وضعیت لایه‌های حفاظتی (نمونه مصنوعی)</h3>
+      <h3><span class="icon"></span>وضعیت لایه‌های حفاظتی (IEC 61511)</h3>
       <button class="btn" id="btnBarriers">محاسبه سلامت لایه‌ها</button>
+      <button class="btn" id="btnLopa" style="margin-right:8px">اجرای LOPA</button>
     </div>
+
+    <!-- پنل خلاصه SIL (جدید در نسخه ۲) -->
+    <div class="kpi-grid" style="margin-top:16px" id="silKpis">
+      <div class="kpi green"><div class="label">لایه‌های مطابق SIL</div><div class="value" id="silCompliant">—</div><div class="delta">انطباق IEC 61511</div></div>
+      <div class="kpi red"><div class="label">زیر هدف SIL</div><div class="value" id="silBelow">—</div><div class="delta down">نیاز به بازنگری</div></div>
+      <div class="kpi orange"><div class="label">بایپس فعال</div><div class="value" id="bypassActive">—</div><div class="delta">مدیریت بایپس</div></div>
+      <div class="kpi yellow"><div class="label">تخلف بایپس</div><div class="value" id="bypassViolations">—</div><div class="delta">فراتر از حد SIL</div></div>
+    </div>
+
     <div class="card" style="margin-top:16px">
-      <h3><span class="icon"></span>سلامت هر لایه به تفکیک واحد</h3>
-      <table id="barrierTable">
-        <thead><tr><th>واحد</th><th>لایه</th><th>سلامت</th><th>جریمه بایپس</th><th>PFD</th><th>سطح ریسک</th><th>توصیه</th></tr></thead>
-        <tbody></tbody>
-      </table>
+      <h3><span class="icon"></span>سلامت هر لایه، PFD و SIL (IEC 61511)</h3>
+      <div style="overflow-x:auto">
+        <table id="barrierTable">
+          <thead><tr><th>واحد</th><th>لایه</th><th>سلامت</th><th>PFD</th><th>SIL محقق</th><th>SIL هدف</th><th>وضعیت</th><th>بایپس</th><th>توصیه</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- پنل LOPA (جدید در نسخه ۲) -->
+    <div class="card" style="margin-top:16px; border-left:4px solid var(--accent)">
+      <h3><span class="icon">🛡</span>تحلیل لایه‌های حفاظتی (LOPA) — کفایت لایه‌ها</h3>
+      <div id="lopaPanel" style="font-size:0.9rem; padding:8px 0">
+        برای مشاهده تحلیل LOPA، دکمه «اجرای LOPA» را بزنید.
+      </div>
     </div>
   </section>
 
   <!-- پیش‌بینی توالی -->
   <section class="panel" id="sequences">
     <div class="card">
-      <h3><span class="icon"></span>پیش‌بینی احتمال توقف برای توالی رخدادها</h3>
+      <h3><span class="icon"></span>پیش‌بینی احتمال توقف برای توالی رخدادها (Horizon ۱h/۲۴h/۷۲h)</h3>
       <div class="form-grid">
         <label>توالی رویدادها (جدا با |)
           <textarea id="seqInput">Bypass-On|Alarm-Storm|Temp-High|Vibration-High</textarea>
@@ -296,8 +384,15 @@ svg.spark { width: 100%; height: 60px; }
       </div>
       <button class="btn" id="btnSeq">پیش‌بینی</button>
     </div>
+    <!-- پنل horizon چندمرحله‌ای (جدید در نسخه ۲) -->
+    <div class="kpi-grid" style="margin-top:16px" id="seqHorizonKpis">
+      <div class="kpi yellow"><div class="label">احتمال توقف در ۱ ساعت</div><div class="value" id="p1h">—</div><div class="delta">مداخله فوری</div></div>
+      <div class="kpi orange"><div class="label">احتمال توقف در ۲۴ ساعت</div><div class="value" id="p24h">—</div><div class="delta">برنامه‌ریزی مداخله</div></div>
+      <div class="kpi red"><div class="label">احتمال توقف در ۷۲ ساعت</div><div class="value" id="p72h">—</div><div class="delta">تحلیل روند</div></div>
+      <div class="kpi green"><div class="label">زمان پیش‌notice تا توقف</div><div class="value" id="leadTime">—</div><div class="delta">دقیقه</div></div>
+    </div>
     <div class="card" style="margin-top:16px">
-      <h3><span class="icon"></span>نتیجه</h3>
+      <h3><span class="icon"></span>نتیجه و توصیه مداخله</h3>
       <div id="seqResult" style="font-size:0.9rem"></div>
     </div>
   </section>
@@ -570,6 +665,130 @@ function renderAlarmResults(d) {
   const tt = document.querySelector('#threshTable tbody');
   tt.innerHTML = (d.threshold_recommendations||[]).map(r => `
     <tr><td><code>${r.tag}</code></td><td>${r.current_setpoint}</td><td>${r.suggested_high}</td><td>${r.suggested_low}</td></tr>`).join('');
+
+  // ----- پنل‌های جدید نسخه ۲: انطباق EEMUA/ISA -----
+  renderCompliancePanels(d);
+}
+
+function renderCompliancePanels(d) {
+  const m = d.metrics || {};
+  const compliance = d.compliance || {};
+  const targets = compliance.targets || {};
+  const actuals = compliance.actuals || {};
+  const gaps = compliance.gaps || [];
+
+  // امتیاز و گرید
+  const score = m.compliance_score ?? compliance.compliance_score ?? '—';
+  const grade = m.compliance_grade ?? compliance.compliance_grade ?? '—';
+  document.getElementById('complianceScore').textContent = score;
+  const gradeEl = document.getElementById('complianceGrade');
+  gradeEl.textContent = grade;
+  const gradeColors = {A:'var(--green)', B:'var(--green)', C:'var(--yellow)', D:'var(--red)'};
+  gradeEl.style.color = gradeColors[grade] || 'var(--text)';
+
+  // شکاف‌ها
+  const gapsEl = document.getElementById('complianceGaps');
+  if (gaps.length === 0) {
+    gapsEl.innerHTML = '<span style="color:var(--green)">✓ هیچ شکاف قابل توجهی شناسایی نشد.</span>';
+  } else {
+    gapsEl.innerHTML = gaps.map(g => `<div style="margin:4px 0"><span class="badge ${g.severity==='High'?'Critical':g.severity==='Medium'?'High':'Low'}">${g.severity}</span> ${g.kpi}: ${g.actual} (هدف: ${g.target})</div>`).join('');
+  }
+
+  // جدول EEMUA
+  const rows = [
+    ['نرخ آلارم پایدار (۱۰ دقیقه)', actuals.alarms_per_10min_steady, targets.alarms_per_10min_steady, '<= ۱'],
+    ['نرخ اوج پس از اختلال', actuals.alarms_per_10min_peak, targets.alarms_per_10min_upset, '<= ۱۰'],
+    ['درصد تگ‌های چترینگ', actuals.chattering_pct + '%', '<= ۱٪', '<= ۱٪'],
+    ['درصد آلارم ثابت‌مانده', actuals.standing_pct + '%', '<= ۵٪', '<= ۵٪'],
+    ['درصد آلارم stale', actuals.stale_pct + '%', targets.stale_max_pct + '%', '<= ۱٪'],
+    ['سهم ۱۰ تگ برتر', actuals.top10_share_pct + '%', targets.top10_share_max_pct + '%', '<= ۱٪'],
+    ['سهم بد-اکتورها', actuals.bad_actors_share_pct + '%', '<= ۱۰٪', '<= ۱۰٪'],
+    ['انطباق توزیع اولویت', actuals.priority_compliance + '%', '>= ۷۰٪', '>= ۷۰٪'],
+    ['نرخ تأیید (ack ≤ ۳۰s)', actuals.ack_compliance_pct + '%', '>= ۸۰٪', '>= ۸۰٪'],
+    ['آلارم/اپراتور/روز', actuals.alarms_per_operator_per_day, '<= ۱۴۴', '<= ۱۴۴'],
+  ];
+  const tbody = document.getElementById('eemuaTableBody');
+  tbody.innerHTML = rows.map(r => {
+    const actual = r[1];
+    const target = r[2];
+    const ok = checkKpi(r[0], actual, target);
+    return `<tr style="border-bottom:1px solid var(--border)">
+      <td style="padding:8px; text-align:right">${r[0]}</td>
+      <td style="padding:8px; text-align:center; font-weight:700; color:${ok?'var(--green)':'var(--red)'}">${actual ?? '—'}</td>
+      <td style="padding:8px; text-align:center; color:var(--text-dim)">${r[3]}</td>
+      <td style="padding:8px; text-align:center">${ok?'<span class="badge Low">✓ مطابق</span>':'<span class="badge Critical">✗ غیرمطابق</span>'}</td>
+    </tr>`;
+  }).join('');
+
+  // توزیع اولویت
+  const prioDist = actuals.priority_distribution || m.priority_distribution || {};
+  const targetDist = {Low:80, Medium:15, High:4, Critical:1};
+  const prioColors = {Low:'var(--green)', Medium:'var(--yellow)', High:'var(--orange)', Critical:'var(--red)'};
+  document.getElementById('priorityDistChart').innerHTML = Object.keys(targetDist).map(p => {
+    const actual = prioDist[p] || 0;
+    const target = targetDist[p];
+    const h = Math.min(actual * 2, 100);
+    return `<div style="flex:1; text-align:center">
+      <div style="font-size:0.75rem; color:var(--text-dim)">${actual.toFixed(1)}٪</div>
+      <div style="height:${Math.max(h,4)}px; background:${prioColors[p]}; border-radius:4px 4px 0 0; margin:4px 0; min-height:4px"></div>
+      <div style="font-size:0.8rem">${p === 'Low' ? 'پایین' : p === 'Medium' ? 'متوسط' : p === 'High' ? 'بالا' : 'بحرانی'}</div>
+      <div style="font-size:0.7rem; color:var(--text-dim)">هدف ${target}٪</div>
+    </div>`;
+  }).join('');
+
+  // نرخ steady/peak
+  document.getElementById('steadyRate').textContent = actuals.alarms_per_10min_steady ?? '—';
+  document.getElementById('peakRate').textContent = actuals.alarms_per_10min_peak ?? '—';
+  const sr = actuals.alarms_per_10min_steady;
+  document.getElementById('steadyRate').style.color = (sr != null && sr <= 1) ? 'var(--green)' : 'var(--red)';
+
+  // بد-اکتورها
+  const badActorsShare = actuals.bad_actors_share_pct ?? 0;
+  document.getElementById('badActorsPanel').innerHTML = `
+    <div style="margin:6px 0">تعداد بد-اکتور: <b>${m.bad_actors ?? 0}</b> تگ</div>
+    <div style="margin:6px 0">سهم کل آلارم: <b style="color:${badActorsShare<=10?'var(--green)':'var(--red)'}">${badActorsShare}٪</b></div>
+    <div style="margin:6px 0">سهم ۱۰ تگ برتر: <b style="color:${(m.top_10_share_pct||0)<=5?'var(--green)':'var(--red)'}">${m.top_10_share_pct ?? 0}٪</b> (هدف EEMUA ممتاز: <= ۱٪)</div>
+  `;
+
+  // Rationalization — فراخوانی جداگانه
+  loadRationalization();
+}
+
+function checkKpi(name, actual, target) {
+  if (actual == null || target == null) return true;
+  // اکثر شاخص‌ها: مقدار کمتر = بهتر
+  if (typeof actual === 'string') {
+    actual = parseFloat(actual);
+    target = parseFloat(target);
+  }
+  if (isNaN(actual) || isNaN(target)) return true;
+  if (name.includes('انطباق') || name.includes('تأیید')) {
+    return actual >= target;
+  }
+  return actual <= target;
+}
+
+async function loadRationalization() {
+  // بارگذاری آخرین نتیجه rationalization از حافظه محلی (ساده)
+  const n = parseInt(document.getElementById('nAlarms').value) || 100;
+  const prio = document.getElementById('prioFilter').value;
+  const alarms = generateAlarms(n, prio);
+  try {
+    const data = await api('/api/v1/alarms/rationalize', {
+      method: 'POST', body: JSON.stringify({alarms})
+    });
+    const recs = (data.data?.rationalization_records) || [];
+    const summary = data.data?.actions_summary || {};
+    document.getElementById('rationalizationPanel').innerHTML = `
+      <div style="margin:6px 0"><b>${recs.length}</b> تگ بازنگری شد.</div>
+      <div style="margin:6px 0">خلاصه اقدامات:
+        ${Object.entries(summary).map(([a,c])=>`<span class="badge ${a==='Remove'?'Critical':a==='Retune'?'High':a==='Reprioritize'?'Medium':'Low'}">${a}: ${c}</span>`).join(' ')}
+      </div>
+      <div style="margin-top:8px">نمونه‌ها:<br>${recs.slice(0,5).map(r=>`<div style="margin:3px 0; font-size:0.8rem"><code>${r.tag}</code> ${r.current_priority}→<b>${r.recommended_priority}</b> <span class="badge Low">${r.recommended_action}</span></div>`).join('')}</div>
+    `;
+  } catch (e) {
+    document.getElementById('rationalizationPanel').textContent = 'تحلیل rationalization در دسترس نیست.';
+  }
 }
 
 // ---------------------------------------------------------------
@@ -584,6 +803,7 @@ document.getElementById('btnBarriers').addEventListener('click', async () => {
         timestamp: now, unit: u, layer: l,
         health_score: rand(0.4, 0.95),
         bypass_active: Math.random() < 0.1,
+        bypass_duration_h: Math.random() < 0.1 ? rand(0.5, 6) : 0,
         last_test_result: Math.random() < 0.85 ? 1 : 0,
         days_since_test: randInt(10, 400),
         sensor_drift: rand(0, 0.1),
@@ -596,7 +816,7 @@ document.getElementById('btnBarriers').addEventListener('click', async () => {
       method: 'POST', body: JSON.stringify({barriers})
     });
     setStatus(true);
-    renderBarrierResults(data.data.layers);
+    renderBarrierResults(data.data.layers, data.data.sil_summary);
   } catch {
     // حالت دمو
     const layers = barriers.map(b => ({
@@ -604,24 +824,104 @@ document.getElementById('btnBarriers').addEventListener('click', async () => {
       health_score: Math.round(b.health_score*100)/100,
       bypass_penalty: b.bypass_active ? 0.15 : 0,
       pfd_estimate: rand(0.001, 0.05),
+      sil_achieved: 1 + Math.floor(Math.random() * 3),
+      sil_target: 2,
+      sil_gap: Math.random() < 0.7 ? 'OK' : 'Below-target',
       risk_level: b.health_score > 0.85 ? 'Low' : b.health_score > 0.65 ? 'Medium' : b.health_score > 0.45 ? 'High' : 'Critical',
+      bypass_active: b.bypass_active,
+      bypass_compliance: !b.bypass_active,
       recommendation: b.bypass_active ? 'بایپس فعال؛ بازگرداندن به خدمت الزامی' : 'ادامه پایش دوره‌ای'
     }));
-    renderBarrierResults(layers);
+    renderBarrierResults(layers, {total_layers: layers.length, sil_compliant: layers.filter(l=>l.sil_gap==='OK').length, sil_below_target: layers.filter(l=>l.sil_gap!=='OK').length, bypass_active_count: layers.filter(l=>l.bypass_active).length, bypass_violations: 0, compliance_pct: 75});
   }
 });
 
-function renderBarrierResults(layers) {
+function renderBarrierResults(layers, silSummary) {
   const tb = document.querySelector('#barrierTable tbody');
   tb.innerHTML = layers.map(l => `
     <tr>
       <td>${l.unit}</td><td>${l.layer}</td>
-      <td>${(l.health_score*100).toFixed(1)}%</td>
-      <td>${l.bypass_penalty.toFixed(2)}</td>
-      <td>${l.pfd_estimate.toFixed(4)}</td>
-      <td><span class="badge ${l.risk_level}">${l.risk_level}</span></td>
+      <td style="color:${(l.health_score||0)>=0.7?'var(--green)':(l.health_score||0)>=0.5?'var(--orange)':'var(--red)'}">${((l.health_score||0)*100).toFixed(1)}%</td>
+      <td style="font-family:monospace">${(l.pfd_estimate||0).toExponential(2)}</td>
+      <td><span class="badge ${l.sil_achieved?'Low':'Critical'}">SIL ${l.sil_achieved ?? '-'}</span></td>
+      <td>SIL ${l.sil_target ?? '-'}</td>
+      <td>${l.sil_gap === 'OK' ? '<span class="badge Low">✓ OK</span>' : '<span class="badge Critical">✗ زیر هدف</span>'}</td>
+      <td>${l.bypass_active ? (l.bypass_compliance ? '<span class="badge High">فعال (مجاز)</span>' : '<span class="badge Critical">فعال (تخلف)</span>') : '<span class="badge Low">خیر</span>'}</td>
       <td style="font-size:0.78rem">${l.recommendation}</td>
     </tr>`).join('');
+
+  // پنل خلاصه SIL
+  if (silSummary) {
+    document.getElementById('silCompliant').textContent = silSummary.sil_compliant ?? '—';
+    document.getElementById('silBelow').textContent = silSummary.sil_below_target ?? '—';
+    document.getElementById('bypassActive').textContent = silSummary.bypass_active_count ?? '—';
+    document.getElementById('bypassViolations').textContent = silSummary.bypass_violations ?? '—';
+  }
+}
+
+// دکمه LOPA
+document.getElementById('btnLopa').addEventListener('click', async () => {
+  const now = new Date().toISOString().replace('T',' ').slice(0,19);
+  const barriers = [];
+  for (const u of UNITS.slice(0, 2)) {
+    for (const l of LAYERS) {
+      barriers.push({
+        timestamp: now, unit: u, layer: l,
+        health_score: rand(0.4, 0.95),
+        bypass_active: false,
+        bypass_duration_h: 0,
+        last_test_result: 1,
+        days_since_test: randInt(30, 200),
+        sensor_drift: rand(0, 0.05),
+        response_delay_s: rand(1, 3),
+      });
+    }
+  }
+  try {
+    const data = await api('/api/v1/barriers/lopa', {
+      method: 'POST', body: JSON.stringify({barriers, hazard: 'loss_of_containment', unmitigated_freq_per_year: 0.1})
+    });
+    renderLopaResults(data.data);
+  } catch {
+    // حالت دمو
+    renderLopaResults({
+      hazard: 'loss_of_containment',
+      tolerable_risk: 1e-5,
+      results: UNITS.slice(0,2).map(u => ({
+        unit: u, hazard: 'loss_of_containment',
+        unmitigated_risk: 0.1, mitigated_risk: 1e-6,
+        risk_reduction_factor: 100000, required_rrf: 10000,
+        tolerable_risk: 1e-5, layers_used: ['BPCS-Control','SIS-Interlock','ESD-Shutdown'],
+        layers_compliant: 2, gap: 'Compliant',
+        recommendation: 'لایه‌های حفاظتی کافی برای ریسک قابل‌تحمل.'
+      }))
+    });
+  }
+});
+
+function renderLopaResults(data) {
+  const results = data.results || [];
+  const html = results.map(r => {
+    const gapClass = r.gap === 'Compliant' ? 'Low' : (r.gap === 'Insufficient-layers' ? 'Critical' : 'High');
+    return `
+      <div style="border:1px solid var(--border); border-radius:8px; padding:12px; margin:8px 0">
+        <div style="display:flex; flex-wrap:wrap; gap:16px; align-items:center; margin-bottom:8px">
+          <div><b>واحد:</b> ${r.unit}</div>
+          <div><b>خطر:</b> ${r.hazard}</div>
+          <span class="badge ${gapClass}">${r.gap}</span>
+        </div>
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:12px; font-size:0.85rem">
+          <div><div style="color:var(--text-dim)">ریسک بدون لایه</div><div style="font-weight:700">${r.unmitigated_risk.toExponential(2)} /سال</div></div>
+          <div><div style="color:var(--text-dim)">ریسک کاهش‌یافته</div><div style="font-weight:700; color:var(--green)">${r.mitigated_risk.toExponential(2)} /سال</div></div>
+          <div><div style="color:var(--text-dim)">ضریب کاهش (RRF)</div><div style="font-weight:700">${r.risk_reduction_factor.toFixed(0)}×</div></div>
+          <div><div style="color:var(--text-dim)">RRF لازم</div><div style="font-weight:700">${r.required_rrf.toFixed(0)}×</div></div>
+          <div><div style="color:var(--text-dim)">ریسک قابل‌تحمل</div><div>${r.tolerable_risk.toExponential(0)} /سال</div></div>
+          <div><div style="color:var(--text-dim)">لایه‌های مستقل</div><div>${r.layers_used.length} (${r.layers_compliant} مطابق)</div></div>
+        </div>
+        <div style="margin-top:8px; font-size:0.85rem; color:var(--text-dim)">💡 ${r.recommendation}</div>
+      </div>`;
+  }).join('');
+  document.getElementById('lopaPanel').innerHTML = html || 'نتیجه‌ای یافت نشد.';
 }
 
 // ---------------------------------------------------------------
@@ -640,19 +940,42 @@ document.getElementById('btnSeq').addEventListener('click', async () => {
   } catch {
     // حالت دمو
     const p = events.includes('Bypass-On') && events.includes('Alarm-Storm') ? 0.85 : 0.15;
-    renderSeqResult({ shutdown_probability: p, predicted_next_event: 'Vibration-High', next_event_probability: 0.42, lead_time_min: p > 0.5 ? 30 : 0, risk_level: p > 0.7 ? 'Critical' : p > 0.4 ? 'High' : 'Low' });
+    renderSeqResult({ shutdown_probability: p, predicted_next_event: 'Vibration-High', next_event_probability: 0.42, lead_time_min: p > 0.5 ? 30 : 0, risk_level: p > 0.7 ? 'Critical' : p > 0.4 ? 'High' : 'Low',
+      prob_shutdown_1h: p, prob_shutdown_24h: 1 - Math.pow(1-p, 24), prob_shutdown_72h: 1 - Math.pow(1-p, 72),
+      lead_time_to_shutdown_min: p > 0.05 ? Math.round(60/Math.max(p,0.01)) : -1,
+      confidence: 0.65,
+      recommended_intervention: p > 0.5 ? 'مداخله فوری در < ۱ ساعت: کاهش بار، فعال‌سازی بک‌آپ، آماده‌سازی تیم اضطراری.' : 'عملیات عادی؛ پایش استاندارد ادامه یابد.'
+    });
   }
 });
 
 function renderSeqResult(p) {
+  // پنل‌های horizon (جدید نسخه ۲)
+  const p1h = (p.prob_shutdown_1h ?? p.shutdown_probability ?? 0);
+  const p24h = (p.prob_shutdown_24h ?? 0);
+  const p72h = (p.prob_shutdown_72h ?? 0);
+  const lead = (p.lead_time_to_shutdown_min ?? p.lead_time_min ?? 0);
+  document.getElementById('p1h').textContent = (p1h*100).toFixed(1) + '%';
+  document.getElementById('p24h').textContent = (p24h*100).toFixed(1) + '%';
+  document.getElementById('p72h').textContent = (p72h*100).toFixed(1) + '%';
+  document.getElementById('leadTime').textContent = lead > 0 ? lead + ' دقیقه' : '—';
+  // رنگ‌بندی بر اساس ریسک
+  document.getElementById('p1h').style.color = p1h > 0.5 ? 'var(--red)' : (p1h > 0.15 ? 'var(--orange)' : 'var(--green)');
+  document.getElementById('p24h').style.color = p24h > 0.5 ? 'var(--red)' : (p24h > 0.15 ? 'var(--orange)' : 'var(--green)');
+  document.getElementById('p72h').style.color = p72h > 0.5 ? 'var(--red)' : (p72h > 0.15 ? 'var(--orange)' : 'var(--green)');
+
   document.getElementById('seqResult').innerHTML = `
     <div style="display:flex;gap:20px;flex-wrap:wrap;margin-bottom:12px">
-      <div><div style="color:var(--text-dim);font-size:0.8rem">احتمال توقف</div><div style="font-size:1.8rem;font-weight:800;color:${p.shutdown_probability>0.5?'var(--red)':'var(--green)'}">${(p.shutdown_probability*100).toFixed(1)}%</div></div>
+      <div><div style="color:var(--text-dim);font-size:0.8rem">احتمال توقف (instant)</div><div style="font-size:1.8rem;font-weight:800;color:${p.shutdown_probability>0.5?'var(--red)':'var(--green)'}">${(p.shutdown_probability*100).toFixed(1)}%</div></div>
       <div><div style="color:var(--text-dim);font-size:0.8rem">رویداد بعدی محتمل</div><div style="font-size:1.2rem;font-weight:700">${p.predicted_next_event}</div></div>
       <div><div style="color:var(--text-dim);font-size:0.8rem">احتمال رویداد بعدی</div><div style="font-size:1.2rem">${(p.next_event_probability*100).toFixed(0)}%</div></div>
-      <div><div style="color:var(--text-dim);font-size:0.8rem">زمان پیش‌گویی</div><div style="font-size:1.2rem">${p.lead_time_min} دقیقه</div></div>
+      <div><div style="color:var(--text-dim);font-size:0.8rem">اعتماد پیش‌بینی</div><div style="font-size:1.2rem">${((p.confidence ?? 0.5)*100).toFixed(0)}%</div></div>
+      <div><div style="color:var(--text-dim);font-size:0.8rem">سطح ریسک</div><div><span class="badge ${p.risk_level}">${p.risk_level}</span></div></div>
     </div>
-    <span class="badge ${p.risk_level}">سطح ریسک: ${p.risk_level}</span>`;
+    <div style="background:var(--bg2); padding:10px; border-radius:8px; border-right:4px solid var(--accent)">
+      <div style="font-size:0.85rem; color:var(--text-dim); margin-bottom:4px">💡 توصیه مداخله:</div>
+      <div style="font-size:0.95rem">${p.recommended_intervention || 'عملیات عادی؛ پایش استاندارد ادامه یابد.'}</div>
+    </div>`;
 }
 
 // ---------------------------------------------------------------

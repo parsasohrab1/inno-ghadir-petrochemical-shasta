@@ -27,6 +27,7 @@ from bham import (
     AlarmAnalytics, BarrierHealthMonitor, SequencePredictor,
     DynamicRiskEstimator, TEPFaultDetector,
     DATA_SYN, DATA_REAL, MODELS_DIR, REPORTS_DIR, __version__,
+    EEMUA_TARGETS,
 )
 import joblib
 
@@ -114,6 +115,41 @@ class TEPDetectRequest(BaseModel):
     features: list[list[float]] = Field(..., min_length=1)
 
 
+class RationalizeRequest(BaseModel):
+    """درخواست Alarm Rationalization (ISA-18.2)."""
+    alarms: list[AlarmRow] = Field(..., min_length=1)
+    target_distribution: dict[str, float] | None = None
+
+
+class ShelveRequest(BaseModel):
+    """درخواست Alarm Shelving (IEC 62682)."""
+    tag: str
+    duration_min: int = Field(..., ge=1, le=14400)  # حداکثر ۱۰ روز
+    reason: str
+    shelved_by: str = "operator"
+    auto_reshelf: bool = True
+    expires_at: str | None = None
+    safety_impact: str = "None"
+
+
+class ShelveBatchRequest(BaseModel):
+    """شلف کردن گروهی."""
+    items: list[ShelveRequest] = Field(..., min_length=1)
+
+
+class StateBasedRequest(BaseModel):
+    """درخواست state-based suppression."""
+    alarms: list[AlarmRow] = Field(..., min_length=1)
+    process_state: str  # Start-up / Shutdown / Maintenance / Normal
+
+
+class LOPARequest(BaseModel):
+    """درخواست تحلیل LOPA."""
+    barriers: list[BarrierRow] = Field(..., min_length=1)
+    hazard: str = "loss_of_containment"
+    unmitigated_freq_per_year: float = 0.1
+
+
 # ------------------------------------------------------------
 # بارگذاری مدل‌ها در startup
 # ------------------------------------------------------------
@@ -198,7 +234,7 @@ def metrics_summary():
 
 @app.post("/api/v1/alarms/analyze")
 def analyze_alarms(req: AlarmAnalysisRequest):
-    """تحلیل آلارم: شاخص‌ها + خوشه‌بندی + ناهنجاری + پیشنهاد آستانه."""
+    """تحلیل آلارم: شاخص‌های کامل EEMUA/ISA + خوشه‌بندی + ناهنجاری + پیشنهاد آستانه."""
     df = _alarm_df(req)
     model: AlarmAnalytics = _get_or_create("alarm", AlarmAnalytics)
     metrics = model.metrics(df)
@@ -211,10 +247,12 @@ def analyze_alarms(req: AlarmAnalysisRequest):
     except Exception:
         n_anom = 0
     recs = model.recommend_thresholds(df)
+    compliance = model.compliance_report(df)
     return {
         "status": "ok",
         "data": {
             "metrics": metrics.to_dict(),
+            "compliance": compliance,
             "n_clusters": len(clusters),
             "n_anomalies": n_anom,
             "top_clusters": [
@@ -224,7 +262,10 @@ def analyze_alarms(req: AlarmAnalysisRequest):
                     "root": c.likely_root_tag,
                     "priority_score": c.priority_score,
                     "is_flood": c.is_flood,
+                    "rationale": c.alarm_rationale,
                     "start": c.start, "end": c.end,
+                    "duration_sec": c.duration_sec,
+                    "unique_tags": c.unique_tags,
                 } for c in clusters[:10]
             ],
             "threshold_recommendations": recs[:5],
@@ -233,9 +274,122 @@ def analyze_alarms(req: AlarmAnalysisRequest):
     }
 
 
+@app.post("/api/v1/alarms/kpi/eemua")
+def alarm_kpi_eemua(req: AlarmAnalysisRequest):
+    """شاخص‌های استاندارد EEMUA 191 / ISA-18.2 با اهداف و gaps."""
+    df = _alarm_df(req)
+    model: AlarmAnalytics = _get_or_create("alarm", AlarmAnalytics)
+    compliance = model.compliance_report(df)
+    return {
+        "status": "ok",
+        "data": compliance,
+        "errors": [],
+    }
+
+
+@app.post("/api/v1/alarms/rationalize")
+def alarm_rationalize(req: RationalizeRequest):
+    """Alarm Rationalization (ISA-18.2 Lifecycle — مرحله Rationalization)."""
+    df = _alarm_df(req)
+    model: AlarmAnalytics = _get_or_create("alarm", AlarmAnalytics)
+    records = model.rationalize(df, req.target_distribution)
+    return {
+        "status": "ok",
+        "data": {
+            "rationalization_records": [r.__dict__ for r in records[:50]],
+            "total_records": len(records),
+            "actions_summary": _rationalization_summary(records),
+        },
+        "errors": [],
+    }
+
+
+def _rationalization_summary(records) -> dict:
+    actions = {}
+    for r in records:
+        actions[r.recommended_action] = actions.get(r.recommended_action, 0) + 1
+    return actions
+
+
+@app.post("/api/v1/alarms/shelve")
+def alarm_shelve(req: ShelveRequest):
+    """Alarm Shelving (الزام IEC 62682)."""
+    model: AlarmAnalytics = _get_or_create("alarm", AlarmAnalytics)
+    rec = model.shelve(
+        tag=req.tag, duration_min=req.duration_min, reason=req.reason,
+        shelved_by=req.shelved_by, auto_reshelf=req.auto_reshelf,
+        expires_at=req.expires_at, safety_impact=req.safety_impact,
+    )
+    return {
+        "status": "ok",
+        "data": rec.__dict__,
+        "errors": [],
+    }
+
+
+@app.post("/api/v1/alarms/shelve/batch")
+def alarm_shelve_batch(req: ShelveBatchRequest):
+    """شلف کردن گروهی آلارم‌ها."""
+    model: AlarmAnalytics = _get_or_create("alarm", AlarmAnalytics)
+    results = []
+    for item in req.items:
+        rec = model.shelve(
+            tag=item.tag, duration_min=item.duration_min, reason=item.reason,
+            shelved_by=item.shelved_by, auto_reshelf=item.auto_reshelf,
+            expires_at=item.expires_at, safety_impact=item.safety_impact,
+        )
+        results.append(rec.__dict__)
+    return {
+        "status": "ok",
+        "data": {"shelved": results, "count": len(results)},
+        "errors": [],
+    }
+
+
+@app.delete("/api/v1/alarms/shelve/{tag}")
+def alarm_unshelve(tag: str):
+    """بازگرداندن آلارم از shelved."""
+    model: AlarmAnalytics = _get_or_create("alarm", AlarmAnalytics)
+    ok = model.unshelve(tag)
+    return {
+        "status": "ok" if ok else "not_found",
+        "data": {"tag": tag, "unshelved": ok},
+        "errors": [] if ok else [{"type": "NotFound", "message": f"tag {tag} not shelved"}],
+    }
+
+
+@app.get("/api/v1/alarms/shelved")
+def alarm_list_shelved():
+    """فهرست آلارم‌های shelved."""
+    model: AlarmAnalytics = _get_or_create("alarm", AlarmAnalytics)
+    records = model.list_shelved()
+    return {
+        "status": "ok",
+        "data": {"shelved": [r.__dict__ for r in records], "count": len(records)},
+        "errors": [],
+    }
+
+
+@app.post("/api/v1/alarms/state-based-suppression")
+def alarm_state_based(req: StateBasedRequest):
+    """پیشنهاد خاموش آلارم بر اساس حالت فرآیند (State-Based Alarming)."""
+    df = _alarm_df(req)
+    model: AlarmAnalytics = _get_or_create("alarm", AlarmAnalytics)
+    suppressions = model.state_based_suppression(df, req.process_state)
+    return {
+        "status": "ok",
+        "data": {
+            "process_state": req.process_state,
+            "suppressions": [s.__dict__ for s in suppressions],
+            "suppressed_count": sum(1 for s in suppressions if s.suppressed),
+        },
+        "errors": [],
+    }
+
+
 @app.post("/api/v1/barriers/health")
 def barrier_health(req: BarrierHealthRequest):
-    """محاسبه سلامت لایه‌های حفاظتی و ریسک واحد."""
+    """محاسبه سلامت لایه‌های حفاظتی، SIL و ریسک واحد (IEC 61511)."""
     df = _barrier_df(req)
     model: BarrierHealthMonitor = _get_or_create("barrier", BarrierHealthMonitor)
     layers = model.compute_layer_health(df)
@@ -249,6 +403,63 @@ def barrier_health(req: BarrierHealthRequest):
             "unit_risk": unit_risk,
             "simultaneous_weakness": weak[:10],
             "schedule": schedule.to_dict(orient="records"),
+            "sil_summary": _sil_summary(layers),
+        },
+        "errors": [],
+    }
+
+
+def _sil_summary(layers) -> dict:
+    """خلاصه وضعیت SIL لایه‌ها."""
+    total = len(layers)
+    compliant = sum(1 for l in layers if l.sil_gap == "OK")
+    below = sum(1 for l in layers if l.sil_gap == "Below-target")
+    bypass_active = sum(1 for l in layers if l.bypass_active)
+    bypass_violations = sum(1 for l in layers if l.bypass_active and not l.bypass_compliance)
+    return {
+        "total_layers": total,
+        "sil_compliant": compliant,
+        "sil_below_target": below,
+        "bypass_active_count": bypass_active,
+        "bypass_violations": bypass_violations,
+        "compliance_pct": round(compliant / max(total, 1) * 100, 1),
+    }
+
+
+@app.post("/api/v1/barriers/lopa")
+def barrier_lopa(req: LOPARequest):
+    """تحلیل LOPA (Layer of Protection Analysis) برای ارزیابی کفایت لایه‌ها."""
+    df = _barrier_df(req)
+    model: BarrierHealthMonitor = _get_or_create("barrier", BarrierHealthMonitor)
+    lopa_results = model.lopa_analysis(
+        df, hazard=req.hazard,
+        unmitigated_freq_per_year=req.unmitigated_freq_per_year,
+    )
+    return {
+        "status": "ok",
+        "data": {
+            "hazard": req.hazard,
+            "tolerable_risk": model.tolerable_risk,
+            "results": [r.__dict__ for r in lopa_results],
+        },
+        "errors": [],
+    }
+
+
+@app.post("/api/v1/barriers/bypass-events")
+def barrier_bypass_events(req: BarrierHealthRequest):
+    """استخراج و گزارش رویدادهای بایپس با انطباق SIL."""
+    df = _barrier_df(req)
+    model: BarrierHealthMonitor = _get_or_create("barrier", BarrierHealthMonitor)
+    events = model.bypass_events(df)
+    violations = [e for e in events if not e.within_limit]
+    return {
+        "status": "ok",
+        "data": {
+            "events": [e.__dict__ for e in events],
+            "total_events": len(events),
+            "violations": len(violations),
+            "compliant": len(events) - len(violations),
         },
         "errors": [],
     }
