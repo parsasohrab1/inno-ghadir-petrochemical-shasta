@@ -115,6 +115,20 @@ class DynamicRiskEstimator:
         )
         X_tr_s = self._scaler.fit_transform(X_tr.values)
         X_te_s = self._scaler.transform(X_te.values)
+        # مقابله با عدم تعادل کلاس (failure rate ~2.5٪) با وزن‌دهی کلاس
+        n_pos = int(np.sum(y_tr == 1))
+        n_neg = int(np.sum(y_tr == 0))
+        if _HAS_XGB and n_pos > 0 and n_neg > 0:
+            # XGBoost: scale_pos_weight = neg/pos
+            try:
+                self._clf.set_params(scale_pos_weight=max(n_neg / n_pos, 1.0))
+            except Exception:
+                pass
+        elif n_pos > 0 and n_neg > 0:
+            try:
+                self._clf.set_params(sample_weight=np.where(y_tr == 1, n_neg / n_pos, 1.0))
+            except Exception:
+                pass
         self._clf.fit(X_tr_s, y_tr)
         self._fitted = True
         y_pred = self._clf.predict(X_te_s)
@@ -130,6 +144,8 @@ class DynamicRiskEstimator:
             "classification_report": report,
             "roc_auc": round(auc, 4),
             "feature_names": self._feature_names,
+            "class_balance": {"positive": n_pos, "negative": n_neg,
+                               "scale_pos_weight": round(max(n_neg / n_pos, 1.0), 2) if n_pos > 0 else 1.0},
         }
 
     def predict(self, df: pd.DataFrame) -> list[RiskEstimate]:

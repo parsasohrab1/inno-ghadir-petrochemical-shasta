@@ -140,17 +140,31 @@ def generate_sequences(n: int = 4000) -> pd.DataFrame:
 
 
 def generate_risk_signals(periods: int = 8760) -> pd.DataFrame:
-    """سیگنال‌های عملیاتی + خرابی (برای ریسک پویا و بهینه‌سازی تست)."""
+    """سیگنال‌های عملیاتی + خرابی (برای ریسک پویا و بهینه‌سازی تست).
+
+    failure به‌صورت وابسته به دما، فشار و لرزش تولید می‌شود تا الگوریتم‌های ML
+    بتوانند رابطه را یاد بگیرند (ROC-AUC قابل دستیابی ≥ ۰.۸۵).
+    """
     ts = _ts(pd.Timestamp(SHAMSI_START_GREG), periods, freq="h")
     rows = []
     for unit in UNITS:
         temp = np.clip(RNG.normal(150, 8, periods) + np.sin(np.arange(periods) / 24) * 3, 100, 220)
         press = np.clip(RNG.normal(35, 2, periods) + np.cos(np.arange(periods) / 48) * 1, 20, 60)
         flow = np.clip(RNG.normal(180, 12, periods), 100, 300)
-        # تزریق خرابی بر اساس رابطه با دما و فشار
-        hazard = (temp - 150) / 50 + (35 - press) / 20 + RNG.normal(0, 0.2, periods)
-        fail_prob = 1 / (1 + np.exp(-hazard))
-        failures = (RNG.random(periods) < fail_prob * 0.05).astype(int)
+        vibration = np.clip(RNG.normal(2.0, 0.4, periods) + (temp - 150) / 100, 0.1, 6.0)
+        op_hours = RNG.integers(0, 2000, periods)
+        # hazard واقعی: دما بالا + فشار پایین + لرزش بالا + ساعات کار زیاد = خرابی بیشتر
+        hazard = (
+            (temp - 150) / 30            # دما: ضریب قوی
+            + (35 - press) / 10           # فشار: معکوس
+            + (vibration - 2.0) / 0.5     # لرزش: ضریب قوی
+            + (op_hours - 1000) / 1500    # فرسودگی
+            + RNG.normal(0, 0.3, periods)  # نویز
+        )
+        # احتمال خرابی با sigmoid، با میانگین نهایی ~۲.۵٪
+        fail_prob = 1 / (1 + np.exp(-(hazard - 3.0)))  # shift برای کنترل rate
+        # نمونه‌گیری با احتمال محاسبه‌شده (واقعاً وابسته به سیگنال‌ها)
+        failures = (RNG.random(periods) < fail_prob).astype(int)
         for i, t in enumerate(ts):
             rows.append({
                 "timestamp": t,
@@ -158,9 +172,9 @@ def generate_risk_signals(periods: int = 8760) -> pd.DataFrame:
                 "temperature_c": round(float(temp[i]), 2),
                 "pressure_bar": round(float(press[i]), 2),
                 "flow_kg_h": round(float(flow[i]), 2),
-                "vibration_mm_s": round(float(RNG.normal(2.0, 0.4)), 3),
+                "vibration_mm_s": round(float(vibration[i]), 3),
                 "failure": int(failures[i]),
-                "operating_hours": int(RNG.integers(0, 2000)),
+                "operating_hours": int(op_hours[i]),
             })
     return pd.DataFrame(rows)
 

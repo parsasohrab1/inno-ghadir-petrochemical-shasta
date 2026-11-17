@@ -294,7 +294,8 @@ class ProductionOptimizer:
                 total_hours = float(g["operating_hours"].max() - g["operating_hours"].min())
                 mtbf = total_hours / max(n_failures, 1)
                 mttr = 4.0  # فرض ثابت در نبود داده دقیق
-                avail_pct = (total_hours - n_failures * mttr) / max(total_hours, 1) * 100
+                # availability را به بازه 0-100 محدود کن (در صورت تعداد خرابی زیاد)
+                avail_pct = max(0.0, min(100.0, (total_hours - n_failures * mttr) / max(total_hours, 1) * 100))
             else:
                 mtbf = 0.0; mttr = 0.0; avail_pct = 100.0
 

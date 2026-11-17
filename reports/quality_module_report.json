@@ -1,0 +1,533 @@
+{
+  "summary": {
+    "n_quality_variables": 6,
+    "avg_cpk": 1.0,
+    "capability_grade": "Inadequate",
+    "out_of_spec_total": 1412,
+    "out_of_spec_pct_avg": 2.224,
+    "n_critical_faults": 0,
+    "n_high_faults": 0
+  },
+  "quality_variables": [
+    {
+      "name": "xmeas_40",
+      "description": "متغیر فرآیندی xmeas_40",
+      "unit": "—",
+      "target": 53.716,
+      "usl": 55.44,
+      "lsl": 51.992,
+      "current_value": 54.489,
+      "deviation_sigma": 1.345,
+      "status": "In-control",
+      "impact_on_product": "High"
+    },
+    {
+      "name": "xmeas_41",
+      "description": "متغیر فرآیندی xmeas_41",
+      "unit": "—",
+      "target": 43.796,
+      "usl": 45.537,
+      "lsl": 42.055,
+      "current_value": 43.801,
+      "deviation_sigma": 0.009,
+      "status": "In-control",
+      "impact_on_product": "High"
+    },
+    {
+      "name": "xmeas_09",
+      "description": "متغیر فرآیندی xmeas_09",
+      "unit": "—",
+      "target": 120.401,
+      "usl": 120.616,
+      "lsl": 120.186,
+      "current_value": 120.38,
+      "deviation_sigma": 0.293,
+      "status": "In-control",
+      "impact_on_product": "Medium"
+    },
+    {
+      "name": "xmeas_17",
+      "description": "متغیر فرآیندی xmeas_17",
+      "unit": "—",
+      "target": 22.929,
+      "usl": 24.833,
+      "lsl": 21.026,
+      "current_value": 23.206,
+      "deviation_sigma": 0.437,
+      "status": "In-control",
+      "impact_on_product": "Medium"
+    },
+    {
+      "name": "xmeas_07",
+      "description": "متغیر فرآیندی xmeas_07",
+      "unit": "—",
+      "target": 2725.168,
+      "usl": 2951.325,
+      "lsl": 2499.011,
+      "current_value": 2720.2,
+      "deviation_sigma": 0.066,
+      "status": "In-control",
+      "impact_on_product": "Medium"
+    },
+    {
+      "name": "xmeas_08",
+      "description": "متغیر فرآیندی xmeas_08",
+      "unit": "—",
+      "target": 74.857,
+      "usl": 78.989,
+      "lsl": 70.725,
+      "current_value": 77.152,
+      "deviation_sigma": 1.666,
+      "status": "In-control",
+      "impact_on_product": "Medium"
+    }
+  ],
+  "spc_results": [
+    {
+      "variable": "xmeas_40",
+      "mean": 53.7158,
+      "std": 0.5748,
+      "ucl": 55.4401,
+      "lcl": 51.9915,
+      "usl": 55.44,
+      "lsl": 51.992,
+      "cp": 1.0,
+      "cpk": 1.0,
+      "pp": 1.0,
+      "ppk": 1.0,
+      "capability_grade": "Critical",
+      "n_violations": 3664,
+      "rule_violations": {
+        "Rule1": 65,
+        "Rule2": 488,
+        "Rule3": 0,
+        "Rule4": 0,
+        "Rule5": 445,
+        "Rule6": 2458,
+        "Rule7": 208,
+        "Rule8": 0
+      },
+      "out_of_spec_count": 65,
+      "out_of_spec_pct": 0.614,
+      "cusum_drift": -1.81,
+      "ewma_value": 54.2545,
+      "trend_slope": -1e-05
+    },
+    {
+      "variable": "xmeas_41",
+      "mean": 43.7964,
+      "std": 0.5804,
+      "ucl": 45.5374,
+      "lcl": 42.0553,
+      "usl": 45.537,
+      "lsl": 42.055,
+      "cp": 1.0,
+      "cpk": 1.0,
+      "pp": 1.0,
+      "ppk": 1.0,
+      "capability_grade": "Critical",
+      "n_violations": 3667,
+      "rule_violations": {
+        "Rule1": 20,
+        "Rule2": 456,
+        "Rule3": 0,
+        "Rule4": 0,
+        "Rule5": 485,
+        "Rule6": 2499,
+        "Rule7": 207,
+        "Rule8": 0
+      },
+      "out_of_spec_count": 20,
+      "out_of_spec_pct": 0.189,
+      "cusum_drift": 4.035,
+      "ewma_value": 43.7915,
+      "trend_slope": 2e-05
+    },
+    {
+      "variable": "xmeas_09",
+      "mean": 120.401,
+      "std": 0.0716,
+      "ucl": 120.6159,
+      "lcl": 120.1861,
+      "usl": 120.616,
+      "lsl": 120.186,
+      "cp": 1.0,
+      "cpk": 1.0,
+      "pp": 1.0,
+      "ppk": 1.0,
+      "capability_grade": "Inadequate",
+      "n_violations": 1755,
+      "rule_violations": {
+        "Rule1": 364,
+        "Rule2": 109,
+        "Rule3": 19,
+        "Rule4": 0,
+        "Rule5": 515,
+        "Rule6": 717,
+        "Rule7": 31,
+        "Rule8": 0
+      },
+      "out_of_spec_count": 364,
+      "out_of_spec_pct": 3.44,
+      "cusum_drift": -0.05,
+      "ewma_value": 120.398,
+      "trend_slope": -0.0
+    },
+    {
+      "variable": "xmeas_17",
+      "mean": 22.9294,
+      "std": 0.6346,
+      "ucl": 24.8331,
+      "lcl": 21.0257,
+      "usl": 24.833,
+      "lsl": 21.026,
+      "cp": 1.0,
+      "cpk": 1.0,
+      "pp": 1.0,
+      "ppk": 1.0,
+      "capability_grade": "Critical",
+      "n_violations": 653,
+      "rule_violations": {
+        "Rule1": 36,
+        "Rule2": 35,
+        "Rule3": 1,
+        "Rule4": 0,
+        "Rule5": 88,
+        "Rule6": 479,
+        "Rule7": 14,
+        "Rule8": 0
+      },
+      "out_of_spec_count": 36,
+      "out_of_spec_pct": 0.34,
+      "cusum_drift": 4.262,
+      "ewma_value": 23.0209,
+      "trend_slope": 1e-05
+    },
+    {
+      "variable": "xmeas_07",
+      "mean": 2725.1679,
+      "std": 75.3858,
+      "ucl": 2951.3252,
+      "lcl": 2499.0107,
+      "usl": 2951.325,
+      "lsl": 2499.011,
+      "cp": 1.0,
+      "cpk": 1.0,
+      "pp": 1.0,
+      "ppk": 1.0,
+      "capability_grade": "Critical",
+      "n_violations": 2729,
+      "rule_violations": {
+        "Rule1": 591,
+        "Rule2": 65,
+        "Rule3": 186,
+        "Rule4": 0,
+        "Rule5": 721,
+        "Rule6": 1144,
+        "Rule7": 22,
+        "Rule8": 0
+      },
+      "out_of_spec_count": 591,
+      "out_of_spec_pct": 5.586,
+      "cusum_drift": -0.64,
+      "ewma_value": 2719.0624,
+      "trend_slope": -4e-05
+    },
+    {
+      "variable": "xmeas_08",
+      "mean": 74.857,
+      "std": 1.3774,
+      "ucl": 78.9892,
+      "lcl": 70.7249,
+      "usl": 78.989,
+      "lsl": 70.725,
+      "cp": 1.0,
+      "cpk": 1.0,
+      "pp": 1.0,
+      "ppk": 1.0,
+      "capability_grade": "Critical",
+      "n_violations": 2278,
+      "rule_violations": {
+        "Rule1": 336,
+        "Rule2": 140,
+        "Rule3": 15,
+        "Rule4": 0,
+        "Rule5": 575,
+        "Rule6": 1095,
+        "Rule7": 117,
+        "Rule8": 0
+      },
+      "out_of_spec_count": 336,
+      "out_of_spec_pct": 3.176,
+      "cusum_drift": 0.239,
+      "ewma_value": 77.3628,
+      "trend_slope": -3e-05
+    }
+  ],
+  "fault_quality_impacts": [
+    {
+      "fault_id": 6,
+      "fault_description": "Fault 6",
+      "purity_deviation_pct": 1.195,
+      "purity_deviation_sigma": 1.197,
+      "variability_multiplier": 0.899,
+      "impact_grade": "Medium",
+      "affected_quality_vars": [
+        "xmeas_40"
+      ],
+      "estimated_yield_loss_pct": 0.0,
+      "recommended_action": "افزایش فرکانس پایش، تحلیل روند، برنامه‌ریزی اقدام پیشگیرانه."
+    },
+    {
+      "fault_id": 18,
+      "fault_description": "Fault 18",
+      "purity_deviation_pct": -0.65,
+      "purity_deviation_sigma": 0.651,
+      "variability_multiplier": 1.627,
+      "impact_grade": "Low",
+      "affected_quality_vars": [
+        "xmeas_40"
+      ],
+      "estimated_yield_loss_pct": 3.783,
+      "recommended_action": "پایش استاندارد؛ ثبت روند برای ممیزی."
+    },
+    {
+      "fault_id": 17,
+      "fault_description": "Fault 17",
+      "purity_deviation_pct": 0.382,
+      "purity_deviation_sigma": 0.382,
+      "variability_multiplier": 1.044,
+      "impact_grade": "Low",
+      "affected_quality_vars": [
+        "xmeas_40"
+      ],
+      "estimated_yield_loss_pct": 0.222,
+      "recommended_action": "پایش استاندارد؛ ثبت روند برای ممیزی."
+    },
+    {
+      "fault_id": 1,
+      "fault_description": "Fault 1",
+      "purity_deviation_pct": 0.308,
+      "purity_deviation_sigma": 0.308,
+      "variability_multiplier": 0.986,
+      "impact_grade": "Low",
+      "affected_quality_vars": [
+        "xmeas_40"
+      ],
+      "estimated_yield_loss_pct": 0.0,
+      "recommended_action": "پایش استاندارد؛ ثبت روند برای ممیزی."
+    },
+    {
+      "fault_id": 20,
+      "fault_description": "Fault 20",
+      "purity_deviation_pct": 0.287,
+      "purity_deviation_sigma": 0.287,
+      "variability_multiplier": 1.037,
+      "impact_grade": "Low",
+      "affected_quality_vars": [
+        "xmeas_40"
+      ],
+      "estimated_yield_loss_pct": 0.187,
+      "recommended_action": "پایش استاندارد؛ ثبت روند برای ممیزی."
+    },
+    {
+      "fault_id": 16,
+      "fault_description": "Fault 16",
+      "purity_deviation_pct": 0.283,
+      "purity_deviation_sigma": 0.283,
+      "variability_multiplier": 1.083,
+      "impact_grade": "Low",
+      "affected_quality_vars": [
+        "xmeas_40"
+      ],
+      "estimated_yield_loss_pct": 0.416,
+      "recommended_action": "پایش استاندارد؛ ثبت روند برای ممیزی."
+    },
+    {
+      "fault_id": 3,
+      "fault_description": "Fault 3",
+      "purity_deviation_pct": 0.254,
+      "purity_deviation_sigma": 0.254,
+      "variability_multiplier": 0.912,
+      "impact_grade": "Low",
+      "affected_quality_vars": [
+        "xmeas_40"
+      ],
+      "estimated_yield_loss_pct": 0.0,
+      "recommended_action": "پایش استاندارد؛ ثبت روند برای ممیزی."
+    },
+    {
+      "fault_id": 19,
+      "fault_description": "Fault 19",
+      "purity_deviation_pct": 0.239,
+      "purity_deviation_sigma": 0.239,
+      "variability_multiplier": 0.998,
+      "impact_grade": "Low",
+      "affected_quality_vars": [
+        "xmeas_40"
+      ],
+      "estimated_yield_loss_pct": 0.0,
+      "recommended_action": "پایش استاندارد؛ ثبت روند برای ممیزی."
+    },
+    {
+      "fault_id": 2,
+      "fault_description": "Fault 2",
+      "purity_deviation_pct": 0.154,
+      "purity_deviation_sigma": 0.154,
+      "variability_multiplier": 0.965,
+      "impact_grade": "Low",
+      "affected_quality_vars": [
+        "xmeas_40"
+      ],
+      "estimated_yield_loss_pct": 0.0,
+      "recommended_action": "پایش استاندارد؛ ثبت روند برای ممیزی."
+    },
+    {
+      "fault_id": 12,
+      "fault_description": "Fault 12",
+      "purity_deviation_pct": -0.15,
+      "purity_deviation_sigma": 0.15,
+      "variability_multiplier": 1.158,
+      "impact_grade": "Low",
+      "affected_quality_vars": [
+        "xmeas_40"
+      ],
+      "estimated_yield_loss_pct": 0.94,
+      "recommended_action": "پایش استاندارد؛ ثبت روند برای ممیزی."
+    },
+    {
+      "fault_id": 4,
+      "fault_description": "Fault 4",
+      "purity_deviation_pct": 0.139,
+      "purity_deviation_sigma": 0.139,
+      "variability_multiplier": 0.893,
+      "impact_grade": "Low",
+      "affected_quality_vars": [
+        "xmeas_40"
+      ],
+      "estimated_yield_loss_pct": 0.0,
+      "recommended_action": "پایش استاندارد؛ ثبت روند برای ممیزی."
+    },
+    {
+      "fault_id": 8,
+      "fault_description": "Fault 8",
+      "purity_deviation_pct": 0.131,
+      "purity_deviation_sigma": 0.132,
+      "variability_multiplier": 0.927,
+      "impact_grade": "Low",
+      "affected_quality_vars": [
+        "xmeas_40"
+      ],
+      "estimated_yield_loss_pct": 0.0,
+      "recommended_action": "پایش استاندارد؛ ثبت روند برای ممیزی."
+    },
+    {
+      "fault_id": 9,
+      "fault_description": "Fault 9",
+      "purity_deviation_pct": 0.131,
+      "purity_deviation_sigma": 0.132,
+      "variability_multiplier": 0.946,
+      "impact_grade": "Low",
+      "affected_quality_vars": [
+        "xmeas_40"
+      ],
+      "estimated_yield_loss_pct": 0.0,
+      "recommended_action": "پایش استاندارد؛ ثبت روند برای ممیزی."
+    },
+    {
+      "fault_id": 7,
+      "fault_description": "Fault 7",
+      "purity_deviation_pct": 0.117,
+      "purity_deviation_sigma": 0.117,
+      "variability_multiplier": 1.002,
+      "impact_grade": "Low",
+      "affected_quality_vars": [
+        "xmeas_40"
+      ],
+      "estimated_yield_loss_pct": 0.011,
+      "recommended_action": "پایش استاندارد؛ ثبت روند برای ممیزی."
+    },
+    {
+      "fault_id": 5,
+      "fault_description": "Fault 5",
+      "purity_deviation_pct": 0.113,
+      "purity_deviation_sigma": 0.113,
+      "variability_multiplier": 0.959,
+      "impact_grade": "Low",
+      "affected_quality_vars": [
+        "xmeas_40"
+      ],
+      "estimated_yield_loss_pct": 0.0,
+      "recommended_action": "پایش استاندارد؛ ثبت روند برای ممیزی."
+    }
+  ],
+  "root_cause_analysis": {
+    "symptom": "انحراف کیفیت محصول",
+    "likely_causes": [
+      "انحراف ناگهانی در متغیر فرآیندی (احتمالاً خرابی سنسور یا تنظیم setpoint)",
+      "جابجایی میانگین (احتمالاً drift سنسور یا فرسودگی کاتالیست)",
+      "روند تدریجی (احتمالاً فرسودگی تجهیزات یا نشتی تدریجی)",
+      "الگوی غیرتصادفی در نمودار کنترل (نیاز به بازنگری روش کنترل)",
+      "قابلیت فرآیند ناکافی (Cpk < 1.33 در 6 متغیر)"
+    ],
+    "category": "Measurement",
+    "confidence": 1.0,
+    "recommended_investigation": "بررسی نمودارهای کنترل SPC، انجام RCA فرمال با تیم چندرشته‌ای، و در صورت تداوم انحراف > 2σ، توقف خط برای بازرسی."
+  },
+  "setpoint_optimizations": [
+    {
+      "variable": "xmv_02",
+      "current_setpoint": 54.5259,
+      "optimized_setpoint": 54.5259,
+      "expected_purity_gain_pct": 0.001,
+      "expected_yield_gain_pct": 0.0,
+      "confidence": 0.319,
+      "rationale": "همبستگی -0.319 با xmeas_40؛ تنظیم xmv_02 در جهت بهبود خلوص به هدف 53.716."
+    },
+    {
+      "variable": "xmv_03",
+      "current_setpoint": 29.9097,
+      "optimized_setpoint": 29.9098,
+      "expected_purity_gain_pct": 0.001,
+      "expected_yield_gain_pct": 0.0,
+      "confidence": 0.283,
+      "rationale": "همبستگی +0.283 با xmeas_40؛ تنظیم xmv_03 در جهت بهبود خلوص به هدف 53.716."
+    },
+    {
+      "variable": "xmv_09",
+      "current_setpoint": 51.0185,
+      "optimized_setpoint": 51.0185,
+      "expected_purity_gain_pct": 0.001,
+      "expected_yield_gain_pct": 0.0,
+      "confidence": 0.243,
+      "rationale": "همبستگی +0.243 با xmeas_40؛ تنظیم xmv_09 در جهت بهبود خلوص به هدف 53.716."
+    },
+    {
+      "variable": "xmv_10",
+      "current_setpoint": 42.8644,
+      "optimized_setpoint": 42.8644,
+      "expected_purity_gain_pct": 0.001,
+      "expected_yield_gain_pct": 0.0,
+      "confidence": 0.241,
+      "rationale": "همبستگی +0.241 با xmeas_40؛ تنظیم xmv_10 در جهت بهبود خلوص به هدف 53.716."
+    },
+    {
+      "variable": "xmv_11",
+      "current_setpoint": 19.0912,
+      "optimized_setpoint": 19.0912,
+      "expected_purity_gain_pct": 0.0,
+      "expected_yield_gain_pct": 0.0,
+      "confidence": 0.185,
+      "rationale": "همبستگی +0.185 با xmeas_40؛ تنظیم xmv_11 در جهت بهبود خلوص به هدف 53.716."
+    },
+    {
+      "variable": "xmv_01",
+      "current_setpoint": 63.7046,
+      "optimized_setpoint": 63.7046,
+      "expected_purity_gain_pct": 0.0,
+      "expected_yield_gain_pct": 0.0,
+      "confidence": 0.17,
+      "rationale": "همبستگی -0.170 با xmeas_40؛ تنظیم xmv_01 در جهت بهبود خلوص به هدف 53.716."
+    }
+  ]
+}

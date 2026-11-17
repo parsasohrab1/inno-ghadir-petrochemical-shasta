@@ -4,32 +4,32 @@
     "test_size": 2000,
     "classification_report": {
       "0": {
-        "precision": 0.976,
-        "recall": 1.0,
-        "f1-score": 0.9878542510121457,
-        "support": 1952.0
+        "precision": 0.9422740524781341,
+        "recall": 0.8730415991356024,
+        "f1-score": 0.9063376332024677,
+        "support": 1851.0
       },
       "1": {
-        "precision": 0.0,
-        "recall": 0.0,
-        "f1-score": 0.0,
-        "support": 48.0
+        "precision": 0.17543859649122806,
+        "recall": 0.33557046979865773,
+        "f1-score": 0.2304147465437788,
+        "support": 149.0
       },
-      "accuracy": 0.976,
+      "accuracy": 0.833,
       "macro avg": {
-        "precision": 0.488,
-        "recall": 0.5,
-        "f1-score": 0.4939271255060729,
+        "precision": 0.5588563244846811,
+        "recall": 0.60430603446713,
+        "f1-score": 0.5683761898731232,
         "support": 2000.0
       },
       "weighted avg": {
-        "precision": 0.952576,
-        "recall": 0.976,
-        "f1-score": 0.9641457489878543,
+        "precision": 0.8851448110071096,
+        "recall": 0.833,
+        "f1-score": 0.8559813781463954,
         "support": 2000.0
       }
     },
-    "roc_auc": 0.492,
+    "roc_auc": 0.691,
     "feature_names": [
       "temperature_c",
       "pressure_bar",
@@ -40,134 +40,139 @@
       "thermal_stress",
       "wear_factor",
       "vibration_index"
-    ]
+    ],
+    "class_balance": {
+      "positive": 594,
+      "negative": 7406,
+      "scale_pos_weight": 12.47
+    }
   },
   "risk_distribution": {
-    "High": 23,
-    "Low": 1957,
-    "Medium": 18,
-    "Critical": 2
+    "High": 420,
+    "Low": 881,
+    "Critical": 191,
+    "Medium": 508
   },
   "predictions_sample": [
     {
       "unit": "Polymer-Unit",
       "timestamp": "2024-03-20 00:00:00",
-      "failure_probability": 0.516,
-      "risk_score": 0.5162,
+      "failure_probability": 0.3298,
+      "risk_score": 0.3367,
       "risk_level": "High",
       "recommended_action": "افزایش پایش + آماده‌سازی برنامه مداخله + بازرسی اضافی در ۲۴ ساعت.",
-      "weibull_mtbf_h": 1353.5
+      "weibull_mtbf_h": 1316.3
     },
     {
       "unit": "Polymer-Unit",
       "timestamp": "2024-03-20 01:00:00",
-      "failure_probability": 0.0162,
-      "risk_score": 0.0163,
+      "failure_probability": 0.0145,
+      "risk_score": 0.0148,
       "risk_level": "Low",
       "recommended_action": "عملیات عادی؛ پایش دوره‌ای استاندارد.",
-      "weibull_mtbf_h": 1344.5
+      "weibull_mtbf_h": 1306.7
     },
     {
       "unit": "Polymer-Unit",
       "timestamp": "2024-03-20 02:00:00",
-      "failure_probability": 0.0164,
-      "risk_score": 0.017,
-      "risk_level": "Low",
-      "recommended_action": "عملیات عادی؛ پایش دوره‌ای استاندارد.",
-      "weibull_mtbf_h": 1283.1
+      "failure_probability": 0.647,
+      "risk_score": 0.6631,
+      "risk_level": "Critical",
+      "recommended_action": "کاهش بار فوری + فعال‌سازی لایه‌های حفاظتی اضافی + بررسی توقف.",
+      "weibull_mtbf_h": 1309.3
     },
     {
       "unit": "Polymer-Unit",
       "timestamp": "2024-03-20 03:00:00",
-      "failure_probability": 0.0096,
-      "risk_score": 0.0099,
-      "risk_level": "Low",
-      "recommended_action": "عملیات عادی؛ پایش دوره‌ای استاندارد.",
-      "weibull_mtbf_h": 1299.1
+      "failure_probability": 0.3279,
+      "risk_score": 0.3463,
+      "risk_level": "High",
+      "recommended_action": "افزایش پایش + آماده‌سازی برنامه مداخله + بازرسی اضافی در ۲۴ ساعت.",
+      "weibull_mtbf_h": 1252.6
     },
     {
       "unit": "Polymer-Unit",
       "timestamp": "2024-03-20 04:00:00",
-      "failure_probability": 0.0014,
-      "risk_score": 0.0014,
-      "risk_level": "Low",
-      "recommended_action": "عملیات عادی؛ پایش دوره‌ای استاندارد.",
-      "weibull_mtbf_h": 1345.6
+      "failure_probability": 0.4722,
+      "risk_score": 0.4779,
+      "risk_level": "High",
+      "recommended_action": "افزایش پایش + آماده‌سازی برنامه مداخله + بازرسی اضافی در ۲۴ ساعت.",
+      "weibull_mtbf_h": 1332.1
     },
     {
       "unit": "Polymer-Unit",
       "timestamp": "2024-03-20 05:00:00",
-      "failure_probability": 0.0038,
-      "risk_score": 0.0038,
-      "risk_level": "Low",
-      "recommended_action": "عملیات عادی؛ پایش دوره‌ای استاندارد.",
-      "weibull_mtbf_h": 1344.4
+      "failure_probability": 0.2098,
+      "risk_score": 0.2165,
+      "risk_level": "Medium",
+      "recommended_action": "ادامه پایش با فرکانس بالاتر + ثبت روند برای تحلیل.",
+      "weibull_mtbf_h": 1295.9
     },
     {
       "unit": "Polymer-Unit",
       "timestamp": "2024-03-20 06:00:00",
-      "failure_probability": 0.0077,
-      "risk_score": 0.0078,
-      "risk_level": "Low",
-      "recommended_action": "عملیات عادی؛ پایش دوره‌ای استاندارد.",
-      "weibull_mtbf_h": 1311.2
+      "failure_probability": 0.4364,
+      "risk_score": 0.4419,
+      "risk_level": "High",
+      "recommended_action": "افزایش پایش + آماده‌سازی برنامه مداخله + بازرسی اضافی در ۲۴ ساعت.",
+      "weibull_mtbf_h": 1331.5
     },
     {
       "unit": "Polymer-Unit",
       "timestamp": "2024-03-20 07:00:00",
-      "failure_probability": 0.1115,
-      "risk_score": 0.1143,
-      "risk_level": "Low",
-      "recommended_action": "عملیات عادی؛ پایش دوره‌ای استاندارد.",
-      "weibull_mtbf_h": 1308.7
+      "failure_probability": 0.9047,
+      "risk_score": 0.9586,
+      "risk_level": "Critical",
+      "recommended_action": "کاهش بار فوری + فعال‌سازی لایه‌های حفاظتی اضافی + بررسی توقف.",
+      "weibull_mtbf_h": 1246.7
     },
     {
       "unit": "Polymer-Unit",
       "timestamp": "2024-03-20 08:00:00",
-      "failure_probability": 0.0059,
-      "risk_score": 0.0062,
-      "risk_level": "Low",
-      "recommended_action": "عملیات عادی؛ پایش دوره‌ای استاندارد.",
-      "weibull_mtbf_h": 1259.1
+      "failure_probability": 0.2007,
+      "risk_score": 0.2079,
+      "risk_level": "Medium",
+      "recommended_action": "ادامه پایش با فرکانس بالاتر + ثبت روند برای تحلیل.",
+      "weibull_mtbf_h": 1290.0
     },
     {
       "unit": "Polymer-Unit",
       "timestamp": "2024-03-20 09:00:00",
-      "failure_probability": 0.0301,
-      "risk_score": 0.0303,
+      "failure_probability": 0.0312,
+      "risk_score": 0.0324,
       "risk_level": "Low",
       "recommended_action": "عملیات عادی؛ پایش دوره‌ای استاندارد.",
-      "weibull_mtbf_h": 1344.9
+      "weibull_mtbf_h": 1283.6
     }
   ],
   "feature_importances": [
     {
-      "feature": "pressure_bar",
-      "importance": 0.15814562141895294
-    },
-    {
-      "feature": "flow_kg_h",
-      "importance": 0.15243543684482574
+      "feature": "vibration_mm_s",
+      "importance": 0.24518269300460815
     },
     {
       "feature": "temp_pressure_ratio",
-      "importance": 0.14661139249801636
+      "importance": 0.14883731305599213
     },
     {
       "feature": "operating_hours",
-      "importance": 0.1421012133359909
+      "importance": 0.14263305068016052
     },
     {
       "feature": "thermal_stress",
-      "importance": 0.1404372900724411
-    },
-    {
-      "feature": "vibration_mm_s",
-      "importance": 0.13431662321090698
+      "importance": 0.11975356936454773
     },
     {
       "feature": "temperature_c",
-      "importance": 0.12595243752002716
+      "importance": 0.11685029417276382
+    },
+    {
+      "feature": "pressure_bar",
+      "importance": 0.11512761563062668
+    },
+    {
+      "feature": "flow_kg_h",
+      "importance": 0.11161544173955917
     },
     {
       "feature": "vibration_index",
@@ -182,92 +187,102 @@
     {
       "unit": "Polymer-Unit",
       "timestamp": "2024-03-20 00:00:00",
-      "failure_probability": 0.516,
-      "risk_score": 0.5162,
-      "mtbf_h": 1353.5,
-      "recommended_interval_d": 176,
+      "failure_probability": 0.3298,
+      "risk_score": 0.3367,
+      "mtbf_h": 1316.3,
+      "recommended_interval_d": 242,
       "priority": "High"
     },
     {
       "unit": "Polymer-Unit",
       "timestamp": "2024-03-20 01:00:00",
-      "failure_probability": 0.0162,
-      "risk_score": 0.0163,
-      "mtbf_h": 1344.5,
+      "failure_probability": 0.0145,
+      "risk_score": 0.0148,
+      "mtbf_h": 1306.7,
       "recommended_interval_d": 359,
       "priority": "Low"
     },
     {
       "unit": "Polymer-Unit",
       "timestamp": "2024-03-20 02:00:00",
-      "failure_probability": 0.0164,
-      "risk_score": 0.017,
-      "mtbf_h": 1283.1,
-      "recommended_interval_d": 358,
-      "priority": "Low"
+      "failure_probability": 0.647,
+      "risk_score": 0.6631,
+      "mtbf_h": 1309.3,
+      "recommended_interval_d": 122,
+      "priority": "Critical"
     },
     {
       "unit": "Polymer-Unit",
       "timestamp": "2024-03-20 03:00:00",
-      "failure_probability": 0.0096,
-      "risk_score": 0.0099,
-      "mtbf_h": 1299.1,
-      "recommended_interval_d": 361,
-      "priority": "Low"
+      "failure_probability": 0.3279,
+      "risk_score": 0.3463,
+      "mtbf_h": 1252.6,
+      "recommended_interval_d": 238,
+      "priority": "High"
     },
     {
       "unit": "Polymer-Unit",
       "timestamp": "2024-03-20 04:00:00",
-      "failure_probability": 0.0014,
-      "risk_score": 0.0014,
-      "mtbf_h": 1345.6,
-      "recommended_interval_d": 364,
-      "priority": "Low"
+      "failure_probability": 0.4722,
+      "risk_score": 0.4779,
+      "mtbf_h": 1332.1,
+      "recommended_interval_d": 190,
+      "priority": "High"
     },
     {
       "unit": "Polymer-Unit",
       "timestamp": "2024-03-20 05:00:00",
-      "failure_probability": 0.0038,
-      "risk_score": 0.0038,
-      "mtbf_h": 1344.4,
-      "recommended_interval_d": 363,
-      "priority": "Low"
+      "failure_probability": 0.2098,
+      "risk_score": 0.2165,
+      "mtbf_h": 1295.9,
+      "recommended_interval_d": 285,
+      "priority": "Medium"
     },
     {
       "unit": "Polymer-Unit",
       "timestamp": "2024-03-20 06:00:00",
-      "failure_probability": 0.0077,
-      "risk_score": 0.0078,
-      "mtbf_h": 1311.2,
-      "recommended_interval_d": 362,
-      "priority": "Low"
+      "failure_probability": 0.4364,
+      "risk_score": 0.4419,
+      "mtbf_h": 1331.5,
+      "recommended_interval_d": 203,
+      "priority": "High"
     },
     {
       "unit": "Polymer-Unit",
       "timestamp": "2024-03-20 07:00:00",
-      "failure_probability": 0.1115,
-      "risk_score": 0.1143,
-      "mtbf_h": 1308.7,
-      "recommended_interval_d": 323,
-      "priority": "Low"
+      "failure_probability": 0.9047,
+      "risk_score": 0.9586,
+      "mtbf_h": 1246.7,
+      "recommended_interval_d": 30,
+      "priority": "Critical"
     },
     {
       "unit": "Polymer-Unit",
       "timestamp": "2024-03-20 08:00:00",
-      "failure_probability": 0.0059,
-      "risk_score": 0.0062,
-      "mtbf_h": 1259.1,
-      "recommended_interval_d": 362,
-      "priority": "Low"
+      "failure_probability": 0.2007,
+      "risk_score": 0.2079,
+      "mtbf_h": 1290.0,
+      "recommended_interval_d": 289,
+      "priority": "Medium"
     },
     {
       "unit": "Polymer-Unit",
       "timestamp": "2024-03-20 09:00:00",
-      "failure_probability": 0.0301,
-      "risk_score": 0.0303,
-      "mtbf_h": 1344.9,
+      "failure_probability": 0.0312,
+      "risk_score": 0.0324,
+      "mtbf_h": 1283.6,
       "recommended_interval_d": 353,
       "priority": "Low"
     }
-  ]
+  ],
+  "accuracy_metrics": {
+    "roc_auc": 0.691,
+    "c_index": 0.691,
+    "precision_class_1": 0.17543859649122806,
+    "recall_class_1": 0.33557046979865773,
+    "f1_class_1": 0.2304147465437788,
+    "weighted_precision": 0.8851448110071096,
+    "weighted_recall": 0.833,
+    "weighted_f1": 0.8559813781463954
+  }
 }

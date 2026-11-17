@@ -761,5 +761,15 @@
       "risk_score": 0.1309,
       "priority": "Normal"
     }
-  ]
+  ],
+  "summary": {
+    "n_layers": 25,
+    "avg_health": 0.4721,
+    "below_sil": 25,
+    "bypass_active": 25,
+    "sil_compliance_pct": 0.0,
+    "bypass_compliance_pct": 0.0,
+    "high_risk_layers": 16,
+    "simultaneous_weakness_events": 50
+  }
 }

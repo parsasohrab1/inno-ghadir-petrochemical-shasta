@@ -1,0 +1,119 @@
+{
+  "modules": [
+    {
+      "module": "۱. تحلیل آلارم",
+      "dataset": "synthetic (alarms.csv)",
+      "algorithm": "Isolation Forest + DBSCAN + Rule-based EEMUA",
+      "n_train": 25000,
+      "n_test": 8000,
+      "metrics": {
+        "accuracy": 0.858375,
+        "precision": 0.5265700483091788,
+        "recall": 0.18874458874458874,
+        "f1_score": 0.2778840025493945,
+        "roc_auc": 0.5800552746498693,
+        "compliance_score": 30.0,
+        "compliance_grade": "D",
+        "n_clusters": 1310,
+        "n_floods": 0
+      }
+    },
+    {
+      "module": "۲. پایش لایه‌های حفاظتی",
+      "dataset": "synthetic (barriers.csv)",
+      "algorithm": "Weighted Health Index + LOPA + SIL Verification (IEC 61511)",
+      "n_train": 12500,
+      "n_test": 25,
+      "metrics": {
+        "avg_health_score": 0.472136,
+        "sil_compliance_pct": 0.0,
+        "bypass_compliance_pct": 0.0,
+        "high_risk_layers_pct": 64.0,
+        "simultaneous_weakness_rate": 2.0,
+        "n_layers_assessed": 25
+      }
+    },
+    {
+      "module": "۳. پیش‌بینی توالی",
+      "dataset": "synthetic (sequences.csv)",
+      "algorithm": "Random Forest + Markov Chain (multi-horizon)",
+      "n_train": 3200,
+      "n_test": 800,
+      "metrics": {
+        "roc_auc": 0.9746,
+        "accuracy": 0,
+        "precision_class_1": 1.0,
+        "recall_class_1": 0.9559164733178654,
+        "f1_class_1": 0.9774614472123369,
+        "weighted_f1": 0.976280406204801,
+        "high_risk_detected": 266
+      }
+    },
+    {
+      "module": "۴. ریسک پویا",
+      "dataset": "synthetic (risk_signals.csv)",
+      "algorithm": "XGBoost + Weibull AFT + Poisson process",
+      "n_train": 8000,
+      "n_test": 2000,
+      "metrics": {
+        "roc_auc": 0.691,
+        "c_index": 0.691,
+        "precision_class_1": 0.17543859649122806,
+        "recall_class_1": 0.33557046979865773,
+        "f1_class_1": 0.2304147465437788,
+        "weighted_f1": 0.8559813781463954
+      }
+    },
+    {
+      "module": "۵. تشخیص خطای TEP",
+      "dataset": "real (Tennessee Eastman Process)",
+      "algorithm": "PCA + T² + SPE/Q-statistic (multivariate SPC)",
+      "n_train": 10580,
+      "n_test": 21120,
+      "metrics": {
+        "avg_FDR": 0.4053571428571428,
+        "FAR_normal": 0.0,
+        "accuracy": 0.3559659090909091,
+        "weighted_precision": 0.5703832195636888,
+        "weighted_recall": 0.5439508506616257,
+        "weighted_f1": 0.5533284632728009,
+        "pca_explained_variance": 0.8684451063786779
+      }
+    },
+    {
+      "module": "۶. پایش کیفیت محصول",
+      "dataset": "real (TEP — 22 fault types)",
+      "algorithm": "SPC (Western Electric 8 rules) + Cp/Cpk (ISO 22514-2) + CUSUM + EWMA + Ishikawa RCA",
+      "n_train": 10580,
+      "n_test": 10580,
+      "metrics": {
+        "avg_cpk": 1.0,
+        "n_out_of_spec_samples": 1412,
+        "n_spc_violations": 14746,
+        "n_quality_variables": 6,
+        "n_faults_analyzed": 15,
+        "n_critical_fault_impacts": 0,
+        "n_high_fault_impacts": 0
+      }
+    },
+    {
+      "module": "۷. بهینه‌سازی خط تولید",
+      "dataset": "synthetic (risk_signals.csv)",
+      "algorithm": "OEE (Nakajima) + Theory of Constraints + Yield + ROI",
+      "n_train": 43800,
+      "n_test": 5,
+      "metrics": {
+        "avg_oee": 0.0,
+        "oee_grade": "Critical",
+        "avg_yield_pct": 94.96199999999999,
+        "n_bottlenecks_identified": 5,
+        "total_loss_usd_h": 36.28,
+        "n_optimization_opportunities": 15,
+        "best_roi": 665.76
+      }
+    }
+  ],
+  "generated_at": "2026-11-17T20:21:53.577196",
+  "total_runtime_s": 13.52,
+  "n_modules": 7
+}

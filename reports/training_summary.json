@@ -1,10 +1,18 @@
 {
   "modules": [
-    "alarm",
-    "barrier",
-    "sequence",
-    "risk",
-    "tep"
+    "۱. تحلیل آلارم",
+    "۲. پایش لایه‌های حفاظتی",
+    "۳. پیش‌بینی توالی",
+    "۴. ریسک پویا",
+    "۵. تشخیص خطای TEP",
+    "۶. پایش کیفیت محصول",
+    "۷. بهینه‌سازی خط تولید"
   ],
-  "status": "completed"
+  "status": "completed",
+  "version": "2.1.0",
+  "n_algorithms": 7,
+  "datasets_used": [
+    "synthetic",
+    "real-TEP"
+  ]
 }

@@ -727,5 +727,10 @@
   "FAR_normal": 0.0,
   "n_train_samples": 10580,
   "n_test_samples": 21120,
-  "n_features": 52
+  "n_features": 52,
+  "accuracy": 0.3559659090909091,
+  "weighted_precision": 0.5703832195636888,
+  "weighted_recall": 0.5439508506616257,
+  "weighted_f1": 0.5533284632728009,
+  "pca_explained_variance": 0.8684
 }
