@@ -1,0 +1,590 @@
+{
+  "layers": [
+    {
+      "unit": "Aromatics-Unit",
+      "layer": "BPCS-Control",
+      "health_score": 0.5337,
+      "bypass_penalty": 0.15,
+      "pfd_estimate": 0.1,
+      "risk_level": "High",
+      "recommendation": "بایپس فعال برای لایه BPCS-Control؛ بازگرداندن به خدمت یا compensating measure الزامی است."
+    },
+    {
+      "unit": "Aromatics-Unit",
+      "layer": "ESD-Shutdown",
+      "health_score": 0.5555,
+      "bypass_penalty": 0.15,
+      "pfd_estimate": 0.1,
+      "risk_level": "High",
+      "recommendation": "بایپس فعال برای لایه ESD-Shutdown؛ بازگرداندن به خدمت یا compensating measure الزامی است."
+    },
+    {
+      "unit": "Aromatics-Unit",
+      "layer": "Procedural",
+      "health_score": 0.49,
+      "bypass_penalty": 0.15,
+      "pfd_estimate": 0.1,
+      "risk_level": "High",
+      "recommendation": "بایپس فعال برای لایه Procedural؛ بازگرداندن به خدمت یا compensating measure الزامی است."
+    },
+    {
+      "unit": "Aromatics-Unit",
+      "layer": "Relief-Valve",
+      "health_score": 0.4061,
+      "bypass_penalty": 0.15,
+      "pfd_estimate": 0.1,
+      "risk_level": "Critical",
+      "recommendation": "بایپس فعال برای لایه Relief-Valve؛ بازگرداندن به خدمت یا compensating measure الزامی است."
+    },
+    {
+      "unit": "Aromatics-Unit",
+      "layer": "SIS-Interlock",
+      "health_score": 0.4197,
+      "bypass_penalty": 0.15,
+      "pfd_estimate": 0.1,
+      "risk_level": "Critical",
+      "recommendation": "بایپس فعال برای لایه SIS-Interlock؛ بازگرداندن به خدمت یا compensating measure الزامی است."
+    },
+    {
+      "unit": "Olefins-Unit",
+      "layer": "BPCS-Control",
+      "health_score": 0.5283,
+      "bypass_penalty": 0.15,
+      "pfd_estimate": 0.1,
+      "risk_level": "High",
+      "recommendation": "بایپس فعال برای لایه BPCS-Control؛ بازگرداندن به خدمت یا compensating measure الزامی است."
+    },
+    {
+      "unit": "Olefins-Unit",
+      "layer": "ESD-Shutdown",
+      "health_score": 0.4916,
+      "bypass_penalty": 0.15,
+      "pfd_estimate": 0.1,
+      "risk_level": "High",
+      "recommendation": "بایپس فعال برای لایه ESD-Shutdown؛ بازگرداندن به خدمت یا compensating measure الزامی است."
+    },
+    {
+      "unit": "Olefins-Unit",
+      "layer": "Procedural",
+      "health_score": 0.4544,
+      "bypass_penalty": 0.15,
+      "pfd_estimate": 0.1,
+      "risk_level": "High",
+      "recommendation": "بایپس فعال برای لایه Procedural؛ بازگرداندن به خدمت یا compensating measure الزامی است."
+    },
+    {
+      "unit": "Olefins-Unit",
+      "layer": "Relief-Valve",
+      "health_score": 0.5389,
+      "bypass_penalty": 0.15,
+      "pfd_estimate": 0.1,
+      "risk_level": "High",
+      "recommendation": "بایپس فعال برای لایه Relief-Valve؛ بازگرداندن به خدمت یا compensating measure الزامی است."
+    },
+    {
+      "unit": "Olefins-Unit",
+      "layer": "SIS-Interlock",
+      "health_score": 0.4,
+      "bypass_penalty": 0.15,
+      "pfd_estimate": 0.1,
+      "risk_level": "Critical",
+      "recommendation": "بایپس فعال برای لایه SIS-Interlock؛ بازگرداندن به خدمت یا compensating measure الزامی است."
+    },
+    {
+      "unit": "Polymer-Unit",
+      "layer": "BPCS-Control",
+      "health_score": 0.5371,
+      "bypass_penalty": 0.15,
+      "pfd_estimate": 0.1,
+      "risk_level": "High",
+      "recommendation": "بایپس فعال برای لایه BPCS-Control؛ بازگرداندن به خدمت یا compensating measure الزامی است."
+    },
+    {
+      "unit": "Polymer-Unit",
+      "layer": "ESD-Shutdown",
+      "health_score": 0.4633,
+      "bypass_penalty": 0.15,
+      "pfd_estimate": 0.1,
+      "risk_level": "High",
+      "recommendation": "بایپس فعال برای لایه ESD-Shutdown؛ بازگرداندن به خدمت یا compensating measure الزامی است."
+    },
+    {
+      "unit": "Polymer-Unit",
+      "layer": "Procedural",
+      "health_score": 0.455,
+      "bypass_penalty": 0.15,
+      "pfd_estimate": 0.1,
+      "risk_level": "High",
+      "recommendation": "بایپس فعال برای لایه Procedural؛ بازگرداندن به خدمت یا compensating measure الزامی است."
+    },
+    {
+      "unit": "Polymer-Unit",
+      "layer": "Relief-Valve",
+      "health_score": 0.4263,
+      "bypass_penalty": 0.15,
+      "pfd_estimate": 0.1,
+      "risk_level": "Critical",
+      "recommendation": "بایپس فعال برای لایه Relief-Valve؛ بازگرداندن به خدمت یا compensating measure الزامی است."
+    },
+    {
+      "unit": "Polymer-Unit",
+      "layer": "SIS-Interlock",
+      "health_score": 0.482,
+      "bypass_penalty": 0.15,
+      "pfd_estimate": 0.1,
+      "risk_level": "High",
+      "recommendation": "بایپس فعال برای لایه SIS-Interlock؛ بازگرداندن به خدمت یا compensating measure الزامی است."
+    },
+    {
+      "unit": "Storage-Tank-Farm",
+      "layer": "BPCS-Control",
+      "health_score": 0.4338,
+      "bypass_penalty": 0.15,
+      "pfd_estimate": 0.1,
+      "risk_level": "Critical",
+      "recommendation": "بایپس فعال برای لایه BPCS-Control؛ بازگرداندن به خدمت یا compensating measure الزامی است."
+    },
+    {
+      "unit": "Storage-Tank-Farm",
+      "layer": "ESD-Shutdown",
+      "health_score": 0.4794,
+      "bypass_penalty": 0.15,
+      "pfd_estimate": 0.1,
+      "risk_level": "High",
+      "recommendation": "بایپس فعال برای لایه ESD-Shutdown؛ بازگرداندن به خدمت یا compensating measure الزامی است."
+    },
+    {
+      "unit": "Storage-Tank-Farm",
+      "layer": "Procedural",
+      "health_score": 0.4,
+      "bypass_penalty": 0.15,
+      "pfd_estimate": 0.1,
+      "risk_level": "Critical",
+      "recommendation": "بایپس فعال برای لایه Procedural؛ بازگرداندن به خدمت یا compensating measure الزامی است."
+    },
+    {
+      "unit": "Storage-Tank-Farm",
+      "layer": "Relief-Valve",
+      "health_score": 0.4397,
+      "bypass_penalty": 0.15,
+      "pfd_estimate": 0.1,
+      "risk_level": "Critical",
+      "recommendation": "بایپس فعال برای لایه Relief-Valve؛ بازگرداندن به خدمت یا compensating measure الزامی است."
+    },
+    {
+      "unit": "Storage-Tank-Farm",
+      "layer": "SIS-Interlock",
+      "health_score": 0.5358,
+      "bypass_penalty": 0.15,
+      "pfd_estimate": 0.1,
+      "risk_level": "High",
+      "recommendation": "بایپس فعال برای لایه SIS-Interlock؛ بازگرداندن به خدمت یا compensating measure الزامی است."
+    },
+    {
+      "unit": "Utility-Unit",
+      "layer": "BPCS-Control",
+      "health_score": 0.532,
+      "bypass_penalty": 0.15,
+      "pfd_estimate": 0.1,
+      "risk_level": "High",
+      "recommendation": "بایپس فعال برای لایه BPCS-Control؛ بازگرداندن به خدمت یا compensating measure الزامی است."
+    },
+    {
+      "unit": "Utility-Unit",
+      "layer": "ESD-Shutdown",
+      "health_score": 0.4065,
+      "bypass_penalty": 0.15,
+      "pfd_estimate": 0.1,
+      "risk_level": "Critical",
+      "recommendation": "بایپس فعال برای لایه ESD-Shutdown؛ بازگرداندن به خدمت یا compensating measure الزامی است."
+    },
+    {
+      "unit": "Utility-Unit",
+      "layer": "Procedural",
+      "health_score": 0.4763,
+      "bypass_penalty": 0.15,
+      "pfd_estimate": 0.1,
+      "risk_level": "High",
+      "recommendation": "بایپس فعال برای لایه Procedural؛ بازگرداندن به خدمت یا compensating measure الزامی است."
+    },
+    {
+      "unit": "Utility-Unit",
+      "layer": "Relief-Valve",
+      "health_score": 0.5019,
+      "bypass_penalty": 0.15,
+      "pfd_estimate": 0.1,
+      "risk_level": "High",
+      "recommendation": "بایپس فعال برای لایه Relief-Valve؛ بازگرداندن به خدمت یا compensating measure الزامی است."
+    },
+    {
+      "unit": "Utility-Unit",
+      "layer": "SIS-Interlock",
+      "health_score": 0.4161,
+      "bypass_penalty": 0.15,
+      "pfd_estimate": 0.1,
+      "risk_level": "Critical",
+      "recommendation": "بایپس فعال برای لایه SIS-Interlock؛ بازگرداندن به خدمت یا compensating measure الزامی است."
+    }
+  ],
+  "unit_risk": {
+    "Aromatics-Unit": 0.5175,
+    "Olefins-Unit": 0.527,
+    "Polymer-Unit": 0.5264,
+    "Storage-Tank-Farm": 0.5244,
+    "Utility-Unit": 0.5505
+  },
+  "simultaneous_weakness": [
+    {
+      "timestamp": "2024-03-20 08:00:00",
+      "unit": "Olefins-Unit",
+      "weak_layers": [
+        "BPCS-Control",
+        "Procedural"
+      ],
+      "weak_count": 2,
+      "severity": "High"
+    },
+    {
+      "timestamp": "2024-03-20 10:00:00",
+      "unit": "Olefins-Unit",
+      "weak_layers": [
+        "BPCS-Control",
+        "SIS-Interlock"
+      ],
+      "weak_count": 2,
+      "severity": "High"
+    },
+    {
+      "timestamp": "2024-03-20 13:00:00",
+      "unit": "Olefins-Unit",
+      "weak_layers": [
+        "BPCS-Control",
+        "Procedural"
+      ],
+      "weak_count": 2,
+      "severity": "High"
+    },
+    {
+      "timestamp": "2024-03-21 01:00:00",
+      "unit": "Olefins-Unit",
+      "weak_layers": [
+        "Relief-Valve",
+        "Procedural"
+      ],
+      "weak_count": 2,
+      "severity": "High"
+    },
+    {
+      "timestamp": "2024-03-21 02:00:00",
+      "unit": "Olefins-Unit",
+      "weak_layers": [
+        "SIS-Interlock",
+        "BPCS-Control"
+      ],
+      "weak_count": 2,
+      "severity": "High"
+    },
+    {
+      "timestamp": "2024-03-21 10:00:00",
+      "unit": "Olefins-Unit",
+      "weak_layers": [
+        "ESD-Shutdown",
+        "Procedural"
+      ],
+      "weak_count": 2,
+      "severity": "High"
+    },
+    {
+      "timestamp": "2024-03-21 14:00:00",
+      "unit": "Olefins-Unit",
+      "weak_layers": [
+        "Relief-Valve",
+        "Procedural"
+      ],
+      "weak_count": 2,
+      "severity": "High"
+    },
+    {
+      "timestamp": "2024-03-21 16:00:00",
+      "unit": "Olefins-Unit",
+      "weak_layers": [
+        "ESD-Shutdown",
+        "Procedural"
+      ],
+      "weak_count": 2,
+      "severity": "High"
+    },
+    {
+      "timestamp": "2024-03-21 18:00:00",
+      "unit": "Olefins-Unit",
+      "weak_layers": [
+        "Procedural",
+        "ESD-Shutdown"
+      ],
+      "weak_count": 2,
+      "severity": "High"
+    },
+    {
+      "timestamp": "2024-03-21 22:00:00",
+      "unit": "Olefins-Unit",
+      "weak_layers": [
+        "BPCS-Control",
+        "SIS-Interlock"
+      ],
+      "weak_count": 2,
+      "severity": "High"
+    }
+  ],
+  "schedule": [
+    {
+      "unit": "Storage-Tank-Farm",
+      "layer": "Procedural",
+      "current_interval_days": 365,
+      "recommended_interval_days": 270,
+      "days_since_test": 184,
+      "health_score": 0.5818,
+      "risk_score": 0.2601,
+      "priority": "High"
+    },
+    {
+      "unit": "Olefins-Unit",
+      "layer": "SIS-Interlock",
+      "current_interval_days": 365,
+      "recommended_interval_days": 274,
+      "days_since_test": 176,
+      "health_score": 0.5937,
+      "risk_score": 0.2471,
+      "priority": "Normal"
+    },
+    {
+      "unit": "Aromatics-Unit",
+      "layer": "Relief-Valve",
+      "current_interval_days": 365,
+      "recommended_interval_days": 280,
+      "days_since_test": 183,
+      "health_score": 0.6183,
+      "risk_score": 0.2328,
+      "priority": "Normal"
+    },
+    {
+      "unit": "Utility-Unit",
+      "layer": "ESD-Shutdown",
+      "current_interval_days": 365,
+      "recommended_interval_days": 280,
+      "days_since_test": 185,
+      "health_score": 0.6172,
+      "risk_score": 0.2312,
+      "priority": "Normal"
+    },
+    {
+      "unit": "Utility-Unit",
+      "layer": "SIS-Interlock",
+      "current_interval_days": 365,
+      "recommended_interval_days": 282,
+      "days_since_test": 186,
+      "health_score": 0.6322,
+      "risk_score": 0.2273,
+      "priority": "Normal"
+    },
+    {
+      "unit": "Aromatics-Unit",
+      "layer": "SIS-Interlock",
+      "current_interval_days": 365,
+      "recommended_interval_days": 286,
+      "days_since_test": 176,
+      "health_score": 0.6275,
+      "risk_score": 0.2161,
+      "priority": "Normal"
+    },
+    {
+      "unit": "Polymer-Unit",
+      "layer": "Relief-Valve",
+      "current_interval_days": 365,
+      "recommended_interval_days": 286,
+      "days_since_test": 178,
+      "health_score": 0.6411,
+      "risk_score": 0.2139,
+      "priority": "Normal"
+    },
+    {
+      "unit": "Storage-Tank-Farm",
+      "layer": "BPCS-Control",
+      "current_interval_days": 365,
+      "recommended_interval_days": 287,
+      "days_since_test": 182,
+      "health_score": 0.6481,
+      "risk_score": 0.2125,
+      "priority": "Normal"
+    },
+    {
+      "unit": "Storage-Tank-Farm",
+      "layer": "Relief-Valve",
+      "current_interval_days": 365,
+      "recommended_interval_days": 287,
+      "days_since_test": 185,
+      "health_score": 0.657,
+      "risk_score": 0.2113,
+      "priority": "Normal"
+    },
+    {
+      "unit": "Olefins-Unit",
+      "layer": "Procedural",
+      "current_interval_days": 365,
+      "recommended_interval_days": 293,
+      "days_since_test": 182,
+      "health_score": 0.6737,
+      "risk_score": 0.1964,
+      "priority": "Normal"
+    },
+    {
+      "unit": "Polymer-Unit",
+      "layer": "ESD-Shutdown",
+      "current_interval_days": 365,
+      "recommended_interval_days": 293,
+      "days_since_test": 177,
+      "health_score": 0.6839,
+      "risk_score": 0.1947,
+      "priority": "Normal"
+    },
+    {
+      "unit": "Polymer-Unit",
+      "layer": "Procedural",
+      "current_interval_days": 365,
+      "recommended_interval_days": 294,
+      "days_since_test": 177,
+      "health_score": 0.6684,
+      "risk_score": 0.1936,
+      "priority": "Normal"
+    },
+    {
+      "unit": "Utility-Unit",
+      "layer": "Procedural",
+      "current_interval_days": 365,
+      "recommended_interval_days": 298,
+      "days_since_test": 182,
+      "health_score": 0.6955,
+      "risk_score": 0.1833,
+      "priority": "Normal"
+    },
+    {
+      "unit": "Storage-Tank-Farm",
+      "layer": "ESD-Shutdown",
+      "current_interval_days": 365,
+      "recommended_interval_days": 299,
+      "days_since_test": 170,
+      "health_score": 0.6902,
+      "risk_score": 0.1803,
+      "priority": "Normal"
+    },
+    {
+      "unit": "Polymer-Unit",
+      "layer": "SIS-Interlock",
+      "current_interval_days": 365,
+      "recommended_interval_days": 300,
+      "days_since_test": 185,
+      "health_score": 0.6989,
+      "risk_score": 0.1776,
+      "priority": "Normal"
+    },
+    {
+      "unit": "Olefins-Unit",
+      "layer": "ESD-Shutdown",
+      "current_interval_days": 365,
+      "recommended_interval_days": 301,
+      "days_since_test": 183,
+      "health_score": 0.711,
+      "risk_score": 0.1728,
+      "priority": "Normal"
+    },
+    {
+      "unit": "Aromatics-Unit",
+      "layer": "Procedural",
+      "current_interval_days": 365,
+      "recommended_interval_days": 302,
+      "days_since_test": 190,
+      "health_score": 0.709,
+      "risk_score": 0.1717,
+      "priority": "Normal"
+    },
+    {
+      "unit": "Utility-Unit",
+      "layer": "Relief-Valve",
+      "current_interval_days": 365,
+      "recommended_interval_days": 304,
+      "days_since_test": 183,
+      "health_score": 0.7236,
+      "risk_score": 0.1653,
+      "priority": "Normal"
+    },
+    {
+      "unit": "Utility-Unit",
+      "layer": "BPCS-Control",
+      "current_interval_days": 365,
+      "recommended_interval_days": 310,
+      "days_since_test": 188,
+      "health_score": 0.767,
+      "risk_score": 0.1482,
+      "priority": "Normal"
+    },
+    {
+      "unit": "Olefins-Unit",
+      "layer": "BPCS-Control",
+      "current_interval_days": 365,
+      "recommended_interval_days": 311,
+      "days_since_test": 179,
+      "health_score": 0.7527,
+      "risk_score": 0.1479,
+      "priority": "Normal"
+    },
+    {
+      "unit": "Aromatics-Unit",
+      "layer": "BPCS-Control",
+      "current_interval_days": 365,
+      "recommended_interval_days": 311,
+      "days_since_test": 183,
+      "health_score": 0.7563,
+      "risk_score": 0.1452,
+      "priority": "Normal"
+    },
+    {
+      "unit": "Polymer-Unit",
+      "layer": "BPCS-Control",
+      "current_interval_days": 365,
+      "recommended_interval_days": 312,
+      "days_since_test": 179,
+      "health_score": 0.7572,
+      "risk_score": 0.1433,
+      "priority": "Normal"
+    },
+    {
+      "unit": "Storage-Tank-Farm",
+      "layer": "SIS-Interlock",
+      "current_interval_days": 365,
+      "recommended_interval_days": 313,
+      "days_since_test": 187,
+      "health_score": 0.761,
+      "risk_score": 0.1424,
+      "priority": "Normal"
+    },
+    {
+      "unit": "Olefins-Unit",
+      "layer": "Relief-Valve",
+      "current_interval_days": 365,
+      "recommended_interval_days": 314,
+      "days_since_test": 186,
+      "health_score": 0.7636,
+      "risk_score": 0.1381,
+      "priority": "Normal"
+    },
+    {
+      "unit": "Aromatics-Unit",
+      "layer": "ESD-Shutdown",
+      "current_interval_days": 365,
+      "recommended_interval_days": 317,
+      "days_since_test": 183,
+      "health_score": 0.7855,
+      "risk_score": 0.1309,
+      "priority": "Normal"
+    }
+  ]
+}

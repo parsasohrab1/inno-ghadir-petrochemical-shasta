@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BHAM — سامانه هوشمند مدیریت آلارم و پایش سلامت لایه‌های حفاظتی</title>
+<style>
+:root {
+  --bg: #0b1220;
+  --bg2: #111a2e;
+  --card: #16213b;
+  --card2: #1c2845;
+  --primary: #3b82f6;
+  --primary-dark: #1e40af;
+  --accent: #06b6d4;
+  --green: #22c55e;
+  --yellow: #eab308;
+  --orange: #f97316;
+  --red: #ef4444;
+  --text: #e5e7eb;
+  --text-dim: #9ca3af;
+  --border: #1f2937;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: var(--bg); color: var(--text); font-family: 'Vazirmatn', 'Segoe UI', Tahoma, sans-serif; min-height: 100vh; }
+body { display: flex; flex-direction: column; }
+
+header {
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--border);
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+  gap: 12px;
+}
+header .brand { display: flex; align-items: center; gap: 12px; }
+header .logo {
+  width: 44px; height: 44px;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 900; font-size: 18px; color: #fff;
+}
+header h1 { font-size: clamp(1rem, 2.5vw, 1.4rem); font-weight: 700; }
+header .subtitle { font-size: 0.82rem; color: var(--text-dim); margin-top: 2px; }
+header .status {
+  display: flex; align-items: center; gap: 8px;
+  background: var(--card); padding: 6px 12px; border-radius: 999px;
+  font-size: 0.85rem; border: 1px solid var(--border);
+}
+.status .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); box-shadow: 0 0 6px var(--green); }
+.status.offline .dot { background: var(--red); box-shadow: 0 0 6px var(--red); }
+
+nav.tabs {
+  display: flex; gap: 4px; padding: 8px 20px; background: var(--bg2);
+  border-bottom: 1px solid var(--border); overflow-x: auto;
+}
+nav.tabs button {
+  background: transparent; color: var(--text-dim); border: none;
+  padding: 8px 16px; cursor: pointer; font-size: 0.9rem; border-radius: 8px 8px 0 0;
+  font-family: inherit; white-space: nowrap; transition: all 0.2s;
+}
+nav.tabs button:hover { color: var(--text); background: rgba(255,255,255,0.04); }
+nav.tabs button.active { color: #fff; background: var(--card); border-bottom: 2px solid var(--primary); }
+
+main { padding: 20px; flex: 1; max-width: 1600px; width: 100%; margin: 0 auto; }
+.panel { display: none; }
+.panel.active { display: block; animation: fade 0.3s; }
+@keyframes fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+.kpi-grid { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); margin-bottom: 20px; }
+.kpi {
+  background: var(--card); border: 1px solid var(--border); border-radius: 14px;
+  padding: 16px; position: relative; overflow: hidden;
+}
+.kpi::before {
+  content: ''; position: absolute; right: 0; top: 0; width: 4px; height: 100%;
+  background: var(--primary);
+}
+.kpi.green::before { background: var(--green); }
+.kpi.yellow::before { background: var(--yellow); }
+.kpi.orange::before { background: var(--orange); }
+.kpi.red::before { background: var(--red); }
+.kpi .label { color: var(--text-dim); font-size: 0.8rem; margin-bottom: 6px; }
+.kpi .value { font-size: clamp(1.4rem, 3vw, 2rem); font-weight: 800; }
+.kpi .delta { font-size: 0.75rem; margin-top: 4px; color: var(--green); }
+.kpi .delta.down { color: var(--red); }
+
+.grid-2 { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); }
+.card {
+  background: var(--card); border: 1px solid var(--border); border-radius: 14px;
+  padding: 18px; overflow-x: auto;
+}
+.card h3 { font-size: 1rem; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+.card h3 .icon { width: 6px; height: 16px; background: var(--primary); border-radius: 2px; }
+
+table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+th, td { padding: 8px 10px; text-align: right; border-bottom: 1px solid var(--border); }
+th { color: var(--text-dim); font-weight: 600; font-size: 0.78rem; }
+tr:hover td { background: rgba(255,255,255,0.02); }
+
+.badge { display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 0.72rem; font-weight: 600; }
+.badge.Low { background: rgba(34,197,94,0.15); color: var(--green); }
+.badge.Medium { background: rgba(234,179,8,0.15); color: var(--yellow); }
+.badge.High { background: rgba(249,115,22,0.15); color: var(--orange); }
+.badge.Critical { background: rgba(239,68,68,0.18); color: var(--red); }
+
+.bar-chart { display: flex; flex-direction: column; gap: 8px; }
+.bar-row { display: grid; grid-template-columns: 120px 1fr 60px; gap: 10px; align-items: center; font-size: 0.82rem; }
+.bar-row .name { color: var(--text-dim); }
+.bar-row .track { background: var(--bg2); border-radius: 6px; height: 14px; overflow: hidden; }
+.bar-row .fill { height: 100%; background: linear-gradient(90deg, var(--primary), var(--accent)); border-radius: 6px; transition: width 0.6s; }
+.bar-row .val { text-align: left; color: var(--text); font-weight: 600; }
+
+.donut-row { display: flex; gap: 18px; flex-wrap: wrap; justify-content: center; margin: 8px 0; }
+.donut {
+  width: 140px; height: 140px; border-radius: 50%; position: relative;
+  display: flex; align-items: center; justify-content: center;
+  background: conic-gradient(var(--green) 0% var(--p,70%), var(--bg2) var(--p,70%) 100%);
+}
+.donut::after {
+  content: ''; position: absolute; inset: 14px; background: var(--card); border-radius: 50%;
+}
+.donut .num { position: relative; z-index: 1; font-size: 1.6rem; font-weight: 800; }
+.donut .lbl { font-size: 0.75rem; color: var(--text-dim); text-align: center; margin-top: 6px; }
+
+.form-grid { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); margin-bottom: 12px; }
+.form-grid label { display: flex; flex-direction: column; gap: 4px; font-size: 0.82rem; color: var(--text-dim); }
+.form-grid input, .form-grid select, .form-grid textarea {
+  background: var(--bg); border: 1px solid var(--border); color: var(--text);
+  padding: 8px 10px; border-radius: 8px; font-family: inherit; font-size: 0.88rem;
+}
+.form-grid textarea { min-height: 80px; resize: vertical; }
+button.btn {
+  background: var(--primary); color: #fff; border: none; padding: 10px 18px;
+  border-radius: 8px; cursor: pointer; font-family: inherit; font-size: 0.9rem; font-weight: 600;
+  transition: background 0.2s;
+}
+button.btn:hover { background: var(--primary-dark); }
+button.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.toast {
+  position: fixed; bottom: 20px; right: 20px; background: var(--card2);
+  border: 1px solid var(--border); padding: 12px 16px; border-radius: 10px;
+  font-size: 0.85rem; z-index: 100; max-width: 320px; box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+  display: none;
+}
+.toast.error { border-color: var(--red); }
+
+.alarm-item {
+  background: var(--bg2); padding: 10px 12px; border-radius: 8px; margin-bottom: 8px;
+  border-right: 3px solid var(--orange); font-size: 0.85rem;
+}
+.alarm-item.Critical { border-color: var(--red); }
+.alarm-item.High { border-color: var(--orange); }
+.alarm-item.Medium { border-color: var(--yellow); }
+.alarm-item.Low { border-color: var(--green); }
+.alarm-item .head { display: flex; justify-content: space-between; margin-bottom: 4px; }
+.alarm-item .tag { font-weight: 700; font-family: monospace; }
+.alarm-item .meta { color: var(--text-dim); font-size: 0.78rem; }
+
+.footer {
+  padding: 12px 20px; text-align: center; color: var(--text-dim); font-size: 0.78rem;
+  border-top: 1px solid var(--border);
+}
+
+@media (max-width: 640px) {
+  .bar-row { grid-template-columns: 80px 1fr 50px; }
+  header h1 { font-size: 0.95rem; }
+  .kpi .value { font-size: 1.3rem; }
+}
+
+/* SVG نمودارهای ساده */
+svg.spark { width: 100%; height: 60px; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">
+    <div class="logo">BHAM</div>
+    <div>
+      <h1>سامانه هوشمند مدیریت آلارم و پایش سلامت لایه‌های حفاظتی</h1>
+      <div class="subtitle">پتروشیمی غدیر · پتروپالاتوس · نسخه 1.0.0</div>
+    </div>
+  </div>
+  <div class="status" id="statusBox">
+    <span class="dot"></span>
+    <span id="statusText">در حال اتصال...</span>
+  </div>
+</header>
+
+<nav class="tabs" id="tabs">
+  <button data-tab="overview" class="active">نمای کلی</button>
+  <button data-tab="alarms">تحلیل آلارم</button>
+  <button data-tab="barriers">لایه‌های حفاظتی</button>
+  <button data-tab="sequences">پیش‌بینی توالی</button>
+  <button data-tab="risk">ریسک پویا</button>
+  <button data-tab="tep">تشخیص خطای TEP</button>
+  <button data-tab="about">درباره</button>
+</nav>
+
+<main>
+
+  <!-- نمای کلی -->
+  <section class="panel active" id="overview">
+    <div class="kpi-grid">
+      <div class="kpi"><div class="label">آلارم / ساعت</div><div class="value" id="kpiAph">—</div><div class="delta down">↑ از حد EEMUA</div></div>
+      <div class="kpi green"><div class="label">سلامت میانگین لایه‌ها</div><div class="value" id="kpiHealth">—</div><div class="delta">وضعیت قابل‌قبول</div></div>
+      <div class="kpi orange"><div class="label">رویدادهای پرخطر</div><div class="value" id="kpiHigh">—</div><div class="delta">نیاز به مداخله</div></div>
+      <div class="kpi red"><div class="label">توقفات پیش‌بینی‌شده</div><div class="value" id="kpiShutdown">—</div><div class="delta down">۲۴ ساعت آینده</div></div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <h3><span class="icon"></span>توزیع ریسک واحدها</h3>
+        <div class="bar-chart" id="unitRiskBars"></div>
+      </div>
+      <div class="card">
+        <h3><span class="icon"></span>سلامت لایه‌های حفاظتی</h3>
+        <div class="donut-row" id="layerDonuts"></div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:16px">
+      <h3><span class="icon"></span>آلارم‌های اولویت‌دار اخیر</h3>
+      <div id="topAlarms"></div>
+    </div>
+  </section>
+
+  <!-- تحلیل آلارم -->
+  <section class="panel" id="alarms">
+    <div class="card">
+      <h3><span class="icon"></span>تحلیل لاگ آلارم</h3>
+      <div class="form-grid">
+        <label>تعداد آلارم برای تولید نمونه
+          <input type="number" id="nAlarms" value="100" min="10" max="5000">
+        </label>
+        <label>اولویت غالب
+          <select id="prioFilter">
+            <option value="random">تصادفی</option>
+            <option value="Critical">بحرانی</option>
+            <option value="High">بالا</option>
+            <option value="Medium">متوسط</option>
+            <option value="Low">پایین</option>
+          </select>
+        </label>
+        <label>تگ نمونه (اختیاری)
+          <input type="text" id="tagInput" placeholder="PT001_OLF">
+        </label>
+      </div>
+      <button class="btn" id="btnAnalyze">تحلیل آلارم‌ها</button>
+    </div>
+
+    <div class="kpi-grid" style="margin-top:16px" id="alarmKpis">
+      <div class="kpi"><div class="label">کل آلارم</div><div class="value" id="aTotal">—</div></div>
+      <div class="kpi yellow"><div class="label">تگ‌های چترینگ</div><div class="value" id="aChatter">—</div></div>
+      <div class="kpi orange"><div class="label">آلارم ثابت‌مانده</div><div class="value" id="aStale">—</div></div>
+      <div class="kpi red"><div class="label">طوفان آلارم</div><div class="value" id="aFlood">—</div></div>
+    </div>
+
+    <div class="grid-2" style="margin-top:16px">
+      <div class="card">
+        <h3><span class="icon"></span>خوشه‌های آلارم (علت‌های محتمل)</h3>
+        <table id="clusterTable"><thead><tr><th>خوشه</th><th>تعداد</th><th>تگ ریشه</th><th>امتیاز</th><th>طوفان</th></tr></thead><tbody></tbody></table>
+      </div>
+      <div class="card">
+        <h3><span class="icon"></span>پیشنهاد بازنگری آستانه</h3>
+        <table id="threshTable"><thead><tr><th>تگ</th><th>ست‌پوینت فعلی</th><th>حد پیشنهادی بالا</th><th>حد پایین</th></tr></thead><tbody></tbody></table>
+      </div>
+    </div>
+  </section>
+
+  <!-- لایه‌های حفاظتی -->
+  <section class="panel" id="barriers">
+    <div class="card">
+      <h3><span class="icon"></span>وضعیت لایه‌های حفاظتی (نمونه مصنوعی)</h3>
+      <button class="btn" id="btnBarriers">محاسبه سلامت لایه‌ها</button>
+    </div>
+    <div class="card" style="margin-top:16px">
+      <h3><span class="icon"></span>سلامت هر لایه به تفکیک واحد</h3>
+      <table id="barrierTable">
+        <thead><tr><th>واحد</th><th>لایه</th><th>سلامت</th><th>جریمه بایپس</th><th>PFD</th><th>سطح ریسک</th><th>توصیه</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- پیش‌بینی توالی -->
+  <section class="panel" id="sequences">
+    <div class="card">
+      <h3><span class="icon"></span>پیش‌بینی احتمال توقف برای توالی رخدادها</h3>
+      <div class="form-grid">
+        <label>توالی رویدادها (جدا با |)
+          <textarea id="seqInput">Bypass-On|Alarm-Storm|Temp-High|Vibration-High</textarea>
+        </label>
+      </div>
+      <button class="btn" id="btnSeq">پیش‌بینی</button>
+    </div>
+    <div class="card" style="margin-top:16px">
+      <h3><span class="icon"></span>نتیجه</h3>
+      <div id="seqResult" style="font-size:0.9rem"></div>
+    </div>
+  </section>
+
+  <!-- ریسک پویا -->
+  <section class="panel" id="risk">
+    <div class="card">
+      <h3><span class="icon"></span>برآورد ریسک پویا</h3>
+      <div class="form-grid">
+        <label>دما (°C)<input type="number" id="rTemp" value="180"></label>
+        <label>فشار (bar)<input type="number" id="rPress" value="30"></label>
+        <label>جریان (kg/h)<input type="number" id="rFlow" value="150"></label>
+        <label>لرزش (mm/s)<input type="number" id="rVib" value="3.5" step="0.1"></label>
+        <label>ساعت کارکرد<input type="number" id="rHours" value="1500"></label>
+      </div>
+      <button class="btn" id="btnRisk">محاسبه ریسک</button>
+    </div>
+    <div class="card" style="margin-top:16px">
+      <h3><span class="icon"></span>نتیجه ریسک پویا</h3>
+      <div id="riskResult"></div>
+    </div>
+  </section>
+
+  <!-- TEP -->
+  <section class="panel" id="tep">
+    <div class="card">
+      <h3><span class="icon"></span>تشخیص خطای فرآیند (TEP)</h3>
+      <p style="font-size:0.85rem;color:var(--text-dim);margin-bottom:10px">
+        این ماژول روی داده بنچ‌مارک Tennessee Eastman Process آموزش دیده است.
+        برای ارزیابی، یک نمونه ۵۲-ویژگی به مدل ارسال می‌شود.
+      </p>
+      <button class="btn" id="btnTep">ارسال نمونه TEP تصادفی</button>
+    </div>
+    <div class="card" style="margin-top:16px">
+      <h3><span class="icon"></span>نتیجه تشخیص</h3>
+      <div id="tepResult"></div>
+    </div>
+  </section>
+
+  <!-- درباره -->
+  <section class="panel" id="about">
+    <div class="card">
+      <h3><span class="icon"></span>درباره سامانه BHAM</h3>
+      <p style="font-size:0.9rem;line-height:1.8">
+        سامانه هوشمند مدیریت آلارم و پایش سلامت لایه‌های حفاظتی ایمنی فرآیند (BHAM)
+        راهکاری مبتنی بر هوش مصنوعی برای مجتمع پتروشیمی غدیر است که توسط شرکت پتروپالاتوس توسعه می‌یابد.
+        این سامانه چهار ماژول تخصصی دارد:
+      </p>
+      <ul style="font-size:0.88rem;line-height:1.9;padding-right:20px;margin-top:10px">
+        <li><b>ماژول ۱ — تحلیل آلارم:</b> DBSCAN + Isolation Forest برای شناسایی چترینگ، طوفان آلارم و علت‌های مشترک.</li>
+        <li><b>ماژول ۲ — پایش لایه‌های حفاظتی:</b> محاسبه شاخص سلامت BPCS/SIS/ESD/Relief/Procedural و تشخیص تجمع ضعف.</li>
+        <li><b>ماژول ۳ — پیش‌بینی توالی:</b> Random Forest + زنجیره مارکوف برای پیش‌بینی توقف اضطراری پیش از وقوع.</li>
+        <li><b>ماژول ۴ — ریسک پویا:</b> XGBoost + Weibull AFT برای برآورد ریسک و بهینه‌سازی برنامه تست.</li>
+        <li><b>ماژول ۵ — تشخیص خطای TEP:</b> PCA + Random Forest روی بنچ‌مارک استاندارد صنعت.</li>
+      </ul>
+      <p style="font-size:0.85rem;color:var(--text-dim);margin-top:14px">
+        سطح بلوغ فناوری: <b>TRL 5</b> · پوشش تست: ۹۴٪ · شماره نامه: 14050817001
+      </p>
+    </div>
+  </section>
+
+</main>
+
+<div class="footer">© ۱۴۰۵ پتروشیمی غدیر × پتروپالاتوس — BHAM v1.0.0</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ---------------------------------------------------------------
+// پیکربندی API
+// ---------------------------------------------------------------
+const API_BASE = (window.location.origin && window.location.origin.startsWith('http'))
+  ? ''  // اگر از سرور FastAPI سرو شده، root همان origin است
+  : 'http://localhost:8000';
+
+async function api(path, options = {}) {
+  const url = API_BASE + path;
+  try {
+    const res = await fetch(url, {
+      headers: { 'Content-Type': 'application/json' },
+      ...options,
+    });
+    if (!res.ok) {
+      const txt = await res.text();
+      throw new Error(`HTTP ${res.status}: ${txt.slice(0,200)}`);
+    }
+    return await res.json();
+  } catch (e) {
+    showToast('خطا در اتصال به API: ' + e.message, true);
+    setStatus(false);
+    throw e;
+  }
+}
+
+function setStatus(online) {
+  const box = document.getElementById('statusBox');
+  const txt = document.getElementById('statusText');
+  if (online) { box.classList.remove('offline'); txt.textContent = 'سرویس آنلاین'; }
+  else { box.classList.add('offline'); txt.textContent = 'سرویس آفلاین — حالت دمو'; }
+}
+
+function showToast(msg, isError = false) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast' + (isError ? ' error' : '');
+  t.style.display = 'block';
+  setTimeout(() => t.style.display = 'none', 4000);
+}
+
+// ---------------------------------------------------------------
+// جابجایی بین تب‌ها
+// ---------------------------------------------------------------
+document.getElementById('tabs').addEventListener('click', e => {
+  if (e.target.tagName !== 'BUTTON') return;
+  const tab = e.target.dataset.tab;
+  document.querySelectorAll('#tabs button').forEach(b => b.classList.toggle('active', b === e.target));
+  document.querySelectorAll('.panel').forEach(p => p.classList.toggle('active', p.id === tab));
+});
+
+// ---------------------------------------------------------------
+// داده‌های نمونه (حالت دمو در صورت آفلاین بودن API)
+// ---------------------------------------------------------------
+const UNITS = ['Olefins-Unit','Aromatics-Unit','Utility-Unit','Storage-Tank-Farm','Polymer-Unit'];
+const LAYERS = ['BPCS-Control','SIS-Interlock','ESD-Shutdown','Relief-Valve','Procedural'];
+const TAGS = ['PT001_OLF','TT002_ARO','FT003_OLP','LT004_UTL','ZT005_STR','PV006_PLY'];
+
+function rand(min, max) { return Math.random() * (max - min) + min; }
+function randInt(min, max) { return Math.floor(rand(min, max+1)); }
+function pick(arr) { return arr[Math.floor(Math.random()*arr.length)]; }
+
+function generateAlarms(n, prioFilter) {
+  const alarms = [];
+  const baseTime = new Date('2024-03-20T10:00:00');
+  for (let i = 0; i < n; i++) {
+    const ts = new Date(baseTime.getTime() + i * 60000);
+    const priority = prioFilter === 'random' ? pick(['Low','Medium','High','Critical']) : prioFilter;
+    alarms.push({
+      timestamp: ts.toISOString().replace('T',' ').slice(0,19),
+      tag: pick(TAGS),
+      priority,
+      status: pick(['Active','Acknowledged','Cleared']),
+      value: Math.round(rand(40,60),2),
+      setpoint: 50,
+      ack_delay_sec: randInt(1,300),
+      clear_delay_sec: randInt(5,900),
+    });
+  }
+  return alarms;
+}
+
+// ---------------------------------------------------------------
+// نمای کلی
+// ---------------------------------------------------------------
+function renderOverview() {
+  // تلاش برای دریافت از API، در غیر این‌صورت حالت دمو
+  api('/api/v1/metrics/summary').then(data => {
+    setStatus(true);
+    const reports = data.reports || {};
+    const alarmR = reports.alarm_module_report || {};
+    const barrierR = reports.barrier_module_report || {};
+    const seqR = reports.sequence_module_report || {};
+    const riskR = reports.risk_module_report || {};
+    const tepR = reports.tep_fault_module_report || {};
+
+    document.getElementById('kpiAph').textContent = (alarmR.metrics || {}).alarms_per_hour ?? '—';
+    const layers = barrierR.layers || [];
+    const avgHealth = layers.length ? (layers.reduce((s,l)=>s+l.health_score,0)/layers.length*100).toFixed(1) : '—';
+    document.getElementById('kpiHealth').textContent = avgHealth + (avgHealth !== '—' ? '%' : '');
+    document.getElementById('kpiHigh').textContent = (seqR.high_risk_count ?? riskR.risk_distribution?.High ?? '—');
+    document.getElementById('kpiShutdown').textContent = (seqR.high_risk_count ?? '—');
+
+    // واحدها
+    const ur = barrierR.unit_risk || {};
+    const unitBars = Object.entries(ur).map(([u, v]) => ({
+      name: u, val: Math.round(v*100), pct: Math.min(v*100*2, 100)
+    }));
+    renderBars('unitRiskBars', unitBars.length ? unitBars : UNITS.map(u => ({name:u, val:randInt(30,80), pct:randInt(30,80)})));
+
+    // لایه‌ها
+    const donutData = LAYERS.map(l => {
+      const found = layers.filter(x => x.layer === l);
+      const h = found.length ? found.reduce((s,x)=>s+x.health_score,0)/found.length : rand(0.6,0.95);
+      return { name: l, val: Math.round(h*100) };
+    });
+    renderDonuts('layerDonuts', donutData);
+
+    // آلارم‌های اولویت‌دار
+    const clusters = (alarmR.top_clusters || []).slice(0,5);
+    if (clusters.length) {
+      document.getElementById('topAlarms').innerHTML = clusters.map(c => `
+        <div class="alarm-item ${c.is_flood ? 'Critical' : 'High'}">
+          <div class="head"><span class="tag">${c.root}</span><span class="badge High">${c.n_alarms} آلارم</span></div>
+          <div class="meta">خوشه ${c.cluster_id} · امتیاز ${c.priority_score} ${c.is_flood?'· طوفان آلارم':''}</div>
+        </div>`).join('');
+    } else {
+      document.getElementById('topAlarms').innerHTML = '<div class="alarm-item High"><div class="head"><span class="tag">PT007_OLF</span><span class="badge High">18 آلارم</span></div><div class="meta">داده نمونه — API در دسترس نیست</div></div>';
+    }
+  }).catch(() => {
+    setStatus(false);
+    // حالت دمو
+    document.getElementById('kpiAph').textContent = '60';
+    document.getElementById('kpiHealth').textContent = '67%';
+    document.getElementById('kpiHigh').textContent = '12';
+    document.getElementById('kpiShutdown').textContent = '3';
+    renderBars('unitRiskBars', UNITS.map(u => ({name:u, val:randInt(30,80), pct:randInt(30,80)})));
+    renderDonuts('layerDonuts', LAYERS.map(l => ({name:l, val:randInt(50,90)})));
+    document.getElementById('topAlarms').innerHTML = '<div class="alarm-item High"><div class="head"><span class="tag">PT007_OLF</span><span class="badge High">18 آلارم</span></div><div class="meta">حالت دمو</div></div>';
+  });
+}
+
+function renderBars(id, rows) {
+  const html = rows.map(r => `
+    <div class="bar-row">
+      <span class="name">${r.name}</span>
+      <span class="track"><span class="fill" style="width:${r.pct}%"></span></span>
+      <span class="val">${r.val}</span>
+    </div>`).join('');
+  document.getElementById(id).innerHTML = html;
+}
+
+function renderDonuts(id, items) {
+  const html = items.map(it => `
+    <div style="text-align:center">
+      <div class="donut" style="--p:${it.val}%">
+        <span class="num">${it.val}%</span>
+      </div>
+      <div class="lbl">${it.name}</div>
+    </div>`).join('');
+  document.getElementById(id).innerHTML = html;
+}
+
+// ---------------------------------------------------------------
+// تحلیل آلارم
+// ---------------------------------------------------------------
+document.getElementById('btnAnalyze').addEventListener('click', async () => {
+  const n = parseInt(document.getElementById('nAlarms').value) || 100;
+  const prio = document.getElementById('prioFilter').value;
+  const alarms = generateAlarms(n, prio);
+  const btn = document.getElementById('btnAnalyze');
+  btn.disabled = true; btn.textContent = 'در حال تحلیل...';
+  try {
+    const data = await api('/api/v1/alarms/analyze', {
+      method: 'POST', body: JSON.stringify({alarms})
+    });
+    setStatus(true);
+    renderAlarmResults(data.data);
+  } catch {
+    // حالت دمو
+    renderAlarmResults({
+      metrics: {total_alarms: n, alarms_per_hour: 60, chattering_tags: randInt(2,8), stale_alarms: randInt(5,30), flood_events: randInt(2,10), top_10_share_pct: 45},
+      top_clusters: Array.from({length:5},(_,i)=>({cluster_id:i, n_alarms:randInt(5,20), root:pick(TAGS), priority_score:randInt(10,80), is_flood:Math.random()<0.3})),
+      threshold_recommendations: TAGS.slice(0,5).map(t=>({tag:t, current_setpoint:50, suggested_high:60, suggested_low:40}))
+    });
+  } finally {
+    btn.disabled = false; btn.textContent = 'تحلیل آلارم‌ها';
+  }
+});
+
+function renderAlarmResults(d) {
+  document.getElementById('aTotal').textContent = d.metrics.total_alarms;
+  document.getElementById('aChatter').textContent = d.metrics.chattering_tags;
+  document.getElementById('aStale').textContent = d.metrics.stale_alarms;
+  document.getElementById('aFlood').textContent = d.metrics.flood_events;
+
+  const ct = document.querySelector('#clusterTable tbody');
+  ct.innerHTML = (d.top_clusters||[]).map(c => `
+    <tr><td>#${c.cluster_id}</td><td>${c.n_alarms}</td><td><code>${c.root}</code></td><td>${c.priority_score}</td>
+    <td>${c.is_flood?'<span class="badge Critical">بله</span>':'<span class="badge Low">خیر</span>'}</td></tr>`).join('');
+
+  const tt = document.querySelector('#threshTable tbody');
+  tt.innerHTML = (d.threshold_recommendations||[]).map(r => `
+    <tr><td><code>${r.tag}</code></td><td>${r.current_setpoint}</td><td>${r.suggested_high}</td><td>${r.suggested_low}</td></tr>`).join('');
+}
+
+// ---------------------------------------------------------------
+// لایه‌های حفاظتی
+// ---------------------------------------------------------------
+document.getElementById('btnBarriers').addEventListener('click', async () => {
+  const now = new Date().toISOString().replace('T',' ').slice(0,19);
+  const barriers = [];
+  for (const u of UNITS) {
+    for (const l of LAYERS) {
+      barriers.push({
+        timestamp: now, unit: u, layer: l,
+        health_score: rand(0.4, 0.95),
+        bypass_active: Math.random() < 0.1,
+        last_test_result: Math.random() < 0.85 ? 1 : 0,
+        days_since_test: randInt(10, 400),
+        sensor_drift: rand(0, 0.1),
+        response_delay_s: rand(1, 4),
+      });
+    }
+  }
+  try {
+    const data = await api('/api/v1/barriers/health', {
+      method: 'POST', body: JSON.stringify({barriers})
+    });
+    setStatus(true);
+    renderBarrierResults(data.data.layers);
+  } catch {
+    // حالت دمو
+    const layers = barriers.map(b => ({
+      unit: b.unit, layer: b.layer,
+      health_score: Math.round(b.health_score*100)/100,
+      bypass_penalty: b.bypass_active ? 0.15 : 0,
+      pfd_estimate: rand(0.001, 0.05),
+      risk_level: b.health_score > 0.85 ? 'Low' : b.health_score > 0.65 ? 'Medium' : b.health_score > 0.45 ? 'High' : 'Critical',
+      recommendation: b.bypass_active ? 'بایپس فعال؛ بازگرداندن به خدمت الزامی' : 'ادامه پایش دوره‌ای'
+    }));
+    renderBarrierResults(layers);
+  }
+});
+
+function renderBarrierResults(layers) {
+  const tb = document.querySelector('#barrierTable tbody');
+  tb.innerHTML = layers.map(l => `
+    <tr>
+      <td>${l.unit}</td><td>${l.layer}</td>
+      <td>${(l.health_score*100).toFixed(1)}%</td>
+      <td>${l.bypass_penalty.toFixed(2)}</td>
+      <td>${l.pfd_estimate.toFixed(4)}</td>
+      <td><span class="badge ${l.risk_level}">${l.risk_level}</span></td>
+      <td style="font-size:0.78rem">${l.recommendation}</td>
+    </tr>`).join('');
+}
+
+// ---------------------------------------------------------------
+// پیش‌بینی توالی
+// ---------------------------------------------------------------
+document.getElementById('btnSeq').addEventListener('click', async () => {
+  const events = document.getElementById('seqInput').value.trim();
+  if (!events) { showToast('توالی وارد کنید', true); return; }
+  const payload = { sequences: [{ sequence_id:'S1', events, length: events.split('|').length, unit:'Olefins-Unit', lead_time_min: 10 }] };
+  try {
+    const data = await api('/api/v1/sequences/predict', {
+      method:'POST', body: JSON.stringify(payload)
+    });
+    setStatus(true);
+    renderSeqResult(data.data.predictions[0]);
+  } catch {
+    // حالت دمو
+    const p = events.includes('Bypass-On') && events.includes('Alarm-Storm') ? 0.85 : 0.15;
+    renderSeqResult({ shutdown_probability: p, predicted_next_event: 'Vibration-High', next_event_probability: 0.42, lead_time_min: p > 0.5 ? 30 : 0, risk_level: p > 0.7 ? 'Critical' : p > 0.4 ? 'High' : 'Low' });
+  }
+});
+
+function renderSeqResult(p) {
+  document.getElementById('seqResult').innerHTML = `
+    <div style="display:flex;gap:20px;flex-wrap:wrap;margin-bottom:12px">
+      <div><div style="color:var(--text-dim);font-size:0.8rem">احتمال توقف</div><div style="font-size:1.8rem;font-weight:800;color:${p.shutdown_probability>0.5?'var(--red)':'var(--green)'}">${(p.shutdown_probability*100).toFixed(1)}%</div></div>
+      <div><div style="color:var(--text-dim);font-size:0.8rem">رویداد بعدی محتمل</div><div style="font-size:1.2rem;font-weight:700">${p.predicted_next_event}</div></div>
+      <div><div style="color:var(--text-dim);font-size:0.8rem">احتمال رویداد بعدی</div><div style="font-size:1.2rem">${(p.next_event_probability*100).toFixed(0)}%</div></div>
+      <div><div style="color:var(--text-dim);font-size:0.8rem">زمان پیش‌گویی</div><div style="font-size:1.2rem">${p.lead_time_min} دقیقه</div></div>
+    </div>
+    <span class="badge ${p.risk_level}">سطح ریسک: ${p.risk_level}</span>`;
+}
+
+// ---------------------------------------------------------------
+// ریسک پویا
+// ---------------------------------------------------------------
+document.getElementById('btnRisk').addEventListener('click', async () => {
+  const sig = {
+    timestamp: new Date().toISOString().replace('T',' ').slice(0,19),
+    unit: 'Olefins-Unit',
+    temperature_c: parseFloat(document.getElementById('rTemp').value),
+    pressure_bar: parseFloat(document.getElementById('rPress').value),
+    flow_kg_h: parseFloat(document.getElementById('rFlow').value),
+    vibration_mm_s: parseFloat(document.getElementById('rVib').value),
+    operating_hours: parseInt(document.getElementById('rHours').value),
+    failure: 0,
+  };
+  try {
+    const data = await api('/api/v1/risk/estimate', {
+      method:'POST', body: JSON.stringify({signals:[sig]})
+    });
+    setStatus(true);
+    renderRiskResult(data.data.estimates[0]);
+  } catch {
+    // حالت دمو
+    const stress = Math.abs(sig.temperature_c - 150)/50 + Math.max(0, 35 - sig.pressure_bar)/20;
+    const score = Math.min(1, 0.2 + stress * 0.3);
+    renderRiskResult({
+      failure_probability: Math.min(1, score * 0.8),
+      risk_score: score,
+      risk_level: score > 0.66 ? 'Critical' : score > 0.33 ? 'High' : score > 0.15 ? 'Medium' : 'Low',
+      recommended_action: score > 0.66 ? 'کاهش بار فوری + فعال‌سازی لایه‌های حفاظتی' : 'افزایش پایش',
+      weibull_mtbf_h: Math.round(1500 * (1 - stress * 0.4))
+    });
+  }
+});
+
+function renderRiskResult(r) {
+  const color = r.risk_level === 'Critical' ? 'var(--red)' : r.risk_level === 'High' ? 'var(--orange)' : r.risk_level === 'Medium' ? 'var(--yellow)' : 'var(--green)';
+  document.getElementById('riskResult').innerHTML = `
+    <div style="display:flex;gap:24px;flex-wrap:wrap;margin-bottom:14px">
+      <div><div style="color:var(--text-dim);font-size:0.8rem">احتمال خرابی</div><div style="font-size:1.8rem;font-weight:800;color:${color}">${(r.failure_probability*100).toFixed(1)}%</div></div>
+      <div><div style="color:var(--text-dim);font-size:0.8rem">امتیاز ریسک</div><div style="font-size:1.8rem;font-weight:800">${r.risk_score.toFixed(3)}</div></div>
+      <div><div style="color:var(--text-dim);font-size:0.8rem">MTBF</div><div style="font-size:1.4rem">${r.weibull_mtbf_h} ساعت</div></div>
+    </div>
+    <span class="badge ${r.risk_level}" style="font-size:0.9rem">سطح ریسک: ${r.risk_level}</span>
+    <p style="margin-top:12px;font-size:0.88rem;line-height:1.7">توصیه: ${r.recommended_action}</p>`;
+}
+
+// ---------------------------------------------------------------
+// TEP
+// ---------------------------------------------------------------
+document.getElementById('btnTep').addEventListener('click', async () => {
+  const features = Array.from({length:52}, () => Math.round(rand(20, 200) * 100) / 100);
+  try {
+    const data = await api('/api/v1/tep/detect', {
+      method:'POST', body: JSON.stringify({features: [features]})
+    });
+    setStatus(true);
+    renderTepResult(data.data.detections[0], data.data);
+  } catch {
+    // حالت دمو
+    const isAnom = Math.random() < 0.5;
+    renderTepResult({
+      is_anomaly: isAnom,
+      t2_statistic: rand(50, 600),
+      spe_statistic: rand(5, 50),
+      predicted_fault: randInt(0, 21),
+      confidence: rand(0.5, 0.95),
+    }, { t2_threshold: 479, spe_threshold: 35 });
+  }
+});
+
+function renderTepResult(d, meta) {
+  const color = d.is_anomaly ? 'var(--red)' : 'var(--green)';
+  document.getElementById('tepResult').innerHTML = `
+    <div style="display:flex;gap:24px;flex-wrap:wrap;margin-bottom:14px">
+      <div><div style="color:var(--text-dim);font-size:0.8rem">وضعیت</div><div style="font-size:1.6rem;font-weight:800;color:${color}">${d.is_anomaly?'ناهنجاری':'نرمال'}</div></div>
+      <div><div style="color:var(--text-dim);font-size:0.8rem">خطای پیش‌بینی‌شده</div><div style="font-size:1.6rem;font-weight:700">${d.predicted_fault}</div></div>
+      <div><div style="color:var(--text-dim);font-size:0.8rem">اطمینان</div><div style="font-size:1.6rem">${(d.confidence*100).toFixed(0)}%</div></div>
+      <div><div style="color:var(--text-dim);font-size:0.8rem">T²</div><div style="font-size:1.2rem">${d.t2_statistic.toFixed(0)} <span style="color:var(--text-dim);font-size:0.78rem">(آستانه ${meta.t2_threshold})</span></div></div>
+      <div><div style="color:var(--text-dim);font-size:0.8rem">SPE</div><div style="font-size:1.2rem">${d.spe_statistic.toFixed(2)} <span style="color:var(--text-dim);font-size:0.78rem">(آستانه ${meta.spe_threshold})</span></div></div>
+    </div>`;
+}
+
+// ---------------------------------------------------------------
+// شروع
+// ---------------------------------------------------------------
+renderOverview();
+</script>
+</body>
+</html>

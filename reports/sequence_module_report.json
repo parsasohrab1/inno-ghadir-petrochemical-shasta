@@ -1,0 +1,159 @@
+{
+  "fit_info": {
+    "train_size": 3200,
+    "test_size": 800,
+    "classification_report": {
+      "0": {
+        "precision": 0.9510309278350515,
+        "recall": 1.0,
+        "f1-score": 0.9749009247027741,
+        "support": 369.0
+      },
+      "1": {
+        "precision": 1.0,
+        "recall": 0.9559164733178654,
+        "f1-score": 0.9774614472123369,
+        "support": 431.0
+      },
+      "accuracy": 0.97625,
+      "macro avg": {
+        "precision": 0.9755154639175257,
+        "recall": 0.9779582366589328,
+        "f1-score": 0.9761811859575555,
+        "support": 800.0
+      },
+      "weighted avg": {
+        "precision": 0.9774130154639176,
+        "recall": 0.97625,
+        "f1-score": 0.976280406204801,
+        "support": 800.0
+      }
+    },
+    "roc_auc": 0.9746
+  },
+  "predictions_sample": [
+    {
+      "sequence_id": "SEQ-02855",
+      "shutdown_probability": 0.7703,
+      "predicted_next_event": "Flow-Low",
+      "next_event_probability": 0.1634,
+      "lead_time_min": 119,
+      "risk_level": "Critical"
+    },
+    {
+      "sequence_id": "SEQ-01834",
+      "shutdown_probability": 0.0484,
+      "predicted_next_event": "Bypass-On",
+      "next_event_probability": 0.1384,
+      "lead_time_min": 0,
+      "risk_level": "Low"
+    },
+    {
+      "sequence_id": "SEQ-00981",
+      "shutdown_probability": 0.8818,
+      "predicted_next_event": "Flow-Low",
+      "next_event_probability": 0.1534,
+      "lead_time_min": 57,
+      "risk_level": "Critical"
+    },
+    {
+      "sequence_id": "SEQ-00439",
+      "shutdown_probability": 0.1298,
+      "predicted_next_event": "Flow-Low",
+      "next_event_probability": 0.145,
+      "lead_time_min": 0,
+      "risk_level": "Low"
+    },
+    {
+      "sequence_id": "SEQ-02484",
+      "shutdown_probability": 0.9989,
+      "predicted_next_event": "Level-High",
+      "next_event_probability": 0.1459,
+      "lead_time_min": 110,
+      "risk_level": "Critical"
+    },
+    {
+      "sequence_id": "SEQ-00578",
+      "shutdown_probability": 0.0347,
+      "predicted_next_event": "Level-High",
+      "next_event_probability": 0.1459,
+      "lead_time_min": 0,
+      "risk_level": "Low"
+    },
+    {
+      "sequence_id": "SEQ-01069",
+      "shutdown_probability": 0.9775,
+      "predicted_next_event": "Level-High",
+      "next_event_probability": 0.1593,
+      "lead_time_min": 45,
+      "risk_level": "Critical"
+    },
+    {
+      "sequence_id": "SEQ-02342",
+      "shutdown_probability": 0.9589,
+      "predicted_next_event": "Flow-Low",
+      "next_event_probability": 0.1429,
+      "lead_time_min": 85,
+      "risk_level": "Critical"
+    },
+    {
+      "sequence_id": "SEQ-01583",
+      "shutdown_probability": 0.9879,
+      "predicted_next_event": "Vibration-High",
+      "next_event_probability": 0.1403,
+      "lead_time_min": 73,
+      "risk_level": "Critical"
+    },
+    {
+      "sequence_id": "SEQ-00797",
+      "shutdown_probability": 0.8919,
+      "predicted_next_event": "Flow-Low",
+      "next_event_probability": 0.1468,
+      "lead_time_min": 117,
+      "risk_level": "Critical"
+    }
+  ],
+  "high_risk_count": 263,
+  "feature_importances": [
+    {
+      "feature": "vibration-high",
+      "importance": 0.10813701109165656
+    },
+    {
+      "feature": "pressure-low",
+      "importance": 0.10093733198792991
+    },
+    {
+      "feature": "has_press_low",
+      "importance": 0.09549299016638287
+    },
+    {
+      "feature": "has_vibration",
+      "importance": 0.08916385882244658
+    },
+    {
+      "feature": "unique_events",
+      "importance": 0.08734122064789678
+    },
+    {
+      "feature": "temp-high",
+      "importance": 0.039003169306398015
+    },
+    {
+      "feature": "len",
+      "importance": 0.03393736075495223
+    },
+    {
+      "feature": "bypass-on",
+      "importance": 0.03301194528126375
+    },
+    {
+      "feature": "alarm-storm",
+      "importance": 0.0322867627262045
+    },
+    {
+      "feature": "has_temp_high",
+      "importance": 0.029861791578886118
+    }
+  ]
+}

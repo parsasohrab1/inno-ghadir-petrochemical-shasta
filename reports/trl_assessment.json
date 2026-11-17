@@ -1,0 +1,103 @@
+{
+  "achieved_trl": 5,
+  "target_trl": 5,
+  "details": {
+    "TRL_1": {
+      "level": 1,
+      "criteria_total": 2,
+      "criteria_completed": 2,
+      "ratio": 1.0,
+      "status": "completed",
+      "completed": [
+        "مشاهده و تعریف مسئله ایمنی فرآیند و حجم آلارم",
+        "تدوین ایده اولیه سامانه هوشمند مدیریت آلارم"
+      ],
+      "pending": []
+    },
+    "TRL_2": {
+      "level": 2,
+      "criteria_total": 2,
+      "criteria_completed": 2,
+      "ratio": 1.0,
+      "status": "completed",
+      "completed": [
+        "فرمول‌بندی معماری ۴ ماژولی BHAM",
+        "انتخاب الگوریتم‌های کاندید (DBSCAN، Isolation Forest، Random Forest، XGBoost، Weibull)"
+      ],
+      "pending": []
+    },
+    "TRL_3": {
+      "level": 3,
+      "criteria_total": 3,
+      "criteria_completed": 3,
+      "ratio": 1.0,
+      "status": "completed",
+      "completed": [
+        "پیاده‌سازی نمونه اولیه هر ماژول در پایتون",
+        "اجرای موفق روی داده شبیه‌سازی‌شده کوچک",
+        "اعتبارسنجی مفهوم چترینگ/خوشه‌بندی/تشخیص ناهنجاری"
+      ],
+      "pending": []
+    },
+    "TRL_4": {
+      "level": 4,
+      "criteria_total": 4,
+      "criteria_completed": 4,
+      "ratio": 1.0,
+      "status": "completed",
+      "completed": [
+        "تجمیع چهار ماژول در یک پکیج نرم‌افزاری (bham)",
+        "خط لوله آموزش سرتاسری (train_all.py)",
+        "مجموعه تست‌های واحد با پوشش ≥ ۸۰٪",
+        "گزارش شاخص‌های کمی هر ماژول"
+      ],
+      "pending": []
+    },
+    "TRL_5": {
+      "level": 5,
+      "criteria_total": 6,
+      "criteria_completed": 6,
+      "ratio": 1.0,
+      "status": "completed",
+      "completed": [
+        "اعتبارسنجی روی داده واقعی بنچ‌مارک صنعت (TEP)",
+        "نمونه اولیه API سرویس (FastAPI) با مدل‌های آموزش‌دیده",
+        "داشبورد نمایش زنده خروجی مدل‌ها",
+        "مستندات SRS/BRS و معماری فنی",
+        "ارزیابی FDR/FAR روی داده واقعی",
+        "نسخه‌گذاری و قابلیت بازتولید (versioning + reproduce)"
+      ],
+      "pending": []
+    }
+  },
+  "evidence": {
+    "TRL_1": {
+      "af55e4aaf6": true,
+      "ae2ba85d68": true
+    },
+    "TRL_2": {
+      "7f478e1baa": true,
+      "3fc52d65a9": true
+    },
+    "TRL_3": {
+      "71b23e443a": true,
+      "7c8015ad84": true,
+      "47a03c7304": true
+    },
+    "TRL_4": {
+      "d74d1b376c": true,
+      "7513d23241": true,
+      "50b63f553a": true,
+      "a0077ba151": true
+    },
+    "TRL_5": {
+      "e1d1f8abe5": true,
+      "cdfd5451ab": true,
+      "2bf1bd49b2": true,
+      "04c49c6e7a": true,
+      "1b9b90463e": true,
+      "8180949fdf": true
+    }
+  },
+  "summary": "سطح TRL 5 به‌طور کامل حاصل شده است: اجزای کلیدی سامانه در محیط مرتبط (داده واقعی بنچ‌مارک TEP + داشبورد زنده + API) اعتبارسنجی شده‌اند."
+}

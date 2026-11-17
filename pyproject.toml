@@ -1,0 +1,45 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "bham-ghadir"
+version = "1.0.0"
+description = "BHAM — Barrier Health & Alarm Manager: هوشمندسازی مدیریت آلارم و پایش سلامت لایه‌های حفاظتی ایمنی فرآیند پتروشیمی غدیر"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "Proprietary — PetroPalatos / Ghadir Petrochemical"}
+authors = [{name = "PetroPalatos R&D Team"}]
+dependencies = [
+    "numpy>=1.24",
+    "pandas>=2.0",
+    "scikit-learn>=1.3",
+    "scipy>=1.10",
+    "statsmodels>=0.14",
+    "xgboost>=2.0",
+    "lightgbm>=4.0",
+    "fastapi>=0.100",
+    "uvicorn>=0.23",
+    "joblib>=1.3",
+    "pydantic>=2.0",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=7", "pytest-cov>=4", "pytest-asyncio", "httpx", "matplotlib"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.coverage.run]
+source = ["src/bham"]
+omit = ["*/tests/*", "*/__init__.py"]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = false
+exclude_lines = [
+    "pragma: no cover",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+    "if TYPE_CHECKING:",
+]
