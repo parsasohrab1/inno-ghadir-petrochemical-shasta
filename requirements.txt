@@ -1,0 +1,29 @@
+# BHAM — وابستگی‌های پایتون
+# نصب: pip install -r requirements.txt
+
+# محاسبات علمی و داده
+numpy>=1.24
+pandas>=2.0
+scipy>=1.10
+
+# یادگیری ماشین
+scikit-learn>=1.3
+xgboost>=2.0
+lightgbm>=4.0
+statsmodels>=0.14
+
+# وب API
+fastapi>=0.100
+uvicorn[standard]>=0.23
+pydantic>=2.0
+
+# ذخیره‌سازی مدل
+joblib>=1.3
+
+# نمودار (برای گزارش‌ها)
+matplotlib>=3.7
+
+# توسعه و تست (اختیاری)
+# pytest>=7
+# pytest-cov>=4
+# httpx
