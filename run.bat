@@ -99,17 +99,43 @@ if not exist "models\sequence_predictor.joblib" (
 )
 
 REM ------------------------------------------------------------
-REM مرحله ۶: اجرای سرور (بک‌اند + فرانت)
+REM مرحله ۶: ساخت گواهینامه SSL خودامضا (برای HTTPS)
+REM ------------------------------------------------------------
+echo.
+echo ▶ مرحله ۶: گواهینامه SSL (برای HTTPS)...
+if not exist "certs" mkdir certs
+where openssl >nul 2>nul
+if errorlevel 1 (
+    echo    ⚠️ openssl یافت نشد — فقط HTTP روی پورت 8000 اجرا می‌شود
+    echo    برای HTTPS، OpenSSL را نصب کنید یا از Git Bash استفاده کنید
+    set HAS_SSL=0
+) else (
+    if not exist "certs\cert.pem" (
+        echo    ساخت گواهینامه خودامضا...
+        openssl req -x509 -newkey rsa:2048 -keyout certs\key.pem -out certs\cert.pem -days 365 -nodes -subj "/C=IR/ST=Tehran/L=Tehran/O=BHAM/OU=Dev/CN=localhost" -addext "subjectAltName=DNS:localhost,IP:127.0.0.1" 2>nul
+        echo ✓ گواهینامه ساخته شد
+        set HAS_SSL=1
+    ) else (
+        echo ✓ گواهینامه از قبل موجود است
+        set HAS_SSL=1
+    )
+)
+
+REM ------------------------------------------------------------
+REM مرحله ۷: اجرای سرور (بک‌اند + فرانت)
 REM ------------------------------------------------------------
 echo.
 echo ============================================================
 echo   🚀 راه‌اندازی کامل شد!
 echo ============================================================
 echo.
-echo   📊 داشبورد:        http://localhost:8000/
-echo   📚 مستندات API:    http://localhost:8000/docs
-echo   🔍 ReDoc:           http://localhost:8000/redoc
-echo   ❤️  Health check:   http://localhost:8000/api/v1/health
+echo   📊 داشبورد (HTTP):  http://localhost:8000/
+echo   📚 مستندات API:     http://localhost:8000/docs
+echo   ❤️  Health check:    http://localhost:8000/api/v1/health
+if "!HAS_SSL!"=="1" (
+    echo   📊 داشبورد (HTTPS): https://localhost:8443/
+    echo   ⚠️  اگر مرورگر خطای SSL داد: روی «Advanced» → «Proceed» کلیک کنید
+)
 echo.
 echo   برای توقف: Ctrl+C
 echo ============================================================
@@ -118,7 +144,13 @@ echo.
 REM باز کردن خودکار مرورگر پس از ۳ ثانیه
 start "" cmd /c "timeout /t 3 >nul && start http://localhost:8000/"
 
-REM اجرای سرور (روی همه اینترفیس‌ها، پورت ۸۰۰۰، با reload)
+REM اجرای سرور HTTPS در background (اگر SSL موجود باشد)
+if "!HAS_SSL!"=="1" (
+    start "BHAM-HTTPS" cmd /c "%PY% -m uvicorn api.server:app --host 0.0.0.0 --port 8443 --ssl-keyfile certs\key.pem --ssl-certfile certs\cert.pem"
+    echo ✓ سرور HTTPS روی پورت 8443 اجرا شد
+)
+
+REM اجرای سرور HTTP در foreground (با reload برای توسعه)
 %PY% -m uvicorn api.server:app --host 0.0.0.0 --port 8000 --reload
 
 pause

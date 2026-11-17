@@ -101,20 +101,52 @@ else
 fi
 
 # ------------------------------------------------------------
-# مرحله ۶: اجرای سرور (بک‌اند + فرانت)
+# مرحله ۶: ساخت گواهینامه SSL خودامضا (برای HTTPS)
+# ------------------------------------------------------------
+echo -e "\n${YELLOW}▶ مرحله ۶: گواهینامه SSL (برای HTTPS)...${NC}"
+mkdir -p certs
+if [ ! -f "certs/cert.pem" ] || [ ! -f "certs/key.pem" ]; then
+    echo -e "${YELLOW}   ساخت گواهینامه خودامضا...${NC}"
+    openssl req -x509 -newkey rsa:2048 -keyout certs/key.pem -out certs/cert.pem \
+        -days 365 -nodes \
+        -subj "/C=IR/ST=Tehran/L=Tehran/O=BHAM/OU=Dev/CN=localhost" \
+        -addext "subjectAltName=DNS:localhost,IP:127.0.0.1" 2>/dev/null
+    echo -e "${GREEN}✓ گواهینامه ساخته شد (certs/cert.pem)${NC}"
+else
+    echo -e "${GREEN}✓ گواهینامه از قبل موجود است${NC}"
+fi
+
+# ------------------------------------------------------------
+# مرحله ۷: اجرای سرور (بک‌اند + فرانت)
 # ------------------------------------------------------------
 echo -e "\n${BLUE}============================================================${NC}"
 echo -e "${GREEN}  🚀 راه‌اندازی کامل شد!${NC}"
 echo -e "${BLUE}============================================================${NC}"
 echo ""
-echo -e "${GREEN}  📊 داشبورد:        http://localhost:8000/${NC}"
-echo -e "${GREEN}  📚 مستندات API:    http://localhost:8000/docs${NC}"
-echo -e "${GREEN}  🔍 ReDoc:           http://localhost:8000/redoc${NC}"
-echo -e "${GREEN}  ❤️  Health check:   http://localhost:8000/api/v1/health${NC}"
+echo -e "${GREEN}  📊 داشبورد (HTTP):  http://localhost:8000/${NC}"
+echo -e "${GREEN}  📊 داشبورد (HTTPS): https://localhost:8443/${NC}"
+echo -e "${GREEN}  📚 مستندات API:     http://localhost:8000/docs${NC}"
+echo -e "${GREEN}  ❤️  Health check:    http://localhost:8000/api/v1/health${NC}"
+echo ""
+echo -e "${YELLOW}  ⚠️  اگر مرورگر خطای SSL داد: روی «Advanced» → «Proceed to localhost» کلیک کنید${NC}"
+echo -e "${YELLOW}     (گواهینامه خودامضاست، امن اما توسط CA امضا نشده)${NC}"
 echo ""
 echo -e "${YELLOW}  برای توقف: Ctrl+C${NC}"
 echo -e "${BLUE}============================================================${NC}"
 echo ""
 
-# اجرای سرور (روی همه اینترفیس‌ها، پورت ۸۰۰۰، با reload)
-exec $PY -m uvicorn api.server:app --host 0.0.0.0 --port 8000 --reload
+# اجرای سرور HTTPS در background
+$PY -m uvicorn api.server:app --host 0.0.0.0 --port 8443 \
+    --ssl-keyfile certs/key.pem --ssl-certfile certs/cert.pem &
+HTTPS_PID=$!
+echo -e "${GREEN}✓ سرور HTTPS روی پورت 8443 اجرا شد (PID: $HTTPS_PID)${NC}"
+
+# اجرای سرور HTTP در foreground (با reload برای توسعه)
+echo -e "${GREEN}✓ سرور HTTP روی پورت 8000 اجرا شد${NC}"
+echo ""
+$PY -m uvicorn api.server:app --host 0.0.0.0 --port 8000 --reload
+HTTP_EXIT=$?
+
+# پس از خروج سرور HTTP، سرور HTTPS را هم متوقف کن
+kill $HTTPS_PID 2>/dev/null
+exit $HTTP_EXIT
